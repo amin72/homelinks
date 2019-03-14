@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    {{ block.super }} |
+    گزارش {{ link.title }}
+{% endblock %}
+
+
+{% block content %}
+<section class="col-xl-10 col-md-9">
+    <div class="row mt-3">
+        <div class="offset-lg-2 col-lg-8 col-12">
+            <div class="content-section">
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4 text-center bg-light">ثبت گزارش</legend>
+                        <div class="form-group">
+                            <label class="col-form-label">گزارش لینک</label>
+                            <a class="form-control" href="{{ link.get_absolute_url }}">{{ link.title }}</a>
+                        </div>
+
+                        {{ form|crispy }}
+                    </fieldset>
+
+                    <div class="form-group">
+                        <button class="btn btn-lg btn-outline-primary" type="submit">ارسال</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

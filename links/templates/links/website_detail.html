@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    {{ block.super }} |
+    وب سایت {{ object.title }}
+{% endblock %}
+
+
+{% block content %}
+    {% include "links/link.html" %}
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
+
+
+{% block content %}
+<section class="col-xl-10 col-md-9">
+    <!-- websites section -->
+    <div class="box mt-5">
+
+        <!-- header -->
+        <h3 class="mb-0">وب سایت ها</h3>
+
+        <!-- free websites section -->
+        <div class="row">
+            {% include "links/links.html" with links=websites %}
+        </div><!-- row: free websites section -->
+
+        <!-- more websites button -->
+        <div class="row">
+            <div class="col-md-12 mt-2">
+                <a class="btn btn-outline-info left" href="{% url 'links:websites}' %">مشاهده موارد بیشتر</a>
+            </div>
+        </div><!-- more websites button -->
+
+    </div><!-- end: websites section -->
+
+
+    <!-- channels section -->
+    <div class="box mt-5">
+
+        <!-- header -->
+        <h3 class="mb-0">کانال ها</h3>
+
+        <!-- free channels section -->
+        <div class="row">
+            {% include "links/links.html" with links=channels %}
+        </div><!-- row: free channels section -->
+
+        <!-- more channels button -->
+        <div class="row">
+            <div class="col-md-12 mt-2">
+                <a class="btn btn-outline-info" href="{% url 'links:channels' %}">مشاهده موارد بیشتر</a>
+            </div>
+        </div><!-- more channels button -->
+
+    </div><!-- end: channels section -->
+
+
+    <!-- groups section -->
+    <div class="box mt-5">
+
+        <!-- header -->
+        <h3 class="mb-0">گروه ها</h3>
+
+        <!-- free groups section -->
+        <div class="row">
+            {% include "links/links.html" with links=groups %}
+        </div><!-- row: free groups section -->
+
+      <!-- more groups button -->
+      <div class="row">
+          <div class="col-md-12 mt-2">
+              <a class="btn btn-outline-info" href="% url 'links:groups' %">مشاهده موارد بیشتر</a>
+          </div>
+      </div><!-- more groups button -->
+
+    </div><!-- end: groups section -->
+
+
+    <!-- instagram section -->
+    <div class="box mt-5">
+
+        <!-- header -->
+        <h3 class="mb-0">اینستاگرام</h3>
+
+        <!-- free instagram section -->
+        <div class="row">
+            {% include "links/links.html" with links=instagrams %}
+        </div><!-- row: free instagram section -->
+
+        <!-- more instagram button -->
+        <div class="row">
+            <div class="col-md-12 mt-2">
+                <a class="btn btn-outline-info" href="% url 'links:instagrams' %">مشاهده موارد بیشتر</a>
+            </div>
+        </div><!-- more instagram button -->
+
+    </div><!-- end: instagram section -->
+</section>
+{% endblock %}

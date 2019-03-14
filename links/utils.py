@@ -1,6 +1,7 @@
 import re
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext, gettext_lazy as _
+from PIL import Image
 
 
 WHATSAPP_LINK = 'https://chat.whatsapp.com/'
@@ -116,20 +117,30 @@ def generate_instagram_url(page_id):
     return url
 
 
-def check_duplicate_url(model, url):
-    instance = model.objects.filter(url=url)
-    if instance.exists():
-        instance = instance.first()
-        if split_http(instance.url) == split_http(url):
-            if model.__name__ == 'Website':
-                raise ValidationError({'url':
-                    _('Website already registerd')})
-            elif model.__name__ == 'Channel':
-                raise ValidationError({'channel_id':
-                    _('Channel already registerd')})
-            elif model.__name__ == 'Group':
-                raise ValidationError({'url':
-                    _('Group already registerd')})
-            elif model.__name__ == 'Instagram':
-                raise ValidationError({'page_id':
-                    _('Instagram page already registerd')})
+def check_duplicate_url(object):
+    model = type(object) # get the model name
+    instance = model.objects.filter(url__endswith=split_http(object.url))
+    if not object.pk and instance.exists():
+        if model.__name__ == 'Website':
+            raise ValidationError({'url':
+                _('Website already registerd')})
+        elif model.__name__ == 'Channel':
+            raise ValidationError({'channel_id':
+                _('Channel already registerd')})
+        elif model.__name__ == 'Group':
+            raise ValidationError({'url':
+                _('Group already registerd')})
+        elif model.__name__ == 'Instagram':
+            raise ValidationError({'page_id':
+                _('Instagram page already registerd')})
+
+
+def create_thumbnail(orig_path, thumbnail_path):
+    # make two version of the image
+    img = Image.open(orig_path)
+    # the original one
+    img.thumbnail((320, 240))
+    img.save(orig_path)
+    # thumbnail
+    img.thumbnail((160, 120))
+    img.save(thumbnail_path)

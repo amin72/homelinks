@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    {{ block.super }} |
+    لیست وب سایت ها
+{% endblock %}
+
+
+{% block content %}
+<section class="col-xl-10 col-md-9">
+    <h1 class="mt-3 mb-4"><span class="badge badge-info">وب سایت ها</span></h1>
+
+    <div class="col-12 d-flex justify-content-center mt-5 mb-2">
+        <a class="mx-1 px-1 btn website-btn btn-danger mx-2 font-weight-bold"
+            href="{% url 'links:websites' %}">همه</a>
+
+        <a class="mx-1 px-1 btn website-btn font-weight-bold bg-iranian"
+            href="{% url 'links:iranian-websites' %}">ایرانی</a>
+
+        <a class="mx-1 px-1 btn website-btn font-weight-bold bg-foreign"
+            href="{% url 'links:foreign-websites' %}">خارجی</a>
+    </div>
+
+    <!-- list websites -->
+    <div class="row">
+        {% include "links/links.html" with links=object_list %}
+    </div><!-- row: list websites -->
+</section>
+{% endblock %}

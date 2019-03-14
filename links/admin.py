@@ -20,6 +20,7 @@ class WebsiteAdmin(admin.ModelAdmin):
     list_filter = ('type', 'created', 'updated', 'category')
     search_fields = ('title', 'url', 'description', 'type')
     raw_id_fields = ('author', 'category')
+    list_editable = ['status', 'created']
 
 
 # CHANNEL
@@ -32,6 +33,7 @@ class ChannelAdmin(admin.ModelAdmin):
     list_filter = ('application', 'created', 'updated', 'category')
     search_fields = ('title', 'channel_id', 'description')
     raw_id_fields = ('author', 'category')
+    list_editable = ['status', 'created']
 
 
 # GROUP
@@ -44,6 +46,7 @@ class GroupAdmin(admin.ModelAdmin):
     list_filter = ('application', 'created', 'updated', 'category')
     search_fields = ('title', 'url', 'description')
     raw_id_fields = ('author', 'category')
+    list_editable = ['status', 'created']
 
 
 # INSTAGRAM
@@ -55,3 +58,4 @@ class InstagramAdmin(admin.ModelAdmin):
     search_fields = ('title', 'slug', 'page_id', 'description')
     prepopulated_fields = {'slug': ('page_id',)}
     raw_id_fields = ('author', 'category')
+    list_editable = ['status', 'created']

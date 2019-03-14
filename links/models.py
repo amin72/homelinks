@@ -1,4 +1,5 @@
 import uuid
+import os
 
 from django.db import models
 from django.conf import settings
@@ -6,9 +7,10 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django.utils import timezone
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
-from . import utils
-
+from django.urls import reverse
 from taggit.managers import TaggableManager
+
+from . import utils
 
 
 
@@ -37,6 +39,11 @@ class LinkManager(models.Manager):
 		return super().filter(parent=None)
 
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status='published')
+
+
 class Link(models.Model):
     STATUS_CHOICES = (
         ('draft', _('Draft')),
@@ -63,12 +70,14 @@ class Link(models.Model):
     parent = models.ForeignKey("self", null=True, blank=True,
 		on_delete=models.CASCADE)
 
-    def get_thumbnail_url(self):
+    @property
+    def thumbnail_url(self):
         """Get thumbnail url"""
         image_url, ext = os.path.splitext(self.image.url)
         return image_url + '_thumbnail' + ext
 
-    def get_thumbnail_path(self):
+    @property
+    def thumbnail_path(self):
         """Get thumbnail path"""
         image_path, ext = os.path.splitext(self.image.path)
         return image_path + '_thumbnail' + ext
@@ -80,18 +89,11 @@ class Link(models.Model):
         """
         ACTIONS = ['detail', 'update', 'delete', 'report']
         if action in ACTIONS:
-            created = self.created.astimezone()
-            year = created.year
-            month = created.month
-            day = created.day
             slug = self.slug
-            model_name = self.__class__.__name__.lower()
-            url_reverse = f'posts:{model_name}-{action}'
-            return reverse(url_reverse, kwargs={'year': year,
-                'month': month, 'day': day, 'slug': slug}
-            )
-        else:
-            raise ValueError(f"action must be one of {ACTIONS}")
+            model = self.__class__.__name__.lower()
+            url_reverse = f'links:{model}-{action}'
+            return reverse(url_reverse, kwargs={'slug': slug})
+        raise ValueError(f"action must be one of {ACTIONS}")
 
     def get_absolute_url(self):
         return self.get_object_url(action='detail')
@@ -117,12 +119,19 @@ class Link(models.Model):
             return False
         return True
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        utils.create_thumbnail(self.image.path, self.thumbnail_path)
+
+    objects = LinkManager()
+    published = PublishedManager()
+
     class Meta:
         abstract = True
 
 
 class Website(Link):
-    url_reverse = 'posts:website-detail'
+    url_reverse = 'links:website-detail'
 
     TYPE_CHOICESS = (
         ('iranian', _('Iranian')),
@@ -133,19 +142,22 @@ class Website(Link):
         verbose_name=_('Type of Link'))
 
     def __str__(self):
-        return '{} - ({})'.format(self.title, self.url)
+        return f'{self.title} - ({self.url})'
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        utils.check_duplicate_url(Website, self.url)
-        self.slug = slugify(utils.split_http(self.url))
+        utils.check_duplicate_url(self)
+        # slug: domain-extention => webiste-org, google-com
+        domain, ext = utils.split_http(self.url).split('.')
+        slug = f'{domain}-{ext}'
+        self.slug = slugify(slug)
 
     class Meta:
         ordering = ('-created',)
 
 
 class Channel(Link):
-    url_reverse = 'posts:channel-detail'
+    url_reverse = 'links:channel-detail'
 
     APPLICATION_CHOICES = (
         ('telegram', _('Telegram')),
@@ -171,15 +183,15 @@ class Channel(Link):
 
         utils.check_channel_id(self.channel_id, self.application)
         self.url = utils.generate_channel_url(self.channel_id, self.application)
-        utils.check_duplicate_url(self.url)
-        self.slug = slugify(f'{self.application} {self.channel_id}')
+        utils.check_duplicate_url(self)
+        self.slug = slugify(f'{self.application}-{self.channel_id}')
 
     class Meta:
         ordering = ('-created',)
 
 
 class Group(Link):
-    url_reverse = 'posts:group-detail'
+    url_reverse = 'links:group-detail'
 
     APPLICATION_CHOICES = (
         ('whatsapp', _('Whatsapp')),
@@ -200,7 +212,7 @@ class Group(Link):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        utils.check_duplicate_url(self.url)
+        utils.check_duplicate_url(self)
         self.slug = slugify(f'{self.application}-{self.title}-f{self.uuid}',
             allow_unicode=True)
 
@@ -209,7 +221,7 @@ class Group(Link):
 
 
 class Instagram(Link):
-    url_reverse = 'posts:instagram-detail'
+    url_reverse = 'links:instagram-detail'
 
     page_id = models.CharField(max_length=30, verbose_name=_('Page ID'))
 
@@ -224,7 +236,7 @@ class Instagram(Link):
             self.page_id = self.page_id[1:]
 
         self.link = utils.generate_instagram_url(page_id)
-        utils.check_duplicate_url(self.url)
+        utils.check_duplicate_url(self)
         self.slug = slugify(f'{self.page_id}')
 
     class Meta:

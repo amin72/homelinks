@@ -1,0 +1,50 @@
+{% load static %}
+<!doctype html>
+<html lang="fa">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="../../../../favicon.ico"> -->
+
+    <title>{% block title %}خانه لینک ها{% endblock %}</title>
+
+    <!-- CSS files -->
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/font-awesome.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/style.css" %}" rel="stylesheet">
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+</head>
+
+<body>
+
+    {% include "navbar.html" %}
+    {% block header %}{% endblock %}
+
+    <div class="container-fluid">
+        <div class="row">
+
+            {% include "messages.html" %}
+            {% block rightside %}{% endblock %}
+
+            <!-- left sidebar -->
+            <!-- block content -->
+            {% block content %}{% endblock %}
+
+        </div><!-- row -->
+    </div><!-- container-fluid -->
+
+
+    {% include "footer.html" %}
+
+    <!-- JavaScript -->
+    <script src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static "js/popper.min.js" %}"></script>
+    <script src="{% static "js/tether.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+
+    {% block javascript %}{% endblock %}
+</body>
+</html>

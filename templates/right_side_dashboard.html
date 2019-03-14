@@ -1,0 +1,65 @@
+{% load static %}
+
+<!-- right sidebar -->
+<aside class="col-xl-3 col-md-4">
+
+  <!-- links to different sections -->
+  <div class="row ml-auto mr-auto mt-3">
+
+      <div class="col-12 border border-info rounded">
+
+          <!-- header -->
+          <div class="mt-2 mb-2 rounded p-1 lightblue">
+              <h1 class="mt-4 text-center display-5"><a href="{% url 'dashboard:index' %}">پنل کاربری</a></h1>
+              <h3 class="mb-4 text-center">{% if user.first_name and user.last_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</h3>
+          </div>
+          <hr>
+
+          <!-- dashboard links -->
+          <div class="row mt-3">
+              <div class="col-12">
+                  <ul class="list-unstyled mb-3 rem1-2">
+
+                      <li class="list-group-item light-even">
+                          <a href="url 'dashboard:add_link'">ثبت لینک</a>
+                      </li>
+
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'dashboard:edit_remove_links' %}">ویرایش و حذف لینک ها</a>
+                      </li>
+
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'dashboard:users_channels' %}">کانال های من</a>
+                      </li>
+
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'dashboard:users_groups' %}">گروه های من</a>
+                      </li>
+
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'dashboard:users_instagrams' %}">صفحات اینستاگرام من</a>
+                      </li>
+
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'users:update' %}">ویرایش اطلاعات کاربری</a>
+                      </li>
+
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'users:password_change' %}">تغییر رمز عبور</a>
+                      </li>
+
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'dashboard:rules' %}">قوانین و مقررات</a>
+                      </li>
+
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'users:logout' %}">خروج</a>
+                      </li>
+
+                  </ul>
+              </div>
+          </div><!-- links to channels -->
+      </div>
+
+  </div><!-- link to different sections -->
+</aside><!-- right side -->

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    {{ block.super }} |
+    لیست گروه ها
+{% endblock %}
+
+
+{% block content %}
+<section class="col-xl-10 col-md-9">
+    <h1 class="mt-3 mb-4"><span class="badge badge-info">گروه ها</span></h1>
+
+    <div class="row d-flex justify-content-center mt-5">
+        <a class="mb-2 btn group-btn btn-danger font-weight-bold"
+            href="{% url 'links:groups' %}">همه</a>
+        <a class="mb-2 mx-1 px-1 btn group-btn bg-whatsapp font-weight-bold white"
+            href="{% url 'links:whatsapp-groups' %}">واتس اپ</a>
+        <a class="mb-2 px-1 btn group-btn bg-telegram font-weight-bold white"
+            href="{% url 'links:telegram-groups' %}">تلگرام</a>
+        <a class="mb-2 mx-1 px-1 btn group-btn bg-soroush font-weight-bold white"
+            href="{% url 'links:soroush-groups' %}">سروش</a>
+        <a class="mb-2 btn group-btn bg-gap font-weight-bold white"
+            href="{% url 'links:gap-groups' %}">گپ</a>
+        <a class="mb-2 mx-1 px-1 btn group-btn bg-igap font-weight-bold white"
+            href="{% url 'links:igap-groups' %}">ای گپ</a>
+        <a class="mb-2 btn group-btn bg-eitaa font-weight-bold white"
+            href="{% url 'links:eitaa-groups' %}">ایتا</a>
+    </div>
+
+    <!-- list groups -->
+    <div class="row">
+        {% include "links/links.html" with links=object_list %}
+    </div><!-- row: list goups -->
+
+</section>
+{% endblock %}
