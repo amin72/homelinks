@@ -1,0 +1,73 @@
+{% if links %}
+
+    <!-- Latest Links -->
+    <div class="col-12">
+
+        <!-- HEADER -->
+        <div class="row border-bottom bb-3">
+            <div class="col-xl-2 col-3 font-weight-bold">
+                عکس
+            </div>
+            <div class="col-xl-8 col-6 font-weight-bold">
+                عنوان
+            </div>
+            <div class="col-xl-2 col-3 font-weight-bold text-center">
+                ویرایش/حذف
+            </div>
+        </div>
+
+        <!-- Display latest links -->
+        {% for link in links %}
+
+            <div class="row shadow py-2 {% if is_paginated %}my-1 border-bottom bb-3{% else %}{% if not forloop.last %}my-1 border-bottom bb-3{% endif %}{% endif %}">
+                <div class="col-xl-2 col-3">
+                    <!-- link's image -->
+                    {% if link.status == 'published' %}
+                        <a href="{{ link.get_absolute_url }}"><img class="img-fluid img-dashboard"
+                            src="{{ link.thumbnail_url }}" alt="{{ link.title }}"></a>
+                    {% else %}
+                        <img class="img-fluid img-dashboard"
+                            src="{{ link.thumbnail_url }}" alt="{{ link.title }}">
+                    {% endif %}
+                </div>
+
+                <!-- link's title and description -->
+                <div class="col-xl-8 col-6">
+                    {% if link.status == 'published' %}
+                        <h6><a href="{{ link.get_absolute_url }}">{{ link.title|truncatewords:4 }}</a></h6>
+                    {% else %}
+                        <h6>{{ link.title|truncatewords:6 }} - غیر فعال</h6>
+                    {% endif %}
+                    <p class="mt-2 word-wraps">{{ link.description|truncatewords:6 }}</p>
+                </div>
+
+                <!-- operations -->
+                <div class="col-xl-2 col-3">
+                    <div class="col-12 px-lg-4 px-sm-3 px-0">
+                        <a class="btn btn-sm btn-primary w-60 float-right"
+                            href="{{ link.get_update_url }}">ویرایش</a>
+                    </div>
+                    <div class="col-12 px-lg-4 px-sm-3 px-0">
+                        <form id="delete-form" method="post" action="{{ link.get_delete_url }}">
+                            {% csrf_token %}
+                            <input type="submit" value="حذف"
+                                class="btn btn-sm btn-danger mt-2 w-60 float-right"
+                                    onclick="return confirm('آیا از حذف لینک مطمین هستید؟')">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+        {% include "pagination.html" with page_obj=links %}
+    {% endif %}
+
+{% else %}
+    <!-- user has no posts -->
+    <div class="col-12 border-top pt-2">
+        شما هیچ لینکی ثبت نکرده اید. برای افزودن لینک از منوی سمت راست گزینه ثبت لینک را انتخاب کنید.
+    </div>
+{% endif %}

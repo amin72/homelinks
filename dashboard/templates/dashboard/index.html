@@ -1,0 +1,70 @@
+{% extends "base_dashboard.html" %}
+
+
+{% block title %}
+    {{ block.super }} |
+    پنل کاربری
+{% endblock %}
+
+
+{% block content %}
+
+<!-- left sidebar -->
+<section class="col-xl-9 col-md-8">
+
+    <div class="row ml-auto mr-auto mt-3 pb-1 border border-info rounded">
+
+        <!-- user info header -->
+        <div class="col-12">
+            <h1 class="mt-3 text-center bg-light rounded p-2">اطلاعات کاربری</h1>
+        </div>
+
+        <!-- user info content -->
+        <div class="col-12 user_info_fontsize">
+
+            <ul class="list-unstyled">
+
+                <li class="list-group-item lightblue">
+                    نام و نام خانوادگی: <strong>
+                    {% if user.first_name or user.last_name %}
+                        {% if user.first_name %}
+                            {{ user.first_name }}
+                        {% endif %}
+                        {% if user.last_name %}
+                            {{ user.last_name }}
+                        {% endif %}
+                    {% else %}
+                        --
+                    {% endif %}
+                    </strong>
+                </li>
+
+                <li class="list-group-item lightblue">
+                    ایمیل: <strong>{{ user.email }}</strong>
+                </li>
+
+                <li class="list-group-item lightblue">
+                    شماره تلفن: <strong>
+                    {% if user.phone_number %}
+                        {{ user.phone_number }}
+                    {% else %}
+                        --
+                    {% endif %}
+                    </strong>
+                </li>
+            </ul>
+        </div>
+
+
+        <!-- latest added links header -->
+        <div class="col-12 mt-5">
+            <h1 class="text-center bg-light rounded">لینک های من</h1>
+        </div>
+
+        {% include "dashboard/links.html" %}
+
+    </div><!-- Row Border -->
+
+</section><!-- left sidebar -->
+
+{% endblock %}

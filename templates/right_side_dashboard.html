@@ -21,12 +21,12 @@
                   <ul class="list-unstyled mb-3 rem1-2">
 
                       <li class="list-group-item light-even">
-                          <a href="url 'dashboard:add_link'">ثبت لینک</a>
+                          <a href="{% url 'dashboard:add_link' %}">ثبت لینک</a>
                       </li>
 
-                      <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:edit_remove_links' %}">ویرایش و حذف لینک ها</a>
-                      </li>
+                      <!-- <li class="list-group-item light-even">
+                          <a href="% url 'dashboard:edit_remove_links' %">ویرایش و حذف لینک ها</a>
+                      </li> -->
 
                       <li class="list-group-item light-even">
                           <a href="{% url 'dashboard:users_channels' %}">کانال های من</a>
@@ -41,11 +41,11 @@
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="{% url 'users:update' %}">ویرایش اطلاعات کاربری</a>
+                          <a href="% url 'users:update' %">ویرایش اطلاعات کاربری</a>
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="{% url 'users:password_change' %}">تغییر رمز عبور</a>
+                          <a href="% url 'users:password_change' %">تغییر رمز عبور</a>
                       </li>
 
                       <li class="list-group-item light-even">
@@ -53,7 +53,7 @@
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="{% url 'users:logout' %}">خروج</a>
+                          <a href="% url 'users:logout' %">خروج</a>
                       </li>
 
                   </ul>

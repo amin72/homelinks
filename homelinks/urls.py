@@ -5,9 +5,16 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+    # admin
     path('admin/', admin.site.urls),
 
+    # dashboard
+    path('dashboard/', include('dashboard.urls')),
+
+    # links
     path('', include('links.urls')),
+
+    # APIs
 ]
 
 if settings.DEBUG:

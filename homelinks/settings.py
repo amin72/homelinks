@@ -32,6 +32,7 @@ INSTALLED_APPS = [
 
     # apps
     'links.apps.LinksConfig',
+    'dashboard.apps.DashboardConfig',
 
     # third-party
     'taggit',
@@ -127,3 +128,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'public_html', 'media')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "assets"),
 ]
+
+# CRISPY
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
