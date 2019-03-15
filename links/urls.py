@@ -60,4 +60,71 @@ urlpatterns = [
     # channel delete
     path('channels/<slug:slug>/delete/', views.ChannelDeleteView.as_view(),
         name='channel-delete'),
+
+    # list groups
+    path('groups/', views.GroupListView.as_view(), name='groups'),
+
+    # list whatsapp groups
+    path('groups/whatsapp/', views.WhatsappGroupListView.as_view(),
+        name='whatsapp-groups'),
+
+    # list telegram groups
+    path('groups/telegram/', views.TelegramGroupListView.as_view(),
+        name='telegram-groups'),
+
+    # list soroush groups
+    path('groups/soroush/', views.SoroushGroupListView.as_view(),
+        name='soroush-groups'),
+
+    # list gap groups
+    path('groups/gap/', views.GapGroupListView.as_view(),
+        name='gap-groups'),
+
+    # list igap groups
+    path('groups/igap/', views.IGapGroupListView.as_view(),
+        name='igap-groups'),
+
+    # list eitaa groups
+    path('groups/eitaa/', views.EitaaGroupListView.as_view(),
+        name='eitaa-groups'),
+
+    # group create
+    path('groups/create/', views.GroupCreateView.as_view(), name='group-create'),
+
+    # group details
+    path('groups/<str:slug>/', views.GroupDetailView.as_view(),
+        name='group-detail'),
+
+    # group update
+    path('groups/<str:slug>/update/', views.GroupUpdateView.as_view(),
+        name='group-update'),
+
+    # group delete
+    path('groups/<str:slug>/delete/', views.GroupDeleteView.as_view(),
+        name='group-delete'),
+
+    # list instagrams
+    path('instagram/', views.InstagramListView.as_view(), name='instagrams'),
+
+    # instagram create
+    path('instagram/create/', views.InstagramCreateView.as_view(),
+        name='instagram-create'),
+
+    # instagram details
+    path('instagram/<slug:slug>/', views.InstagramDetailView.as_view(),
+        name='instagram-detail'),
+
+    # instagram update
+    path('instagram/<slug:slug>/update/', views.InstagramUpdateView.as_view(),
+        name='instagram-update'),
+
+    # instagram delete
+    path('instagram/<slug:slug>/delete/', views.InstagramDeleteView.as_view(),
+        name='instagram-delete'),
+
+    # instagram report
+    # path('instagram/<int:year>/<int:month>/<int:day>/<slug:slug>/report/',
+    #     views.InstagramReportCreateView.as_view(),
+    #     name='instagram-report'),
+
 ]

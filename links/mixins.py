@@ -18,12 +18,6 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 
 
-class GetObjectMixIn:
-    def get_object(self):
-        slug = self.kwargs.get('slug')
-        return get_object_or_404(self.model, slug=slug)
-
-
 class ApplicationMixIn(ListView):
     """
     This MixIn filters the queryset by application name
@@ -66,14 +60,7 @@ class OwnerMixin(UserPassesTestMixin):
         return (self.request.user == self.object.author)
 
 
-class DetailMixIn(PublishedObjectMixIn, GetObjectMixIn, DetailView):
-    """
-    Get detail of published object
-    """
-    pass
-
-
-class UpdateMixIn(GetObjectMixIn, UpdateView):
+class UpdateMixIn(UpdateView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         # make a copy of the first object on the second one
@@ -81,7 +68,7 @@ class UpdateMixIn(GetObjectMixIn, UpdateView):
         return redirect(reverse_lazy('dashboard:index'))
 
 
-class DeleteMixIn(LoginRequiredMixin, OwnerMixin, GetObjectMixIn, DeleteView):
+class DeleteMixIn(LoginRequiredMixin, OwnerMixin, DeleteView):
     """This MixIn deletes an object"""
     success_url = reverse_lazy('dashboard:index')
 

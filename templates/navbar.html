@@ -17,34 +17,34 @@
                 <a class="nav-link" href="{% url 'links:index' %}">خانه</a>
             </li>
             <li class="nav-item mr-2">
-                <a class="nav-link" href="url 'dashboard:add_link'">ثبت لینک</a>
+                <a class="nav-link" href="{% url 'dashboard:add_link' %}">ثبت لینک</a>
             </li>
             <li class="nav-item dropdown mr-1">
                 <a class="nav-link dropdown-toggle">سایت ها</a>
                 <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownWebsites">
-                    <a class="dropdown-item" href="url 'posts:iranian-websites'">ایرانی</a>
-                    <a class="dropdown-item" href="url 'posts:foreign-websites'">خارجی</a>
+                    <a class="dropdown-item" href="{% url 'links:iranian-websites' %}">ایرانی</a>
+                    <a class="dropdown-item" href="{% url 'links:foreign-websites' %}">خارجی</a>
                 </div>
             </li>
             <li class="nav-item dropdown mr-1">
                 <a class="nav-link dropdown-toggle">کانال ها</a>
                 <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownChannels">
-                    <a class="dropdown-item" href="% url 'posts:telegram-channels' ">تلگرام</a>
-                    <a class="dropdown-item" href="% url 'posts:soroush-channels' ">سروش</a>
-                    <a class="dropdown-item" href="% url 'posts:gap-channels' ">گپ</a>
-                    <a class="dropdown-item" href=" url 'posts:igap-channels'">ای گپ</a>
-                    <a class="dropdown-item" href="url 'posts:eitaa-channels' ">ایتا</a>
+                    <a class="dropdown-item" href="{% url 'links:telegram-channels' %}">تلگرام</a>
+                    <a class="dropdown-item" href="{% url 'links:soroush-channels' %}">سروش</a>
+                    <a class="dropdown-item" href="{% url 'links:gap-channels' %}">گپ</a>
+                    <a class="dropdown-item" href="{% url 'links:igap-channels' %}">ای گپ</a>
+                    <a class="dropdown-item" href="{% url 'links:eitaa-channels' %}">ایتا</a>
                 </div>
             </li>
             <li class="nav-item dropdown mr-1">
                 <a class="nav-link dropdown-toggle">گروه ها</a>
                 <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownGroups">
-                    <a class="dropdown-item" href="% url 'posts:whatsapp-groups' %">واتس اپ</a>
-                    <a class="dropdown-item" href="% url 'posts:telegram-groups' %">تلگرام</a>
-                    <a class="dropdown-item" href="% url 'posts:soroush-groups' %">سروش</a>
-                    <a class="dropdown-item" href="% url 'posts:gap-groups' %">گپ</a>
-                    <a class="dropdown-item" href="% url 'posts:igap-groups' %">ای گپ</a>
-                    <a class="dropdown-item" href="% url 'posts:eitaa-groups' %">ایتا</a>
+                    <a class="dropdown-item" href="{% url 'links:whatsapp-groups' %}">واتس اپ</a>
+                    <a class="dropdown-item" href="{% url 'links:telegram-groups' %}">تلگرام</a>
+                    <a class="dropdown-item" href="{% url 'links:soroush-groups' %}">سروش</a>
+                    <a class="dropdown-item" href="{% url 'links:gap-groups' %}">گپ</a>
+                    <a class="dropdown-item" href="{% url 'links:igap-groups' %}">ای گپ</a>
+                    <a class="dropdown-item" href="{% url 'links:eitaa-groups' %}">ایتا</a>
                 </div>
             </li>
             <li class="nav-item">
@@ -75,7 +75,7 @@
 <!-- Search Box -->
 <nav class="navbar navbar-dark bg-dark">
     <div class="col-12 m-0 p-0">
-        <form class="form-inline float-right" action="% url 'posts:search' %">
+        <form class="form-inline float-right" action="% url 'links:search' %">
             <div class="input-group form-1 pl-0">
               <div class="input-group-prepend">
                   <button type="submit" class="input-group-text cyan lighten-2 cursor-pointer"><i class="fa fa-search" aria-hidden="true"></i></button>

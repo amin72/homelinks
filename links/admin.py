@@ -13,7 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
 # WEBSITE
 @admin.register(Website)
 class WebsiteAdmin(admin.ModelAdmin):
-    fields = ('author', 'title', 'status', 'url', 'category', 'description',
+    fields = ('author', 'type', 'title', 'status', 'url', 'category', 'description',
         'image', 'tags', 'parent')
     list_display = ('title', 'url', 'slug', 'status', 'author', 'category',
         'created')

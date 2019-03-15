@@ -9,8 +9,8 @@ from django.views.generic import (
 )
 from .models import Website, Channel, Group, Instagram
 from .mixins import (
-    DetailMixIn,
     ApplicationMixIn,
+    PublishedObjectMixIn,
     LoginRequiredMixin,
     InfoMessageMixin,
     CreateMixIn,
@@ -32,7 +32,7 @@ delete_message = _('Your link was successfully deleted.')
 
 
 
-# list all posts: websites, channels, groups, and instagrams
+# list all links: websites, channels, groups, and instagrams
 def index(request):
     websites = Website.published.all()[:6]
     channels = Channel.published.all()[:6]
@@ -58,19 +58,23 @@ class WebsiteListView(ListView):
 class IranianWebsiteListView(ListView):
     """List all published and iranian websites"""
     def get_queryset(self):
-        return Website.objects.filter(visible=True, type='iranian')
+        return Website.published.filter(type='iranian')
 
 
 # list foreign websites
 class ForeignWebsiteListView(ListView):
     """List all published and foreign websites"""
     def get_queryset(self):
-        return Website.objects.filter(visible=True, type='foreign')
+        return Website.published.filter(type='foreign')
 
 
 # website detail
-class WebsiteDetailView(DetailMixIn):
+class WebsiteDetailView(PublishedObjectMixIn, DetailView):
+    """
+    Give detail about published object
+    """
     model = Website
+    lookup_field = 'slug'
 ## -----------------------------------------------------
 
 
@@ -111,8 +115,9 @@ class EitaaChannelListView(ApplicationMixIn):
 
 
 # channel details
-class ChannelDetailView(DetailMixIn):
+class ChannelDetailView(PublishedObjectMixIn, DetailView):
     model = Channel
+    lookup_field = 'slug'
 
 
 # channel create
@@ -148,3 +153,128 @@ class ChannelDeleteView(DeleteMixIn):
     model = Channel
     success_message = delete_message
 ## -----------------------------------------------------
+
+
+# list groups
+class GroupListView(ListView):
+    queryset = Group.published.all()
+
+
+# list whatsapp groups
+class WhatsappGroupListView(ApplicationMixIn):
+    model = Group
+    application = 'whatsapp'
+
+
+# list telegram groups
+class TelegramGroupListView(ApplicationMixIn):
+    model = Group
+    application='telegram'
+
+
+# list soroush groups
+class SoroushGroupListView(ApplicationMixIn):
+    model = Group
+    application='soroush'
+
+
+# list gap groups
+class GapGroupListView(ApplicationMixIn):
+    model = Group
+    application='gap'
+
+
+# list igap groups
+class IGapGroupListView(ApplicationMixIn):
+    model = Group
+    application='igap'
+
+
+# list eitaa groups
+class EitaaGroupListView(ApplicationMixIn):
+    model = Group
+    application='eitaa'
+
+
+# group detail
+class GroupDetailView(PublishedObjectMixIn, DetailView):
+    model = Group
+    lookup_field = 'slug'
+
+
+# group create
+class GroupCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
+    model = Group
+    fields = (
+        'application',
+        'title',
+        'link',
+        'category',
+        'description',
+        'image'
+    )
+    success_message = create_message
+
+
+# group update
+class GroupUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
+    model = Group
+    fields = (
+        'application',
+        'title',
+        'link',
+        'category',
+        'description',
+        'image'
+    )
+    success_message = update_message
+
+
+# group delete
+class GroupDeleteView(DeleteMixIn):
+    model = Group
+    success_message = delete_message
+## -----------------------------------------------------
+
+
+# list instagrams
+class InstagramListView(ListView):
+    queryset = Instagram.published.all()
+
+
+# instagram details
+class InstagramDetailView(PublishedObjectMixIn, DetailView):
+    model = Instagram
+    lookup_field = 'slug'
+
+
+# instagram create
+class InstagramCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
+    model = Instagram
+    fields = (
+        'title',
+        'page_id',
+        'category',
+        'description',
+        'image'
+    )
+    success_message = create_message
+
+
+# instagram update
+class InstagramUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
+    model = Instagram
+    fields = (
+        'title',
+        'page_id',
+        'category',
+        'description',
+        'image'
+    )
+    success_message = update_message
+
+
+# instagram delete
+class InstagramDeleteView(DeleteMixIn):
+    model = Instagram
+    success_message = delete_message
