@@ -122,9 +122,8 @@ urlpatterns = [
     path('instagram/<slug:slug>/delete/', views.InstagramDeleteView.as_view(),
         name='instagram-delete'),
 
-    # instagram report
-    # path('instagram/<int:year>/<int:month>/<int:day>/<slug:slug>/report/',
-    #     views.InstagramReportCreateView.as_view(),
-    #     name='instagram-report'),
-
+    # report link
+    # model_name and slug are sent in GET mode
+    #path('report/', views.ReportCreateView.as_view(), name='report'),
+    path('report/', views.report_link, name='report'),
 ]

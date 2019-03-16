@@ -8,6 +8,8 @@ from django.utils import timezone
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.urls import reverse
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from taggit.managers import TaggableManager
 
 from . import utils
@@ -84,10 +86,10 @@ class Link(models.Model):
 
     def get_object_url(self, action='detail'):
         """
-        Generate URL for detail, update, delete, and report object.
-        `action`: detail, update, delete, report
+        Generate URL for detail, update, and delete object.
+        `action`: detail, update, delete
         """
-        ACTIONS = ['detail', 'update', 'delete', 'report']
+        ACTIONS = ['detail', 'update', 'delete']
         if action in ACTIONS:
             slug = self.slug
             model = self.__class__.__name__.lower()
@@ -103,9 +105,6 @@ class Link(models.Model):
 
     def get_delete_url(self):
         return self.get_object_url(action='delete')
-
-    def get_report_url(self):
-        return self.get_object_url(action='report')
 
     def children(self):
         return self.objects.filter(parent=self)
@@ -235,9 +234,36 @@ class Instagram(Link):
         if self.page_id.startswith('@'):
             self.page_id = self.page_id[1:]
 
-        self.link = utils.generate_instagram_url(page_id)
+        self.url = utils.generate_instagram_url(page_id)
         utils.check_duplicate_url(self)
         self.slug = slugify(f'{self.page_id}')
 
     class Meta:
         ordering = ('-created',)
+
+
+class Report(models.Model):
+    TYPES = (
+        ('Inappropriate content', _('Inappropriate content')),
+        ('Mismatched title and description', _('Mismatched title and description')),
+        ('Broken link', _('Broken link')),
+    )
+
+    url = models.URLField(verbose_name=_('URL'))
+    email = models.EmailField(verbose_name=_('Your Email'))
+    type = models.CharField(max_length=256, choices=TYPES,
+        verbose_name=_('Type of Report'))
+    text = models.TextField(max_length=1024, verbose_name=_('Text'),
+        help_text=_("Text up to 1024 characters"))
+    is_read = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    # this model can manager many objects (website, groups, ...)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_slug = models.SlugField(allow_unicode=True)
+    content_object = GenericForeignKey('content_type', 'object_slug')
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return '{} - {}'.format(self.email, self.type)

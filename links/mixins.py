@@ -7,8 +7,10 @@ from django.views.generic import (ListView,
     DetailView,
     CreateView,
     UpdateView,
-    DeleteView
+    DeleteView,
+    View,
 )
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
@@ -110,3 +112,15 @@ class InfoMessageMixin:
 
     def get_success_message(self, cleaned_data):
         return self.success_message % cleaned_data
+
+
+class SetModelNameMixIn:
+    """
+    `model_name` property must be set in the sub class.
+    """
+    model_name = None
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['model_name'] = self.model_name
+        return context
