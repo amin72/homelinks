@@ -56,7 +56,7 @@ class PublishedObjectMixIn(UserPassesTestMixin):
 
 
 class OwnerMixin(UserPassesTestMixin):
-    """Test if user tries to delete their or others posts"""
+    """Test if user tries to delete their or others links"""
     def test_func(self):
         self.object = self.get_object()
         return (self.request.user == self.object.author)

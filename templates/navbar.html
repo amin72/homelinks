@@ -61,12 +61,12 @@
                     <div class="dropdown-menu dropdown-content dropdown-menu-right" aria-labelledby="dropdownProfile">
                         <a class="dropdown-item" href="{% url 'dashboard:index' %}">پنل کاربری</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="% url 'users:logout' %">خروج</a>
+                        <a class="dropdown-item" href="{% url 'dashboard:logout' %}">خروج</a>
                     </div>
                 </li>
             {% else %}
-                <li class="nav-item"><a class="nav-link white" href="% url 'users:login' %">ورود</a></li>
-                <li class="nav-item"><a class="nav-link white" href="% url 'users:register' %">ثبت نام</a></li>
+                <li class="nav-item"><a class="nav-link white" href="{% url 'dashboard:login' %}">ورود</a></li>
+                <li class="nav-item"><a class="nav-link white" href="{% url 'dashboard:register' %}">ثبت نام</a></li>
             {% endif %}
         </ul>
     </div><!-- Collapse -->

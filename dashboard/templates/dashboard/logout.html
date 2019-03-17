@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    {{ block.super }} |
+    خارج شدید
+{% endblock %}
+
+
+{% block content %}
+
+<section class="col-xl-10 col-md-9">
+    <div class="row mt-3">
+        <div class="col-12">
+            <h2>شما از سایت خارج شدید.</h2>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    <a href="{% url 'dashboard:login' %}">ورود دوباره به سایت خانه لینک ها</a>
+                </small>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

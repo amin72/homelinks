@@ -1,5 +1,7 @@
 {% extends "base_dashboard.html" %}
 {% load crispy_forms_tags %}
+{% load jalali_tags %}
+{% load static %}
 
 
 {% block title %}
@@ -15,7 +17,7 @@
 {% block content %}
 <section class="col-xl-9 col-md-8">
     <div class="row mt-3">
-        <div class="offset-lg-2 col-lg-8 col-12">
+        <div class="col-lg-6 col-12">
             <div class="content-section">
 
                 <form method="post" enctype="multipart/form-data">
@@ -28,10 +30,45 @@
 
                     <div class="form-group">
                         <button class="btn btn-lg btn-outline-primary" type="submit">ارسال</button>
+                        <button id="preview" class="btn btn-lg btn-outline-secondary">پیش نمایش</button>
                     </div>
                 </form>
             </div>
         </div>
+
+        <div class="col-lg-6 col-12">
+            <div class="content-section">
+                <legend class="border-bottom mb-4 text-center bg-light">پیش نمایش</legend>
+
+                <div class="col-12 mt-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <img class="img-fluid rounded link-img border" src="{% static "img/logo.png" %}">
+                        </div>
+
+                        <div class="col-12 pt-3">
+                            <h1 id="preview_title" class="lead border-bottom mb-4 p-xl-2 rounded font-weight-bold"></h1>
+                            <div id="preview_description" class="text-justify py-1 px-2"></div>
+                        </div>
+                    </div><!-- row: Post content -->
+                </div>
+            </div><!-- post-content -->
+        </div>
     </div>
 </section>
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+    $('#preview').click(function(event) {
+        event.preventDefault();
+
+        var title = $('#id_title').val();
+        var description = $('#id_description').val();
+
+        $('#preview_title').text(title);
+        $('#preview_description').text(description);
+    })
+</script>
 {% endblock %}

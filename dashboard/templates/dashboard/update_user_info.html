@@ -1,0 +1,41 @@
+{% extends "base_dashboard.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    {{ block.super }} |
+    ویرایش اطلاعات کاربری
+{% endblock %}
+
+
+{% block content %}
+
+<!-- left sidebar -->
+<section class="col-xl-9 col-md-8">
+    <div class="row mt-3">
+
+        <div class="offset-xl-2 col-xl-8 col-12 rem1-1">
+            <div class="content-section">
+                <form method="post">
+                    <legend class="border-bottom mb-4 text-center bg-light">ویرایش اطلاعات کاربری</legend>
+                    {% csrf_token %}
+
+                    <fieldset class="form-group">
+                        {{ user_form|crispy }}
+                        {{ profile_form|crispy }}
+                    </fieldset>
+
+                    <!-- submit -->
+                    <div class="form-group row">
+                        <div class="cold-xl-4 col-8">
+                            <button class="btn btn-info mr-1" type="submit">ویرایش</button>
+                            <a class="btn btn-secondary" href="{% url 'dashboard:index' %}">برگشت</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section><!-- left sidebar -->
+
+{% endblock %}

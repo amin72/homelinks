@@ -41,11 +41,11 @@
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="% url 'users:update' %">ویرایش اطلاعات کاربری</a>
+                          <a href="{% url 'dashboard:update' %}">ویرایش اطلاعات کاربری</a>
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="% url 'users:password_change' %">تغییر رمز عبور</a>
+                          <a href="{% url 'dashboard:password_change' %}">تغییر رمز عبور</a>
                       </li>
 
                       <li class="list-group-item light-even">
@@ -53,7 +53,7 @@
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="% url 'users:logout' %">خروج</a>
+                          <a href="{% url 'dashboard:logout' %}">خروج</a>
                       </li>
 
                   </ul>
