@@ -21,7 +21,8 @@
                         <legend class="border-bottom mb-4 text-center bg-light">ثبت گزارش</legend>
                         <div class="form-group">
                             <label class="col-form-label">گزارش لینک</label>
-                            <a class="form-control" href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+                            <a class="form-control"
+                                href="{{ object.get_absolute_url }}">{{ object.title }}</a>
                         </div>
 
                         {{ form|crispy }}

@@ -123,7 +123,8 @@ urlpatterns = [
         name='instagram-delete'),
 
     # report link
-    # model_name and slug are sent in GET mode
-    #path('report/', views.ReportCreateView.as_view(), name='report'),
     path('report/', views.report_link, name='report'),
+
+    # tagged items
+    path('tag/<str:tag_slug>/', views.tagged_items, name='tagged_items'),
 ]

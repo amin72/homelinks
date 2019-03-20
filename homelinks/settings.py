@@ -35,9 +35,10 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
 
     # third-party
-    'taggit',
     'crispy_forms',
     'jalali_date',
+    'taggit',
+    'taggit_helpers',
 ]
 
 MIDDLEWARE = [

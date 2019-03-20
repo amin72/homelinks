@@ -33,11 +33,16 @@
 
                 <!-- link's title and description -->
                 <div class="col-xl-8 col-6">
-                    {% if link.status == 'published' %}
-                        <h6><a href="{{ link.get_absolute_url }}">{{ link.title|truncatewords:4 }}</a></h6>
-                    {% else %}
-                        <h6>{{ link.title|truncatewords:6 }} - غیر فعال</h6>
-                    {% endif %}
+                        <h6>
+                            <a href="{{ link.get_absolute_url }}">{{ link.title|truncatewords:4 }}</a>
+                            {% if link.parent and link.parent.status == 'published' and link.status == 'draft' %}
+                                - <small>این لینک ویرایش شده است، و نیاز به تایید مدیر دارد.</small>
+                            {% endif %}
+                            {% if link.is_parent and link.status == 'draft' %}
+                                - <small>در انتظار تایید مدیر</small>
+                            {% endif %}
+                        </h6>
+
                     <p class="mt-2 word-wraps">{{ link.description|truncatewords:6 }}</p>
                 </div>
 
@@ -45,7 +50,8 @@
                 <div class="col-xl-2 col-3">
                     <div class="col-12 px-lg-4 px-sm-3 px-0">
                         <a class="btn btn-sm btn-primary w-60 float-right"
-                            href="{{ link.get_update_url }}">ویرایش</a>
+                            href="{{ link.get_update_url }}"
+                            >ویرایش</a>
                     </div>
                     <div class="col-12 px-lg-4 px-sm-3 px-0">
                         <form id="delete-form" method="post" action="{{ link.get_delete_url }}">

@@ -23,16 +23,26 @@ from .mixins import UserMixIn
 @login_required
 def index(request):
     user = request.user
-    websites = Website.objects.filter(author=user)
-    channels = Channel.objects.filter(author=user)
-    groups = Group.objects.filter(author=user)
-    instagrams = Instagram.objects.filter(author=user)
+    websites = Website.objects.filter(author=user, parent=None)
+    channels = Channel.objects.filter(author=user, parent=None)
+    groups = Group.objects.filter(author=user, parent=None)
+    instagrams = Instagram.objects.filter(author=user, parent=None)
+
 
     links = sorted(chain(channels, groups, instagrams),
         key=lambda link: link.created, reverse=True)
 
+    # if links have child, sent their child instead of them.
+    links_and_children = []
+    for link in links:
+        child = link.child
+        if child:
+            links_and_children.append(child)
+        else:
+            links_and_children.append(link)
+
     # pagination
-    paginator = Paginator(links, 10)
+    paginator = Paginator(links_and_children, 10)
     page = request.GET.get('page')
     try:
         object_list = paginator.page(page)
@@ -42,7 +52,7 @@ def index(request):
         object_list = paginator.page(paginator.num_pages)
 
     context = {
-        'links': links,
+        'links': object_list,
         'page': page,
         'is_paginated': True,
     }

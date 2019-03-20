@@ -1,4 +1,10 @@
 from django.contrib import admin
+from taggit.models import Tag
+from taggit_helpers.admin import (
+    TaggitCounter,
+    TaggitStackedInline,
+    TaggitTabularInline,
+)
 from .models import (
     Category,
     Website,
@@ -32,15 +38,16 @@ class WebsiteAdmin(admin.ModelAdmin):
 
 # CHANNEL
 @admin.register(Channel)
-class ChannelAdmin(admin.ModelAdmin):
+class ChannelAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'title', 'status', 'application', 'channel_id',
-        'category', 'description', 'image', 'tags', 'parent')
+        'category', 'description', 'image', 'parent')
     list_display = ('title', 'channel_id', 'application', 'slug', 'status',
-    'category', 'created')
+        'category', 'created', 'taggit_counter',)
     list_filter = ('application', 'created', 'updated', 'category')
     search_fields = ('title', 'channel_id', 'description')
     raw_id_fields = ('author', 'category')
     list_editable = ('status', 'created')
+    inlines = [TaggitStackedInline]
 
 
 # GROUP

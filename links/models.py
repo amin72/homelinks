@@ -1,19 +1,18 @@
 import uuid
 import os
 
-from django.db import models
+from django.db import models, IntegrityError, transaction
 from django.conf import settings
 from django.utils.translation import gettext, gettext_lazy as _
 from django.utils import timezone
-from django.db.models.signals import pre_save
-from django.utils.text import slugify
+from django.db.models.signals import post_save
+from django.utils.text import slugify as default_slugify
 from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from taggit.managers import TaggableManager
 
 from . import utils
-
 
 
 class Category(models.Model):
@@ -33,17 +32,9 @@ def image_upload_path(instance, filename):
     return 'images/{}/{}'.format(directory, filename)
 
 
-class LinkManager(models.Manager):
-	def all(self):
-		"""
-        Only return parent objects, children objects are not returned
-        """
-		return super().filter(parent=None)
-
-
 class PublishedManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(status='published')
+        return super().get_queryset().filter(status='published', parent=None)
 
 
 class Link(models.Model):
@@ -106,9 +97,12 @@ class Link(models.Model):
     def get_delete_url(self):
         return self.get_object_url(action='delete')
 
-    def children(self):
-        return self.objects.filter(parent=self)
+    @property
+    def child(self):
+        model = self.__class__
+        return model.objects.filter(parent=self).first()
 
+    @property
     def is_parent(self):
         """
         Object with parent=None are parent objects,
@@ -119,10 +113,26 @@ class Link(models.Model):
         return True
 
     def save(self, *args, **kwargs):
+        # if object has parent (object is a child)
+        if self.parent and self.status == 'published':
+            parent = self.parent
+            # make parent and child equal
+            fields = [f.name for f in self._meta.fields]
+            fields.remove('id')
+            fields.remove('created')
+            fields.remove('updated')
+            fields.remove('parent')
+            for field in fields:
+                attr_self_val = getattr(self, field)
+                setattr(parent, field, attr_self_val)
+            parent.save()
+
         super().save(*args, **kwargs)
         utils.create_thumbnail(self.image.path, self.thumbnail_path)
 
-    objects = LinkManager()
+    # Managers
+    #objects = LinkManager()
+    objects = models.Manager()
     published = PublishedManager()
 
     class Meta:
@@ -149,7 +159,7 @@ class Website(Link):
         # slug: domain-extention => webiste-org, google-com
         domain, ext = utils.split_http(self.url).split('.')
         slug = f'{domain}-{ext}'
-        self.slug = slugify(slug)
+        self.slug = default_slugify(slug)
 
     class Meta:
         ordering = ('-created',)
@@ -183,7 +193,7 @@ class Channel(Link):
         utils.check_channel_id(self.channel_id, self.application)
         self.url = utils.generate_channel_url(self.channel_id, self.application)
         utils.check_duplicate_url(self)
-        self.slug = slugify(f'{self.application}-{self.channel_id}')
+        self.slug = default_slugify(f'{self.application}-{self.channel_id}')
 
     class Meta:
         ordering = ('-created',)
@@ -212,7 +222,7 @@ class Group(Link):
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
         utils.check_duplicate_url(self)
-        self.slug = slugify(f'{self.application}-{self.title}-f{self.uuid}',
+        self.slug = default_slugify(f'{self.application}-{self.title}-f{self.uuid}',
             allow_unicode=True)
 
     class Meta:
@@ -236,7 +246,7 @@ class Instagram(Link):
 
         self.url = utils.generate_instagram_url(page_id)
         utils.check_duplicate_url(self)
-        self.slug = slugify(f'{self.page_id}')
+        self.slug = default_slugify(f'{self.page_id}')
 
     class Meta:
         ordering = ('-created',)

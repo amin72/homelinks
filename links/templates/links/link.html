@@ -10,7 +10,9 @@
                 </div>
 
                 <div class="col-lg-8 col-12 pt-3">
-                    <h1 class="lead border-bottom mb-4 p-xl-2 rounded font-weight-bold">{{ object.title }}</h1>
+                    <h1 class="lead border-bottom mb-4 p-xl-2 rounded font-weight-bold">
+                        {{ object.title }} {% if object.status == 'draft' %}<small>- در انتظار تایید مدیر</small>{% endif %}
+                    </h1>
                     <div class="text-justify py-1 px-2">{{ object.description|linebreaks }}</div>
                 </div>
             </div><!-- row: Post content -->
@@ -38,7 +40,7 @@
         <article class="p-2">
 
             {% for tag in object.tags.all %}
-                <a class="badge badge-secondary tag-size" href="% url 'links:tagged_items' tag.slug %">{{ tag }}</a>
+                <a class="badge badge-secondary tag-size" href="{% url 'links:tagged_items' tag.slug %}">{{ tag }}</a>
             {% endfor %}
 
         </article>

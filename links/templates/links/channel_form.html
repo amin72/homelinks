@@ -30,7 +30,6 @@
 
                     <div class="form-group">
                         <button class="btn btn-lg btn-outline-primary" type="submit">ارسال</button>
-                        <button id="preview" class="btn btn-lg btn-outline-secondary">پیش نمایش</button>
                     </div>
                 </form>
             </div>
@@ -43,12 +42,16 @@
                 <div class="col-12 mt-3">
                     <div class="row">
                         <div class="col-12">
-                            <img class="img-fluid rounded link-img border" src="{% static "img/logo.png" %}">
+                            <img class="img-fluid rounded link-img border"
+                            src="{% static "img/logo.png" %}">
                         </div>
 
                         <div class="col-12 pt-3">
-                            <h1 id="preview_title" class="lead border-bottom mb-4 p-xl-2 rounded font-weight-bold"></h1>
-                            <div id="preview_description" class="text-justify py-1 px-2"></div>
+                            <h1 id="preview_title"
+                                class="lead border-bottom mb-4 p-xl-2 rounded font-weight-bold">{% if object %}{{ object.title }}{% endif %}</h1>
+                            <div id="preview_description" class="text-justify py-1 px-2">
+                                {% if object %}{{ object.description }}{% endif %}
+                            </div>
                         </div>
                     </div><!-- row: Post content -->
                 </div>
@@ -56,19 +59,4 @@
         </div>
     </div>
 </section>
-{% endblock %}
-
-
-{% block javascript %}
-<script>
-    $('#preview').click(function(event) {
-        event.preventDefault();
-
-        var title = $('#id_title').val();
-        var description = $('#id_description').val();
-
-        $('#preview_title').text(title);
-        $('#preview_description').text(description);
-    })
-</script>
 {% endblock %}

@@ -98,7 +98,7 @@ def generate_channel_url(channel_id, application):
     elif application == 'gap':
         url = '{}{}/'.format(GAP_LINK, channel_id)
     # IGap
-    elif application == 'igab':
+    elif application == 'igap':
         url = '{}{}/'.format(IGAP_LINK, channel_id)
     # Eitaa
     elif application == 'eitaa':
