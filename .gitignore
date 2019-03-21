@@ -18,3 +18,4 @@ build/
 tests/report/
 media/*
 notes
+script.sh

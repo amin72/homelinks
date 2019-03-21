@@ -30,7 +30,6 @@
 
                     <div class="form-group">
                         <button class="btn btn-lg btn-outline-primary" type="submit">ارسال</button>
-                        <button id="preview" class="btn btn-lg btn-outline-secondary">پیش نمایش</button>
                     </div>
                 </form>
             </div>
@@ -56,19 +55,4 @@
         </div>
     </div>
 </section>
-{% endblock %}
-
-
-{% block javascript %}
-<script>
-    $('#preview').click(function(event) {
-        event.preventDefault();
-
-        var title = $('#id_title').val();
-        var description = $('#id_description').val();
-
-        $('#preview_title').text(title);
-        $('#preview_description').text(description);
-    })
-</script>
 {% endblock %}

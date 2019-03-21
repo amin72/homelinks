@@ -113,12 +113,12 @@ def generate_instagram_url(page_id):
     """
     Generate instagram page url of gives page ID
     """
-    url = '{}{}/'.format(INSTAGRAM_LINK, self.page_id)
+    url = '{}{}/'.format(INSTAGRAM_LINK, page_id)
     return url
 
 
 def check_duplicate_url(object):
-    model = type(object) # get the model name
+    model = object.__class__ # get the model name
     instance = model.objects.filter(url__endswith=split_http(object.url))
     if not object.pk and instance.exists():
         if model.__name__ == 'Website':

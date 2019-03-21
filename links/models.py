@@ -6,12 +6,11 @@ from django.conf import settings
 from django.utils.translation import gettext, gettext_lazy as _
 from django.utils import timezone
 from django.db.models.signals import post_save
-from django.utils.text import slugify as default_slugify
+from django.utils.text import slugify
 from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from taggit.managers import TaggableManager
-
 from . import utils
 
 
@@ -48,20 +47,22 @@ class Link(models.Model):
     title = models.CharField(max_length=60, verbose_name=_('Title'))
     slug = models.SlugField(max_length=60, blank=True)
     url = models.URLField(verbose_name=_('URL'))
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True,
-        verbose_name=_('Category'))
+    category = models.ForeignKey(Category,
+        on_delete=models.SET_NULL,
+        verbose_name=_('Category'),
+        null=True)
     description = models.TextField(max_length=500,
         verbose_name=_('Description'),
         help_text=_("Link's description up to 500 characters"))
     image = models.ImageField(upload_to=image_upload_path,
         verbose_name=_('Image'))
-    tags = TaggableManager()
     created = models.DateTimeField(default=timezone.localtime)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES,
         default='draft')
     parent = models.ForeignKey("self", null=True, blank=True,
 		on_delete=models.CASCADE)
+    tags = TaggableManager()
 
     @property
     def thumbnail_url(self):
@@ -131,7 +132,6 @@ class Link(models.Model):
         utils.create_thumbnail(self.image.path, self.thumbnail_path)
 
     # Managers
-    #objects = LinkManager()
     objects = models.Manager()
     published = PublishedManager()
 
@@ -159,7 +159,7 @@ class Website(Link):
         # slug: domain-extention => webiste-org, google-com
         domain, ext = utils.split_http(self.url).split('.')
         slug = f'{domain}-{ext}'
-        self.slug = default_slugify(slug)
+        self.slug = slugify(slug)
 
     class Meta:
         ordering = ('-created',)
@@ -193,7 +193,7 @@ class Channel(Link):
         utils.check_channel_id(self.channel_id, self.application)
         self.url = utils.generate_channel_url(self.channel_id, self.application)
         utils.check_duplicate_url(self)
-        self.slug = default_slugify(f'{self.application}-{self.channel_id}')
+        self.slug = slugify(f'{self.application}-{self.channel_id}')
 
     class Meta:
         ordering = ('-created',)
@@ -222,8 +222,7 @@ class Group(Link):
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
         utils.check_duplicate_url(self)
-        self.slug = default_slugify(f'{self.application}-{self.title}-f{self.uuid}',
-            allow_unicode=True)
+        self.slug = slugify(f'{self.application}-{self.title}-f{self.uuid}')
 
     class Meta:
         ordering = ('-created',)
@@ -244,9 +243,9 @@ class Instagram(Link):
         if self.page_id.startswith('@'):
             self.page_id = self.page_id[1:]
 
-        self.url = utils.generate_instagram_url(page_id)
+        self.url = utils.generate_instagram_url(self.page_id)
         utils.check_duplicate_url(self)
-        self.slug = default_slugify(f'{self.page_id}')
+        self.slug = slugify(f'{self.page_id}')
 
     class Meta:
         ordering = ('-created',)

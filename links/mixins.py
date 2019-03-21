@@ -49,7 +49,7 @@ class CreateMixIn(CreateView):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
         self.object.save()
-        self.object.tags.add(self.object.title)
+        #self.object.tags.add(self.object.title)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -114,11 +114,34 @@ class UpdateMixIn(UpdateView):
         if hasattr(object_dup, 'page_id'):
             object_dup.page_id = cd.get('page_id')
 
+        # set slug and url for channel, group, instagram
+        model_name = object_dup.__class__.__name__.lower()
+        url = cd.get('url')
+        if model_name == 'website':
+            object_dup.url = url
+            domain, ext = utils.split_http(self.url).split('.')
+            slug = f'{domain}-{ext}'
+            self.slug = slugify(slug)
+        elif model_name == 'channel':
+            utils.check_channel_id(self.channel_id, self.application)
+            object_dup.url = utils.generate_channel_url(object_dup.channel_id,
+                object_dup.application)
+            object_dup.slug = slugify(
+                f'{object_dup.application}-{object_dup.channel_id}')
+        elif model_name == 'group':
+            utils.check_duplicate_url(object_dup)
+            slug = \
+                f'{object_dup.application}-{object_dup.title}-{object_dup.uuid}'
+            self.slug = slugify(slug)
+        elif model_name == 'instagram':
+            object_dup.url = utils.generate_instagram_url(object_dup.page_id)
+            object_dup.slug = slugify(f'{object_dup.page_id}')
+
+        # check for duplicate url
+        utils.check_duplicate_url(object_dup)
+
         object_dup.title = cd.get('title')
-        object_dup.slug = slugify(
-            f'{object_dup.application}-{object_dup.channel_id}')
-        object_dup.url = utils.generate_channel_url(object_dup.channel_id,
-            object_dup.application)
+
         object_dup.category = cd.get('category')
         object_dup.description = cd.get('description')
         object_dup.status = 'draft'
@@ -129,8 +152,8 @@ class UpdateMixIn(UpdateView):
         object_dup.image = cd.get('image')
 
         # set tags
-        #for tag in object.tags.all():
-        #    object_dup.tags.set(tag)
+        for tag in object.tags.all():
+           object_dup.tags.set(tag)
         object_dup.tags = None
 
         object_dup.save()
