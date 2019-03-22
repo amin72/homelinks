@@ -24,9 +24,11 @@
                           <a href="{% url 'dashboard:add_link' %}">ثبت لینک</a>
                       </li>
 
-                      <!-- <li class="list-group-item light-even">
-                          <a href="% url 'dashboard:edit_remove_links' %">ویرایش و حذف لینک ها</a>
-                      </li> -->
+                      {% if user.profile.vip %}
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'dashboard:users_websites' %}">وبسایت های من</a>
+                      </li>
+                      {% endif %}
 
                       <li class="list-group-item light-even">
                           <a href="{% url 'dashboard:users_channels' %}">کانال های من</a>

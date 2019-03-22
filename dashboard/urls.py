@@ -18,6 +18,10 @@ urlpatterns = [
     path('users_channels/', views.UserChannelsListView.as_view(),
         name='users_channels'),
 
+    # list user's websites
+    path('users_websites/', views.UserWebsitesListView.as_view(),
+        name='users_websites'),
+
     # list user's groups
     path('users_groups/', views.UserGroupsListView.as_view(),
         name='users_groups'),

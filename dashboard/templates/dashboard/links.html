@@ -22,13 +22,10 @@
             <div class="row shadow py-2 {% if is_paginated %}my-1 border-bottom bb-3{% else %}{% if not forloop.last %}my-1 border-bottom bb-3{% endif %}{% endif %}">
                 <div class="col-xl-2 col-3">
                     <!-- link's image -->
-                    {% if link.status == 'published' %}
-                        <a href="{{ link.get_absolute_url }}"><img class="img-fluid img-dashboard"
-                            src="{{ link.thumbnail_url }}" alt="{{ link.title }}"></a>
-                    {% else %}
+                    <a href="{{ link.get_absolute_url }}">
                         <img class="img-fluid img-dashboard"
-                            src="{{ link.thumbnail_url }}" alt="{{ link.title }}">
-                    {% endif %}
+                             src="{{ link.thumbnail_url }}" alt="{{ link.title }}">
+                    </a>
                 </div>
 
                 <!-- link's title and description -->

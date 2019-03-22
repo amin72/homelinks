@@ -222,7 +222,9 @@ class Group(Link):
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
         utils.check_duplicate_url(self)
-        self.slug = slugify(f'{self.application}-{self.title}-f{self.uuid}')
+        self.slug = slugify(
+            f'{self.application}-{self.title}-f{self.uuid}',
+            allow_unicode=True)
 
     class Meta:
         ordering = ('-created',)

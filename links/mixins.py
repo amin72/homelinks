@@ -49,7 +49,7 @@ class CreateMixIn(CreateView):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
         self.object.save()
-        #self.object.tags.add(self.object.title)
+        self.object.tags.add(self.object.title)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -242,4 +242,18 @@ class SetModelNameMixIn:
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['model_name'] = self.model_name
+        return context
+
+
+class SetActiveCssClassMixIn:
+    """
+    This mixin is used for setting `active` attribute in html entities.
+    `model_name` property must be set in sub class.
+    """
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        key = f'active_{self.model_name}s'
+        context[key] = True # eg. active_websites = True
+        print(context)
         return context

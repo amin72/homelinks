@@ -36,6 +36,7 @@ from .mixins import (
     DeleteMixIn,
     SuccessMessageMixin,
     SetModelNameMixIn,
+    SetActiveCssClassMixIn,
 )
 from .forms import ReportForm
 from . import utils
@@ -65,26 +66,32 @@ def index(request):
         'channels': channels,
         'groups': groups,
         'instagrams': instagrams,
+        'active_home': True,
     }
     return render(request, 'links/index.html', context)
 
 
 # list websites
-class WebsiteListView(ListView):
+class WebsiteListView(SetActiveCssClassMixIn, ListView):
     """List all published websites"""
+    model_name = 'website'
     queryset = Website.published.all()
 
 
 # list iranian websites
-class IranianWebsiteListView(ListView):
+class IranianWebsiteListView(SetActiveCssClassMixIn, ListView):
     """List all published and iranian websites"""
+    model_name = 'website'
+
     def get_queryset(self):
         return Website.published.filter(type='iranian')
 
 
 # list foreign websites
-class ForeignWebsiteListView(ListView):
+class ForeignWebsiteListView(SetActiveCssClassMixIn, ListView):
     """List all published and foreign websites"""
+    model_name = 'website'
+
     def get_queryset(self):
         return Website.published.filter(type='foreign')
 
@@ -133,38 +140,44 @@ class WebsiteDeleteView(DeleteMixIn):
 
 
 # list channels
-class ChannelListView(ListView):
+class ChannelListView(SetActiveCssClassMixIn, ListView):
     queryset = Channel.published.all().filter(parent=None)
+    model_name = 'channel'
 
 
 # list telegram channels
-class TelegramChannelListView(ApplicationMixIn):
+class TelegramChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Channel
     application='telegram'
+    model_name = 'channel'
 
 
 # list soroush channels
-class SoroushChannelListView(ApplicationMixIn):
+class SoroushChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Channel
     application='soroush'
+    model_name = 'channel'
 
 
 # list gap channels
-class GapChannelListView(ApplicationMixIn):
+class GapChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Channel
     application='gap'
+    model_name = 'channel'
 
 
 # list igap channels
-class IGapChannelListView(ApplicationMixIn):
+class IGapChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Channel
     application='igap'
+    model_name = 'channel'
 
 
 # list eitaa channels
-class EitaaChannelListView(ApplicationMixIn):
+class EitaaChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Channel
     application='eitaa'
+    model_name = 'channel'
 
 
 # channel details
@@ -210,44 +223,51 @@ class ChannelDeleteView(DeleteMixIn):
 
 
 # list groups
-class GroupListView(ListView):
+class GroupListView(SetActiveCssClassMixIn, ListView):
     queryset = Group.published.all()
+    model_name = 'group'
 
 
 # list whatsapp groups
-class WhatsappGroupListView(ApplicationMixIn):
+class WhatsappGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Group
     application = 'whatsapp'
+    model_name = 'group'
 
 
 # list telegram groups
-class TelegramGroupListView(ApplicationMixIn):
+class TelegramGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Group
     application='telegram'
+    model_name = 'group'
 
 
 # list soroush groups
-class SoroushGroupListView(ApplicationMixIn):
+class SoroushGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Group
     application='soroush'
+    model_name = 'group'
 
 
 # list gap groups
-class GapGroupListView(ApplicationMixIn):
+class GapGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Group
     application='gap'
+    model_name = 'group'
 
 
 # list igap groups
-class IGapGroupListView(ApplicationMixIn):
+class IGapGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Group
     application='igap'
+    model_name = 'group'
 
 
 # list eitaa groups
-class EitaaGroupListView(ApplicationMixIn):
+class EitaaGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
     model = Group
     application='eitaa'
+    model_name = 'group'
 
 
 # group detail
@@ -293,8 +313,9 @@ class GroupDeleteView(DeleteMixIn):
 
 
 # list instagrams
-class InstagramListView(ListView):
+class InstagramListView(SetActiveCssClassMixIn, ListView):
     queryset = Instagram.published.all()
+    model_name = 'instagram'
 
 
 # instagram details

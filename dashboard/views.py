@@ -55,6 +55,7 @@ def index(request):
         'links': object_list,
         'page': page,
         'is_paginated': True,
+        'active_dashboard': True,
     }
     return render(request, 'dashboard/index.html', context)
 
@@ -62,7 +63,7 @@ def index(request):
 # guide
 @login_required
 def rules(request):
-    return render(request, 'dashboard/rules.html')
+    return render(request, 'dashboard/rules.html', {'active_dashboard': True})
 
 
 # add link
@@ -86,7 +87,17 @@ def add_link(request):
             choices.remove(('website', 'Website'))
             form.fields.get('link_type').choices = choices
 
-        return render(request, 'dashboard/add_link.html', {'form': form})
+        context = {
+            'form': form,
+            'active_addlink': True,
+        }
+        return render(request, 'dashboard/add_link.html', context)
+
+
+# list user's websites
+class UserWebsitesListView(LoginRequiredMixin, UserMixIn, ListView):
+    model = Website
+    template_name = 'dashboard/users_websites.html'
 
 
 # list user's channels
@@ -142,4 +153,5 @@ def update_user_info(request):
     return render(request, 'dashboard/update_user_info.html', {
         'user_form': user_form,
         'profile_form': profile_form,
+        'active_dashboard': True,
     })

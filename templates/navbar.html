@@ -13,20 +13,20 @@
 
     <div class="collapse navbar-collapse" id="mainNavbar">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active mr-1">
+            <li class="nav-item mr-1 {% if active_home %}active{% endif %}">
                 <a class="nav-link" href="{% url 'links:index' %}">خانه</a>
             </li>
-            <li class="nav-item mr-2">
+            <li class="nav-item mr-2 {% if active_addlink %}active{% endif %}">
                 <a class="nav-link" href="{% url 'dashboard:add_link' %}">ثبت لینک</a>
             </li>
-            <li class="nav-item dropdown mr-1">
+            <li class="nav-item dropdown mr-1 {% if active_websites %}active{% endif %}">
                 <a class="nav-link dropdown-toggle">سایت ها</a>
                 <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownWebsites">
                     <a class="dropdown-item" href="{% url 'links:iranian-websites' %}">ایرانی</a>
                     <a class="dropdown-item" href="{% url 'links:foreign-websites' %}">خارجی</a>
                 </div>
             </li>
-            <li class="nav-item dropdown mr-1">
+            <li class="nav-item dropdown mr-1 {% if active_channels %}active{% endif %}">
                 <a class="nav-link dropdown-toggle">کانال ها</a>
                 <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownChannels">
                     <a class="dropdown-item" href="{% url 'links:telegram-channels' %}">تلگرام</a>
@@ -36,7 +36,8 @@
                     <a class="dropdown-item" href="{% url 'links:eitaa-channels' %}">ایتا</a>
                 </div>
             </li>
-            <li class="nav-item dropdown mr-1">
+
+            <li class="nav-item dropdown mr-1 {% if active_groups %}active{% endif %}">
                 <a class="nav-link dropdown-toggle">گروه ها</a>
                 <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownGroups">
                     <a class="dropdown-item" href="{% url 'links:whatsapp-groups' %}">واتس اپ</a>
@@ -47,14 +48,19 @@
                     <a class="dropdown-item" href="{% url 'links:eitaa-groups' %}">ایتا</a>
                 </div>
             </li>
-            <li class="nav-item">
+
+            <li class="nav-item {% if active_instagrams %}active{% endif %}">
+                <a class="nav-link" href="% url 'links:instagrams' %">اینستاگرام</a>
+            </li>
+
+            <li class="nav-item {% if active_contactus %}active{% endif %}">
                 <a class="nav-link" href="% url 'contact:contact-us' %">تماس با ما</a>
             </li>
         </ul>
 
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown {% if active_dashboard %}active{% endif %}">
                     <a class="nav-link dropdown-toggle">{% if user.first_name and user.last_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username}}{% endif %}</a>
 
                     <!--<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownProfile">-->
