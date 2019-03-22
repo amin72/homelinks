@@ -22,6 +22,18 @@ urlpatterns = [
     path('website/<slug:slug>/', views.WebsiteDetailView.as_view(),
         name='website-detail'),
 
+    # website create
+    path('websites/create/', views.WebsiteCreateView.as_view(),
+        name='website-create'),
+
+    # website update
+    path('websites/<slug:slug>/update/', views.WebsiteUpdateView.as_view(),
+        name='website-update'),
+
+    # website delete
+    path('websites/<slug:slug>/delete/', views.WebsiteDeleteView.as_view(),
+        name='website-delete'),
+
     # list channels
     path('channels/', views.ChannelListView.as_view(), name='channels'),
 
@@ -127,4 +139,7 @@ urlpatterns = [
 
     # tagged items
     path('tag/<str:tag_slug>/', views.tagged_items, name='tagged_items'),
+
+    # search
+    path('search/', views.search, name='search'),
 ]

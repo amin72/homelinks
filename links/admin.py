@@ -55,7 +55,7 @@ class ChannelAdmin(TaggitCounter, admin.ModelAdmin):
 @admin.register(Group)
 class GroupAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'title', 'status', 'url', 'application', 'category', 'description',
-        'image', 'tags', 'parent')
+        'image', 'parent')
     list_display = ('title', 'status', 'slug', 'application', 'author',
         'category', 'created', 'taggit_counter')
     list_filter = ('application', 'created', 'updated', 'category')

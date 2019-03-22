@@ -13,17 +13,21 @@ function set_preview_description(descriptionInput) {
 $(document).ready(function() {
     // on keyup event preview value of title link
     var titleInput = $("#id_title");
-    titleInput.on('input', function() {
+    if (titleInput.length && titleInput) { // if exists
+        titleInput.on('input', function() {
+            set_preview_title(titleInput);
+        });
+
         set_preview_title(titleInput);
-    });
+    }
 
-    set_preview_title(titleInput);
-
-    // on keyup event preview value of description link
     var descriptionInput = $("#id_description");
-    descriptionInput.on('input', function() {
-        set_preview_description(descriptionInput);
-    });
+    if (descriptionInput.length && descriptionInput) { // if exists
+        // on keyup event preview value of description link
+        descriptionInput.on('input', function() {
+            set_preview_description(descriptionInput);
+        });
 
-    set_preview_description(descriptionInput);
+        set_preview_description(descriptionInput);
+    }
 })

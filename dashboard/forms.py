@@ -17,9 +17,10 @@ User = get_user_model()
 
 class SelectLinkForm(forms.Form):
     choices = (
-        ('channel', 'کانال'),
-        ('group', 'گروه'),
-        ('instagram', 'اینستاگرام'),
+        ('website', _('Website')),
+        ('channel', _('Channel')),
+        ('group', _('Group')),
+        ('instagram', _('Instagram')),
     )
     link_type = forms.ChoiceField(choices=choices, label=_('Link Type'))
 

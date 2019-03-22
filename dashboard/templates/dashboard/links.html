@@ -38,7 +38,7 @@
                             {% if link.parent and link.parent.status == 'published' and link.status == 'draft' %}
                                 - <small>این لینک ویرایش شده است، و نیاز به تایید مدیر دارد.</small>
                             {% endif %}
-                            {% if link.is_parent and link.status == 'draft' %}
+                            {% if link.status == 'draft' %}
                                 - <small>در انتظار تایید مدیر</small>
                             {% endif %}
                         </h6>

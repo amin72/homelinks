@@ -17,6 +17,7 @@ from .forms import (
     ProfileUpdateForm
 )
 from .mixins import UserMixIn
+from .models import Profile
 
 
 # list latest user's links: websites, channels, groups, and instagrams
@@ -28,8 +29,7 @@ def index(request):
     groups = Group.objects.filter(author=user, parent=None)
     instagrams = Instagram.objects.filter(author=user, parent=None)
 
-
-    links = sorted(chain(channels, groups, instagrams),
+    links = sorted(chain(websites, channels, groups, instagrams),
         key=lambda link: link.created, reverse=True)
 
     # if links have child, sent their child instead of them.
@@ -69,7 +69,9 @@ def rules(request):
 @login_required
 def add_link(request):
     link_type = request.POST.get('link_type')
-    if link_type == 'channel':
+    if link_type == 'website':
+        return redirect('links:website-create')
+    elif link_type == 'channel':
         return redirect('links:channel-create')
     elif link_type == 'group':
         return redirect('links:group-create')
@@ -77,6 +79,13 @@ def add_link(request):
         return redirect('links:instagram-create')
     else:
         form = SelectLinkForm()
+
+        if not request.user.profile.vip:
+            # remove website from choices if user is not `vip`
+            choices = form.fields.get('link_type').choices
+            choices.remove(('website', 'Website'))
+            form.fields.get('link_type').choices = choices
+
         return render(request, 'dashboard/add_link.html', {'form': form})
 
 
@@ -106,15 +115,11 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
+            form.save() # create user and profile
             messages.success(request,
                 _('Your account has been created! You are now able to log in')
             )
             return redirect('dashboard:login')
-        else:
-            messages.success(request,
-                _('Something went wrong. Please try again.'))
     else:
         form = UserRegisterForm()
     return render(request, 'dashboard/register.html', {'form': form})
@@ -131,9 +136,6 @@ def update_user_info(request):
             profile_form.save()
             messages.success(request, _('Your account has been updated'))
             return redirect('dashboard:index')
-        else:
-            messages.success(request,
-                _('Something went wrong. Please try again.'))
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)

@@ -1,5 +1,6 @@
 from itertools import chain
 
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
@@ -96,8 +97,39 @@ class WebsiteDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
     model = Website
     lookup_field = 'slug'
     model_name = 'website'
-## -----------------------------------------------------
 
+
+# website create
+class WebsiteCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
+    model = Website
+    fields = (
+        'title',
+        'url',
+        'category',
+        'description',
+        'image'
+    )
+    success_message = create_message
+
+
+# website update
+class WebsiteUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
+    model = Website
+    success_message = update_message
+    fields = (
+        'title',
+        'url',
+        'category',
+        'description',
+        'image'
+    )
+
+
+# website delete
+class WebsiteDeleteView(DeleteMixIn):
+    model = Website
+    success_message = delete_message
+## -----------------------------------------------------
 
 
 # list channels
@@ -358,7 +390,7 @@ def report_link(request):
 
 def tagged_items(request, tag_slug=None):
     """
-    list all posts that are tagged with `tag_slug`
+    list all links that are tagged with `tag_slug`
     """
     websites = Website.published.all()
     channels = Channel.published.all()
@@ -382,13 +414,32 @@ def tagged_items(request, tag_slug=None):
 
     object_list = list(chain(websites, channels, groups, instagrams))
 
-    paginator = Paginator(object_list, 20) # 3 posts in each page
+    paginator = Paginator(object_list, 20) # 20 links per page
     page = request.GET.get('page')
     try:
-        posts = paginator.page(page)
+        object_list = paginator.page(page)
     except PageNotAnInteger:
-        posts = paginator.page(1)
+        object_list = paginator.page(1)
     except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
+        object_list = paginator.page(paginator.num_pages)
     return render(request, 'links/tagged_items.html',
-        {'page': page, 'posts': posts, 'tag': tag})
+        {'page': page, 'object_list': object_list, 'tag': tag})
+
+
+# search
+def search(request):
+    q = request.GET.get('q')
+    if q:
+        query = (Q(title__icontains=q) | Q(description__icontains=q))
+
+        # search the query in published links
+        search_result = chain(
+            Website.published.filter(query),
+            Channel.published.filter(query),
+            Group.published.filter(query),
+            Instagram.published.filter(query))
+    else:
+        search_result = None
+
+    return render(request, 'links/search.html', {
+        'search_result': search_result})

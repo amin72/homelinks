@@ -119,7 +119,7 @@ class UpdateMixIn(UpdateView):
         url = cd.get('url')
         if model_name == 'website':
             object_dup.url = url
-            domain, ext = utils.split_http(self.url).split('.')
+            domain, ext = utils.split_http(url).split('.')
             slug = f'{domain}-{ext}'
             self.slug = slugify(slug)
         elif model_name == 'channel':
@@ -180,27 +180,37 @@ class UpdateMixIn(UpdateView):
 
 
 class DeleteMixIn(LoginRequiredMixin, OwnerMixin, DeleteView):
-    """This MixIn deletes an object"""
+    """
+    This MixIn deletes an object
+    `success_message` property in sub class is required.
+    """
     success_url = reverse_lazy('dashboard:index')
 
     # redirect get request to success-url (dashboard-index)
     def get(self, request, *args, **kwargs):
         return redirect(self.success_url)
 
+    def get_object(self):
+        slug = self.kwargs.get('slug')
+        object = self.model.objects.get(slug=slug, parent=None)
+        return object
+
     # send flash message and do the rest (deleting the thumbnail then the link)
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        object_dup = self.model.objects.get(uuid=self.object.uuid)
-        object_dup.delete()
 
-        # remove object image and thumbnail image
-        os.remove(self.object.image.path)
-        os.remove(self.object.get_thumbnail_path())
+        try:
+            # remove image and thumbnail
+            os.remove(self.object.image.path)
+            os.remove(self.object.thumbnail_path)
 
-        # remove duplicate object image and thumbnail image
-        if self.object.image.name != object_dup.image.name:
-            os.remove(object_dup.image.path)
-            os.remove(object_dup.get_thumbnail_path())
+            # if object has child remove child's image and thumbnail too
+            child = self.object.child
+            if child:
+                os.remove(child.image.path)
+                os.remove(child.thumbnail_path)
+        except FileNotFoundError:
+            pass
 
         messages.success(request, self.success_message)
         return super().post(request, *args, **kwargs)
