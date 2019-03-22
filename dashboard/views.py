@@ -16,7 +16,7 @@ from .forms import (
     UserUpdateForm,
     ProfileUpdateForm
 )
-from .mixins import UserMixIn
+from .mixins import UserMixIn, ReplaceChildWithParent
 from .models import Profile
 
 
@@ -95,25 +95,37 @@ def add_link(request):
 
 
 # list user's websites
-class UserWebsitesListView(LoginRequiredMixin, UserMixIn, ListView):
+class UserWebsitesListView(LoginRequiredMixin,
+    ReplaceChildWithParent,
+    UserMixIn,
+    ListView):
     model = Website
     template_name = 'dashboard/users_websites.html'
 
 
 # list user's channels
-class UserChannelsListView(LoginRequiredMixin, UserMixIn, ListView):
+class UserChannelsListView(LoginRequiredMixin,
+    ReplaceChildWithParent,
+    UserMixIn,
+    ListView):
     model = Channel
     template_name = 'dashboard/users_channels.html'
 
 
 # list user's groups
-class UserGroupsListView(LoginRequiredMixin, UserMixIn, ListView):
+class UserGroupsListView(LoginRequiredMixin,
+    ReplaceChildWithParent,
+    UserMixIn,
+    ListView):
     model = Group
     template_name = 'dashboard/users_groups.html'
 
 
 # list user's instagrams
-class UserInstagramsListView(LoginRequiredMixin, UserMixIn, ListView):
+class UserInstagramsListView(LoginRequiredMixin,
+    ReplaceChildWithParent,
+    UserMixIn,
+    ListView):
     model = Instagram
     template_name = 'dashboard/users_instagrams.html'
 

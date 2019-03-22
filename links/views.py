@@ -112,6 +112,7 @@ class WebsiteCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
     fields = (
         'title',
         'url',
+        'type',
         'category',
         'description',
         'image'

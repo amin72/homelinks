@@ -14,13 +14,13 @@ urlpatterns = [
     # add-link
     path('add_link/', views.add_link, name='add_link'),
 
-    # list user's channels
-    path('users_channels/', views.UserChannelsListView.as_view(),
-        name='users_channels'),
-
     # list user's websites
     path('users_websites/', views.UserWebsitesListView.as_view(),
         name='users_websites'),
+
+    # list user's channels
+    path('users_channels/', views.UserChannelsListView.as_view(),
+        name='users_channels'),
 
     # list user's groups
     path('users_groups/', views.UserGroupsListView.as_view(),

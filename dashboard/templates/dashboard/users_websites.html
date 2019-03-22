@@ -1,0 +1,26 @@
+{% extends "base_dashboard.html" %}
+
+
+{% block title %}
+    {{ block.super }} |
+    وب سایت ها
+{% endblock %}
+
+
+{% block content %}
+
+<!-- left sidebar -->
+<section class="col-xl-9 col-md-8">
+    <div class="row ml-auto mr-auto mt-3 pb-1 border border-info rounded">
+
+        <!-- channel links -->
+        <div class="col-12 mt-5">
+            <h1 class="mb-3 text-center bg-light rounded">وب سایت ها</h1>
+        </div>
+
+        {% include "dashboard/links.html" with links=object_list %}
+
+    </div>
+</section><!-- left sidebar -->
+
+{% endblock %}

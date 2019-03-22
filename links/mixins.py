@@ -255,5 +255,4 @@ class SetActiveCssClassMixIn:
         context = super().get_context_data(*args, **kwargs)
         key = f'active_{self.model_name}s'
         context[key] = True # eg. active_websites = True
-        print(context)
         return context
