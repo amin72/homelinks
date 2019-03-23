@@ -1,28 +1,50 @@
-/*
-	Font
-*/
+@charset "utf-8 ";
+@import url(../fonts/weblogma_yekan.css);
+@charset "UTF-8 ";
 
-@font-face {
-    font-family:'BYekan';
-    src:url('../fonts/BYekan.eot');
-    src:local('bYekan'),
-        local('b Yekan'),
-        url('../fonts/BYekan.eot?#iefix') format('embedded-opentype'),
-        url('../fonts/BYekan.woff') format('woff'),
-        url('../fonts/BYekan.ttf') format('truetype'),
-        url('../fonts/BYekan.svg#BYekan') format('svg');
-    font-style:normal;
-    font-weight:normal;
+html {
+-ms-text-size-adjust:100%;
+-webkit-text-size-adjust:100%
 }
 
-/* END Font */
-
-
 body {
-    direction: rtl;
-    font-family:BYekan, Tahoma, Geneva, sans-serif;
+    font-family:weblogmayekan,Arial;
     background: #fafafa;
     color: #333333;
+    direction: rtl;
+    font-size: 19px;
+}
+
+h1, h2 {
+    font-weight: normal;
+}
+
+h3 {
+    font-weight: bold;
+}
+
+p {
+    text-align: justify;
+}
+
+.p1 {
+    font-size: 14px;
+}
+
+.p2 {
+    font-size: 16px;
+}
+
+.p3 {
+    font-size:18px;
+}
+
+.p4 {
+    font-size:20px;
+}
+
+.p5 {
+    font-size:28px;
 }
 
 .advertisement-image {

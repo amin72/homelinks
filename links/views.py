@@ -38,7 +38,15 @@ from .mixins import (
     SetModelNameMixIn,
     SetActiveCssClassMixIn,
 )
-from .forms import ReportForm
+
+from .forms import (
+    CreateWebsiteForm,
+    CreateChannelForm,
+    CreateGroupForm,
+    CreateInstagramForm,
+    ReportForm,
+)
+
 from . import utils
 
 
@@ -109,14 +117,7 @@ class WebsiteDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
 # website create
 class WebsiteCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
     model = Website
-    fields = (
-        'title',
-        'url',
-        'type',
-        'category',
-        'description',
-        'image'
-    )
+    form_class = CreateWebsiteForm
     success_message = create_message
 
 
@@ -192,14 +193,7 @@ class ChannelDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
 # channel create
 class ChannelCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
     model = Channel
-    fields = (
-        'application',
-        'title',
-        'channel_id',
-        'category',
-        'description',
-        'image'
-    )
+    form_class = CreateChannelForm
     success_message = create_message
 
 
@@ -282,14 +276,7 @@ class GroupDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
 # group create
 class GroupCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
     model = Group
-    fields = (
-        'application',
-        'title',
-        'url',
-        'category',
-        'description',
-        'image'
-    )
+    form_class = CreateGroupForm
     success_message = create_message
 
 
@@ -330,13 +317,7 @@ class InstagramDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
 # instagram create
 class InstagramCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
     model = Instagram
-    fields = (
-        'title',
-        'page_id',
-        'category',
-        'description',
-        'image'
-    )
+    form_class = CreateInstagramForm
     success_message = create_message
 
 
@@ -361,9 +342,7 @@ class InstagramDeleteView(DeleteMixIn):
 
 
 # Report links
-def report_link(request):
-    model_name = request.GET.get('model')
-    slug = request.GET.get('slug')
+def report_link(request, model_name, slug):
     # app_label is required to not conflict with other models
     content_type = ContentType.objects.get(model=model_name, app_label='links')
     model = content_type.model_class()

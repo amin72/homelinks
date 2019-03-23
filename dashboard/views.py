@@ -154,6 +154,8 @@ def update_user_info(request):
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST,
             instance=request.user.profile)
+        print('XXXXXX:', user_form.errors)
+        print('YYYYYY:', profile_form.errors)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()

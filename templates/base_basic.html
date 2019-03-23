@@ -4,10 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- <link rel="icon" href="../../../../favicon.ico"> -->
-
+    <meta name="description" content="سایت خانه لینک ها در حوزه معرفی سایت، کانال، گروه و صفحات شبکه های اجتماعی فعالیت دارد.">
     <title>{% block title %}خانه لینک ها{% endblock %}</title>
 
     <!-- CSS files -->
@@ -16,7 +13,7 @@
     <link href="{% static "css/style.css" %}" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="{% static 'img/logo.png' %}"/>
 
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    {% block rechaptcha %}{% endblock %}
 </head>
 
 <body>
@@ -42,8 +39,6 @@
 
     <!-- JavaScript -->
     <script src="{% static "js/jquery.min.js" %}"></script>
-    <script src="{% static "js/popper.min.js" %}"></script>
-    <script src="{% static "js/tether.min.js" %}"></script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>
     <script src="{% static "js/main.js" %}"></script>
 

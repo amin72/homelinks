@@ -1,14 +1,8 @@
 from django import forms
 from django.utils.translation import gettext, gettext_lazy as _
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import (
-    UserCreationForm,
-    AuthenticationForm,
-    UsernameField
-)
-from snowpenguin.django.recaptcha2.fields import ReCaptchaField
-from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
-from snowpenguin.django.recaptcha2.widgets import ReCaptchaHiddenInput
+from django.contrib.auth.forms import UserCreationForm
+from snowpenguin.django.recaptcha3.fields import ReCaptchaField
 from .models import Profile
 
 
@@ -26,11 +20,10 @@ class SelectLinkForm(forms.Form):
 
 
 class UserRegisterForm(UserCreationForm):
-    captcha = ReCaptchaField(widget=ReCaptchaHiddenInput())
+    captcha = ReCaptchaField()
 
     class Meta:
         model = User
-        # add  `captcha` field
         fields = (
             'username',
             'email',
@@ -41,7 +34,7 @@ class UserRegisterForm(UserCreationForm):
 
 
 class UserUpdateForm(forms.ModelForm):
-    captcha = ReCaptchaField(widget=ReCaptchaHiddenInput())
+    captcha = ReCaptchaField()
 
     class Meta:
         model = User
@@ -49,13 +42,11 @@ class UserUpdateForm(forms.ModelForm):
             'first_name',
             'last_name',
             'email',
-            'captcha'
+            'captcha',
         )
 
 
 class ProfileUpdateForm(forms.ModelForm):
-    #captcha = ReCaptchaField(widget=ReCaptchaHiddenInput())
-
     class Meta:
         model = Profile
         fields = ('phone_number',)

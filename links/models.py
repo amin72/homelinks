@@ -257,16 +257,19 @@ class Instagram(Link):
 class Report(models.Model):
     TYPES = (
         ('Inappropriate content', _('Inappropriate content')),
-        ('Mismatched title and description', _('Mismatched title and description')),
+        ('Mismatched title and description',
+            _('Mismatched title and description')),
         ('Broken link', _('Broken link')),
     )
 
     url = models.URLField(verbose_name=_('URL'))
     email = models.EmailField(verbose_name=_('Your Email'))
-    type = models.CharField(max_length=256, choices=TYPES,
+    type = models.CharField(max_length=256,
+        choices=TYPES,
         verbose_name=_('Type of Report'))
-    text = models.TextField(max_length=1024, verbose_name=_('Text'),
-        help_text=_("Text up to 1024 characters"))
+    text = models.TextField(max_length=1024,
+        verbose_name=_('Text'),
+        help_text=_("Text up to 1024 characters"),)
     is_read = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     # this model can manager many objects (website, groups, ...)

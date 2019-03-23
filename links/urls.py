@@ -135,7 +135,8 @@ urlpatterns = [
         name='instagram-delete'),
 
     # report link
-    path('report/', views.report_link, name='report'),
+    path('report/<str:model_name>/<str:slug>/', views.report_link,
+        name='report'),
 
     # tagged items
     path('tag/<str:tag_slug>/', views.tagged_items, name='tagged_items'),

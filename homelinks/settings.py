@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'jalali_date',
     'taggit',
     'taggit_helpers',
+    'snowpenguin.django.recaptcha3',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'dashboard:index'
 LOGIN_URL = 'dashboard:login'
+
+
+RECAPTCHA_PRIVATE_KEY = '6Lc6fZkUAAAAAE8c3ckrYu7FsngZ5-U_J-W6s3uJ'
+RECAPTCHA_PUBLIC_KEY = '6Lc6fZkUAAAAAK6Tgha7LMhxPNZb8NopjEKbOCMZ'
+RECAPTCHA_DEFAULT_ACTION = 'generic'
+RECAPTCHA_SCORE_THRESHOLD = 0.5

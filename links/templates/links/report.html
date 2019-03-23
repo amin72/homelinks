@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load recaptcha3 %}
 
 
 {% block title %}
     {{ block.super }} |
     گزارش {{ object.title }}
+{% endblock %}
+
+
+{% block rechaptcha %}
+    {% recaptcha_init %}
+    {% recaptcha_ready action_name='homepage' %}
 {% endblock %}
 
 
@@ -14,7 +21,7 @@
         <div class="offset-lg-2 col-lg-8 col-12">
             <div class="content-section">
 
-                <form method="post">
+                <form action="?" method="post">
                     {% csrf_token %}
 
                     <fieldset class="form-group">

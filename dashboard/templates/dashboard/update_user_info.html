@@ -1,10 +1,17 @@
 {% extends "base_dashboard.html" %}
 {% load crispy_forms_tags %}
+{% load recaptcha3 %}
 
 
 {% block title %}
     {{ block.super }} |
     ویرایش اطلاعات کاربری
+{% endblock %}
+
+
+{% block rechaptcha %}
+    {% recaptcha_init %}
+    {% recaptcha_ready action_name='homepage' %}
 {% endblock %}
 
 
@@ -16,7 +23,7 @@
 
         <div class="offset-xl-2 col-xl-8 col-12 rem1-1">
             <div class="content-section">
-                <form method="post">
+                <form action="?" method="post">
                     <legend class="border-bottom mb-4 text-center bg-light">ویرایش اطلاعات کاربری</legend>
                     {% csrf_token %}
 

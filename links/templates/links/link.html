@@ -1,4 +1,6 @@
 {% load jalali_tags %}
+{% load convert_numbers %}
+
 <section class="col-xl-10 col-md-9 mt-md-4 mt-3">
 
     <div class="row border border-info rounded mx-0 pt-1 pb-3">
@@ -6,12 +8,14 @@
         <div class="col-12 mt-3">
             <div class="row">
                 <div class="col-lg-4 col-12">
-                    <img class="img-fluid rounded link-img" src="{{ object.image.url }}" alt="{{ object.title }}">
+                    <img class="img-fluid rounded link-img"
+                         src="{{ object.image.url }}" alt="{{ object.title }}">
                 </div>
 
                 <div class="col-lg-8 col-12 pt-3">
                     <h1 class="lead border-bottom mb-4 p-xl-2 rounded font-weight-bold">
-                        {{ object.title }} {% if object.status == 'draft' %}<small>- در انتظار تایید مدیر</small>{% endif %}
+                        {{ object.title }} {% if object.status == 'draft' %}
+                        <small>- در انتظار تایید مدیر</small>{% endif %}
                     </h1>
                     <div class="text-justify py-1 px-2">{{ object.description|linebreaks }}</div>
                 </div>
@@ -21,14 +25,21 @@
                 <div class="col-lg-4 col-sm-6 col-12">
                     <ul class="list-unstyled">
                         <li class="white bg-info rounded post-meta mb-1"
-                            >تاریخ ارسال: {{ object.created|to_jalali:"%y/%m/%d" }}</li>
+                            >تاریخ ارسال: {{ object.created|to_jalali:'%y/%m/%d'|to_persian }}</li>
                         <li class="white bg-info rounded post-meta"
-                            >ارسال کننده: {% if object.first_name and object.last_name %}{{ object.author.first_name }} {{ object.author.last_name }}{% else %}{{ object.author.username }}{% endif %}</li>
+                            >ارسال کننده:
+                            {% if object.first_name and object.last_name %}
+                                {{ object.author.first_name }} {{ object.author.last_name }}
+                            {% else %}
+                                {{ object.author.username }}
+                            {% endif %}
+                        </li>
                     </ul>
                 </div>
 
                 <div class="col-lg-4 col-sm-6 offset-lg-4 col-12 mt-2">
-                    <a class="btn btn-sm btn-danger float-right" href="{% url 'links:report' %}?model={{ model_name }}&slug={{ object.slug }}">گزارش</a>
+                    <a class="btn btn-sm btn-danger float-right"
+                       href="{% url 'links:report' model_name object.slug %}">گزارش</a>
                     <a class="btn btn-sm btn-success float-right mr-1"
                         href="{{ object.url }}">مشاهده/عضویت</a>
                 </div>
