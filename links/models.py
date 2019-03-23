@@ -126,6 +126,7 @@ class Link(models.Model):
             for field in fields:
                 attr_self_val = getattr(self, field)
                 setattr(parent, field, attr_self_val)
+            #self.status = 'draft'
             parent.save()
 
         super().save(*args, **kwargs)

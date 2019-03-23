@@ -26,7 +26,7 @@ class SelectLinkForm(forms.Form):
 
 
 class UserRegisterForm(UserCreationForm):
-    # captcha = ReCaptchaField(widget=ReCaptchaHiddenInput())
+    captcha = ReCaptchaField(widget=ReCaptchaHiddenInput())
 
     class Meta:
         model = User
@@ -36,11 +36,12 @@ class UserRegisterForm(UserCreationForm):
             'email',
             'password1',
             'password2',
+            'captcha',
         )
 
 
 class UserUpdateForm(forms.ModelForm):
-    # captcha = ReCaptchaField(widget=ReCaptchaHiddenInput())
+    captcha = ReCaptchaField(widget=ReCaptchaHiddenInput())
 
     class Meta:
         model = User
@@ -48,11 +49,12 @@ class UserUpdateForm(forms.ModelForm):
             'first_name',
             'last_name',
             'email',
+            'captcha'
         )
 
 
 class ProfileUpdateForm(forms.ModelForm):
-    # captcha = ReCaptchaField(widget=ReCaptchaHiddenInput())
+    #captcha = ReCaptchaField(widget=ReCaptchaHiddenInput())
 
     class Meta:
         model = Profile

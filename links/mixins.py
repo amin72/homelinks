@@ -89,8 +89,22 @@ class OwnerMixin(UserPassesTestMixin):
 
 class UpdateMixIn(UpdateView):
     def form_valid(self, form):
-        # Create child if child does not exist.
+        cd = form.cleaned_data
         object = self.get_object()
+
+        # check if values are the same before and after updating
+        # if none of the values changed do not create child or update it
+        fields = ['title', 'url', 'category', 'description', 'image', 'type']
+        for field in fields:
+            if hasattr(object, field):
+                value = getattr(object, field)
+                if cd.get(field) != value:
+                    break
+        else:
+            # object values are the same, redirect
+            return redirect(object.get_absolute_url())
+
+        # Create child if child does not exist.
         if object.parent:
             object_dup = object # update child
         else:
@@ -100,7 +114,6 @@ class UpdateMixIn(UpdateView):
             object_dup.parent = object
 
         # Assign all values that are sent with form to child.
-        cd = form.cleaned_data
 
         # channel, group object have application attribute
         if hasattr(object_dup, 'application'):
@@ -141,7 +154,6 @@ class UpdateMixIn(UpdateView):
         utils.check_duplicate_url(object_dup)
 
         object_dup.title = cd.get('title')
-
         object_dup.category = cd.get('category')
         object_dup.description = cd.get('description')
         object_dup.status = 'draft'

@@ -127,6 +127,7 @@ class WebsiteUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
     fields = (
         'title',
         'url',
+        'type',
         'category',
         'description',
         'image'
