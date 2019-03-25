@@ -52,6 +52,7 @@ class Action(models.Model):
         ('link created', _('Link Created')),
         ('link updated', _('Link Updated')),
         ('link reported', _('Link Reported')),
+        ('contact_us', _('Contact Us')),
     )
 
     type = models.CharField(max_length=20, verbose_name=_('Type of Action'),

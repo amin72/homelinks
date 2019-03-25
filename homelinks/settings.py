@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     # apps
     'links.apps.LinksConfig',
     'dashboard.apps.DashboardConfig',
+    'contact.apps.ContactConfig',
 
     # third-party
     'crispy_forms',

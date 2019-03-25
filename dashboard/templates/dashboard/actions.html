@@ -1,26 +1,37 @@
+{% load static %}
 {% load jalali_tags %}
 {% load homelinks_tags %}
 
 
 {% for action in actions %}
-{% with action.content_object as link %}
+{% with action.content_object as object %}
 <div class="row shadow py-2 {% if is_paginated %}my-1 border-bottom bb-3{% else %}{% if not forloop.last %}my-1 border-bottom bb-3{% endif %}{% endif %}">
     <div class="col-xl-2 col-3">
         <!-- link's image -->
+        {% if object.thumbnail_url %}
+            <img class="img-fluid img-dashboard"
+                 src="{{ object.thumbnail_url }}" alt="{{ object.title }}">
+        {% else %}
         <img class="img-fluid img-dashboard"
-             src="{{ link.thumbnail_url }}" alt="{{ link.title }}">
+             src="{% static 'img/logo.png' %}" alt="homelinks خانه لینک ها">
+        {% endif %}
     </div>
 
     <!-- link's title and description -->
     <div class="col-xl-8 col-6">
-        <h5><strong>{{ link.title }}</strong></h5>
+        {% if object.title %}
+            <h5><strong>{{ object.title }}</strong></h5>
+        {% endif %}
+
         <ul class="list-unstyled">
-            <li class="mb-1">نوع لینک: {{ link|model_name }}</li>
-            <li class="mb-1">نوع فعالیت: {{ action.type }}</li>
+            <li class="mb-1">نوع: {{ object|model_name }}</li>
+            <li class="mb-1">فعالیت: {{ action.type }}</li>
             <li class="mb-1">تاریخ ارسال: {{ action.created|to_jalali:'%y/%m/%d'|to_persian }}</li>
             <li class="mb-1">
                 وضعیت:
-                {% if link.status == 'published' %}
+                {% if object.status == 'published' %} <!-- link object -->
+                    <span class="badge badge-success">تایید شده</span>
+                {% elif object.is_read == True %} <!-- contact_us and report object -->
                     <span class="badge badge-success">تایید شده</span>
                 {% else %}
                     <span class="badge badge-danger">تایید نشده</span>
@@ -33,7 +44,7 @@
     <div class="col-xl-2 col-3">
         <div class="col-12 px-lg-4 px-sm-3 px-0">
             <a target="_blank" class="btn btn-sm btn-primary mt-2 w-80 float-right"
-                href="{{ link.get_admin_url }}"
+                href="{{ object.get_admin_url }}"
                 >مدیریت لینک</a>
         </div>
         <div class="col-12 px-lg-4 px-sm-3 px-0">

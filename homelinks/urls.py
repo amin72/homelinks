@@ -11,6 +11,9 @@ urlpatterns = [
     # dashboard
     path('dashboard/', include('dashboard.urls')),
 
+    # contact
+    path('contact/', include('contact.urls')),
+
     # links
     path('', include('links.urls')),
 
