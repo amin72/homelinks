@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+    {{ block.super }} |
+    خطای دسترسی
+{% endblock %}
+
+
+{% block content %}
+<section class="col-xl-10 col-md-9">
+    <div class="row mt-3 pb-1">
+        <div class="col-12">
+            <div class="error-background p-5">
+                <h1 class="text-center">خطای دسترسی</h1>
+                <p class="text-center mt-4">شما اجازه دسترسی به این صفحه را ندارید!</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -17,7 +17,7 @@ SECRET_KEY = 'eo+8*-a+j_!4hb@(gvt%9t^)k6ni3*j%k-k32qwgaf)hx-=%0w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -147,3 +147,6 @@ RECAPTCHA_PRIVATE_KEY = '6Lc6fZkUAAAAAE8c3ckrYu7FsngZ5-U_J-W6s3uJ'
 RECAPTCHA_PUBLIC_KEY = '6Lc6fZkUAAAAAK6Tgha7LMhxPNZb8NopjEKbOCMZ'
 RECAPTCHA_DEFAULT_ACTION = 'generic'
 RECAPTCHA_SCORE_THRESHOLD = 0.5
+
+
+handler404 = 'homelinks.views.handler404'
