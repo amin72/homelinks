@@ -48,6 +48,7 @@ from .forms import (
 )
 
 from . import utils
+from dashboard.models import Action
 
 
 ## ------- MESSAGES -------------------------------------------------
@@ -365,7 +366,8 @@ def report_link(request, model_name, slug):
             type = cd.get('type')
             email = cd.get('email')
 
-            Report.objects.create(
+            # create report
+            report = Report.objects.create(
                 email=email,
                 type=type,
                 text=text,
@@ -373,6 +375,13 @@ def report_link(request, model_name, slug):
                 object_slug=object_slug,
                 url=url,
             )
+
+            # create action for the report
+            model_name = Report.__name__.lower()
+            content_type = ContentType.objects.get(model=model_name,
+                app_label='links')
+            Action.objects.get_or_create(type='report created',
+                content_type=content_type, object_id=report.id)
 
             messages.success(request,
                 _('Your report was successfully submitted.'))

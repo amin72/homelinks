@@ -11,6 +11,7 @@ from django.views.generic import (
     DeleteView,
     View,
 )
+from django.http import Http404
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -20,8 +21,10 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.utils.text import slugify
+from django.contrib.contenttypes.models import ContentType
 
 from . import utils
+from dashboard.models import Action
 
 
 class ApplicationMixIn(ListView):
@@ -44,12 +47,20 @@ class CreateMixIn(CreateView):
     def form_valid(self, form):
         """
         On validation set the author of the link,
-        Also call set_tags() function to set tags of the post
+        Create Action object for admins,
+        Call set_tags() function to set tags of the links.
         """
         self.object = form.save(commit=False)
         self.object.author = self.request.user
         self.object.save()
         self.object.tags.add(self.object.title)
+
+        # create action
+        model_name = self.model.__name__.lower()
+        content_type = ContentType.objects.get(model=model_name,
+            app_label='links')
+        Action.objects.get_or_create(type='link created',
+            content_type=content_type, object_id=self.object.id)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -68,13 +79,15 @@ class PublishedObjectMixIn(UserPassesTestMixin):
         object = queryset.first()
 
         # for the owner, let them see the child object (updated object)
-        if object.author == self.request.user and object.child:
+        if object and object.author == self.request.user and object.child:
             object = object.child
         return object
 
     def test_func(self):
         self.object = self.get_object()
-        if self.object.author == self.request.user:
+        if self.object is None:
+            raise Http404
+        elif self.object.author == self.request.user:
             return True
         else:
             return self.object.status == 'published'
@@ -94,8 +107,7 @@ class UpdateMixIn(UpdateView):
 
         # check if values are the same before and after updating
         # if none of the values changed do not create child or update it
-        fields = ['title', 'url', 'category', 'description', 'image', 'type']
-        for field in fields:
+        for field in self.fields: # check all form fields
             if hasattr(object, field):
                 value = getattr(object, field)
                 if cd.get(field) != value:
@@ -136,7 +148,8 @@ class UpdateMixIn(UpdateView):
             slug = f'{domain}-{ext}'
             self.slug = slugify(slug)
         elif model_name == 'channel':
-            utils.check_channel_id(self.channel_id, self.application)
+            utils.check_channel_id(object_dup.channel_id,
+                object_dup.application)
             object_dup.url = utils.generate_channel_url(object_dup.channel_id,
                 object_dup.application)
             object_dup.slug = slugify(
@@ -175,6 +188,12 @@ class UpdateMixIn(UpdateView):
             object.image.path != old_dup_image_path:
             os.remove(old_dup_image_path)
             os.remove(old_dup_thumbnail_path)
+
+        # create action
+        content_type = ContentType.objects.get(model=model_name,
+            app_label='links')
+        Action.objects.get_or_create(type='link updated',
+            content_type=content_type, object_id=self.object.id)
 
         messages.info(self.request, self.success_message)
         return redirect(object.get_absolute_url())

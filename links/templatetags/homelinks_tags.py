@@ -12,9 +12,14 @@ def date_persian(english_input):
     english_nums = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
     persian_nums = ('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
     date = ''
-    for c in english_input:
+    for c in str(english_input):
         if c in english_nums:
             date += persian_nums[int(c)]
         else:
             date += c # eg. /:
     return date
+
+
+@register.filter
+def model_name(obj):
+    return obj.__class__.__name__

@@ -1,0 +1,45 @@
+{% extends "base_dashboard.html" %}
+
+
+{% block title %}
+    {{ block.super }} |
+    فعالیت های اخیر کاربران
+{% endblock %}
+
+
+{% block content %}
+
+<!-- left sidebar -->
+<section class="col-xl-9 col-md-8">
+
+    <div class="row ml-auto mr-auto mt-3 pb-1 border border-info rounded">
+        <div class="col-12">
+            <h2 class="text-center py-3">فعالیت های اخیر کاربران</h2>
+        </div>
+
+        <!-- recent users actions -->
+        <div class="col-12 user_info_fontsize">
+            {% if recent_actions_count > 0 %}
+                <!-- HEADER -->
+                <div class="row border-bottom bb-3">
+                    <div class="col-xl-2 col-3 font-weight-bold">
+                        عکس
+                    </div>
+                    <div class="col-xl-8 col-6 font-weight-bold">
+                        عنوان
+                    </div>
+                    <div class="col-xl-2 col-3 font-weight-bold text-center">
+                        مشاهده / مدیریت
+                    </div>
+                </div>
+
+                {% include "dashboard/actions.html" with actions=object_list %}
+            {% else %}
+                موردی برای نمایش وجود ندارد.
+            {% endif %}
+        </div>
+    </div><!-- Row Border -->
+
+</section><!-- left sidebar -->
+
+{% endblock %}

@@ -98,6 +98,10 @@ class Link(models.Model):
     def get_delete_url(self):
         return self.get_object_url(action='delete')
 
+    def get_admin_url(self):
+        model_name = self.__class__.__name__.lower()
+        return reverse(f"admin:links_{model_name}_change", args=(self.id,))
+
     @property
     def child(self):
         model = self.__class__
@@ -272,7 +276,7 @@ class Report(models.Model):
         help_text=_("Text up to 1024 characters"),)
     is_read = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
-    # this model can manager many objects (website, groups, ...)
+    # this model can manage many objects (website, groups, ...)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_slug = models.SlugField(allow_unicode=True)
     content_object = GenericForeignKey('content_type', 'object_slug')
@@ -282,3 +286,7 @@ class Report(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(self.email, self.type)
+
+    def get_admin_url(self):
+        model_name = self.__class__.__name__.lower()
+        return reverse(f"admin:links_{model_name}_change", args=(self.id,))

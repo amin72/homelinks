@@ -1,4 +1,5 @@
 {% load static %}
+{% load homelinks_tags %}
 
 <!-- right sidebar -->
 <aside class="col-xl-3 col-md-4">
@@ -26,21 +27,27 @@
 
                       {% if user.profile.vip %}
                       <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:users_websites' %}">وبسایت های من</a>
+                          <a href="{% url 'dashboard:users_websites' %}">وبسایت ها من <span class="badge badge-primary pull-left">{{ websites_count }}</span></a>
                       </li>
                       {% endif %}
 
                       <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:users_channels' %}">کانال های من</a>
+                          <a href="{% url 'dashboard:users_channels' %}">کانال های من <span class="badge badge-primary pull-left">{{ channels_count }}</span></a>
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:users_groups' %}">گروه های من</a>
+                          <a href="{% url 'dashboard:users_groups' %}">گروه های من <span class="badge badge-primary pull-left">{{ groups_count }}</span></a>
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:users_instagrams' %}">صفحات اینستاگرام من</a>
+                          <a href="{% url 'dashboard:users_instagrams' %}">صفحات اینستاگرام من <span class="badge badge-primary pull-left">{{ instagrams_count }}</span></a>
                       </li>
+
+                      {% if user.is_superuser or user.is_staff %}
+                      <li class="list-group-item light-even">
+                          <a href="{% url 'dashboard:recent_actions' %}">فعالیت های اخیر کاربران <span class="badge badge-primary pull-left">{{ recent_actions_count|to_persian }}</span></a>
+                      </li>
+                      {% endif %}
 
                       <li class="list-group-item light-even">
                           <a href="{% url 'dashboard:update' %}">ویرایش اطلاعات کاربری</a>

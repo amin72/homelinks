@@ -30,7 +30,7 @@ class WebsiteAdmin(TaggitCounter, admin.ModelAdmin):
         'description', 'image', 'parent')
     list_display = ('title', 'url', 'slug', 'status', 'author', 'category',
         'created', 'taggit_counter',)
-    list_filter = ('type', 'created', 'updated', 'category')
+    list_filter = ('type', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'url', 'description', 'type')
     raw_id_fields = ('author', 'category')
     list_editable = ('status', 'created')
@@ -44,7 +44,7 @@ class ChannelAdmin(TaggitCounter, admin.ModelAdmin):
         'category', 'description', 'image', 'parent')
     list_display = ('title', 'channel_id', 'application', 'slug', 'status',
         'category', 'created', 'taggit_counter',)
-    list_filter = ('application', 'created', 'updated', 'category')
+    list_filter = ('application', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'channel_id', 'description')
     raw_id_fields = ('author', 'category')
     list_editable = ('status', 'created')
@@ -58,7 +58,7 @@ class GroupAdmin(TaggitCounter, admin.ModelAdmin):
         'image', 'parent')
     list_display = ('title', 'status', 'slug', 'application', 'author',
         'category', 'created', 'taggit_counter')
-    list_filter = ('application', 'created', 'updated', 'category')
+    list_filter = ('application', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'url', 'description')
     raw_id_fields = ('author', 'category')
     list_editable = ('status', 'created')
@@ -70,7 +70,7 @@ class GroupAdmin(TaggitCounter, admin.ModelAdmin):
 class InstagramAdmin(TaggitCounter, admin.ModelAdmin):
     list_display = ('title', 'status', 'slug', 'page_id', 'author', 'category',
         'created', 'taggit_counter')
-    list_filter = ('created', 'updated', 'category')
+    list_filter = ('created', 'status', 'updated', 'category')
     search_fields = ('title', 'slug', 'page_id', 'description')
     prepopulated_fields = {'slug': ('page_id',)}
     raw_id_fields = ('author', 'category')

@@ -8,6 +8,8 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.utils.translation import gettext, gettext_lazy as _
+from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
 
 from links.models import Website, Channel, Group, Instagram
 from .forms import (
@@ -17,8 +19,22 @@ from .forms import (
     ProfileUpdateForm
 )
 from .mixins import UserMixIn, ReplaceChildWithParent
-from .models import Profile
+from .models import Profile, Action
 
+
+User = get_user_model()
+
+
+def get_paginated_object_list(request, queryset, num):
+    paginator = Paginator(queryset, num)
+    page = request.GET.get('page')
+    try:
+        object_list = paginator.page(page)
+    except PageNotAnInteger:
+        object_list = paginator.page(1)
+    except EmptyPage:
+        object_list = paginator.page(paginator.num_pages)
+    return object_list, page
 
 # list latest user's links: websites, channels, groups, and instagrams
 @login_required
@@ -41,15 +57,8 @@ def index(request):
         else:
             links_and_children.append(link)
 
-    # pagination
-    paginator = Paginator(links_and_children, 10)
-    page = request.GET.get('page')
-    try:
-        object_list = paginator.page(page)
-    except PageNotAnInteger:
-        object_list = paginator.page(1)
-    except EmptyPage:
-        object_list = paginator.page(paginator.num_pages)
+    object_list, page = get_paginated_object_list(request,
+                                        links_and_children, 10)
 
     context = {
         'links': object_list,
@@ -169,3 +178,21 @@ def update_user_info(request):
         'profile_form': profile_form,
         'active_dashboard': True,
     })
+
+
+@login_required
+def recent_actions(request):
+    user = request.user
+    if not (user.is_superuser or user.is_staff):
+        # none admin users won't be able to see this view/page
+        raise PermissionDenied
+
+    recent_actions = Action.objects.filter(is_read=False)
+    object_list, page = get_paginated_object_list(request, recent_actions, 5)
+    context = {
+        'object_list': object_list,
+        'page': page,
+        'is_paginated': True,
+        'active_dashboard': True,
+    }
+    return render(request, 'dashboard/recent_actions.html', context)

@@ -1,0 +1,51 @@
+{% load jalali_tags %}
+{% load homelinks_tags %}
+
+
+{% for action in actions %}
+{% with action.content_object as link %}
+<div class="row shadow py-2 {% if is_paginated %}my-1 border-bottom bb-3{% else %}{% if not forloop.last %}my-1 border-bottom bb-3{% endif %}{% endif %}">
+    <div class="col-xl-2 col-3">
+        <!-- link's image -->
+        <img class="img-fluid img-dashboard"
+             src="{{ link.thumbnail_url }}" alt="{{ link.title }}">
+    </div>
+
+    <!-- link's title and description -->
+    <div class="col-xl-8 col-6">
+        <h5><strong>{{ link.title }}</strong></h5>
+        <ul class="list-unstyled">
+            <li class="mb-1">نوع لینک: {{ link|model_name }}</li>
+            <li class="mb-1">نوع فعالیت: {{ action.type }}</li>
+            <li class="mb-1">تاریخ ارسال: {{ action.created|to_jalali:'%y/%m/%d'|to_persian }}</li>
+            <li class="mb-1">
+                وضعیت:
+                {% if link.status == 'published' %}
+                    <span class="badge badge-success">تایید شده</span>
+                {% else %}
+                    <span class="badge badge-danger">تایید نشده</span>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+
+    <!-- operations -->
+    <div class="col-xl-2 col-3">
+        <div class="col-12 px-lg-4 px-sm-3 px-0">
+            <a target="_blank" class="btn btn-sm btn-primary mt-2 w-80 float-right"
+                href="{{ link.get_admin_url }}"
+                >مدیریت لینک</a>
+        </div>
+        <div class="col-12 px-lg-4 px-sm-3 px-0">
+            <a target="_blank" class="btn btn-sm btn-success mt-2 w-80 float-right px-0"
+                href="{{ action.get_admin_url }}"
+                >مدیریت فعالیت</a>
+        </div>
+    </div>
+</div>
+{% endwith %}
+{% endfor %}
+
+{% if is_paginated %}
+    {% include "pagination.html" with page_obj=object_list %}
+{% endif %}
