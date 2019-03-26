@@ -3,6 +3,7 @@ Django 2.1.7.
 """
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,10 +43,11 @@ INSTALLED_APPS = [
     'taggit_helpers',
     'snowpenguin.django.recaptcha3',
     'el_pagination',
-
+    'axes',
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware', # must be the first
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware', # must be the last
 ]
 
 ROOT_URLCONF = 'homelinks.urls'
@@ -150,3 +153,24 @@ RECAPTCHA_SCORE_THRESHOLD = 0.5
 
 
 handler404 = 'homelinks.views.handler404'
+
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    'axes_cache': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+AXES_CACHE = 'axes_cache'
+AXES_FAILURE_LIMIT = 5
+AXES_LOCKOUT_TEMPLATE = 'dashboard/login.html'
+AXES_COOLOFF_TIME = timedelta(minutes=5)

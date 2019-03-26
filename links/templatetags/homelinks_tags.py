@@ -4,7 +4,7 @@ from django import template
 register = template.Library()
 
 @register.filter(name='to_persian')
-def date_persian(english_input):
+def to_persian(english_input):
     """
     Convert english numbers to persian or arabic.
     If any other character found in the gived input they won't be changed.
@@ -23,3 +23,8 @@ def date_persian(english_input):
 @register.filter
 def model_name(obj):
     return obj.__class__.__name__
+
+
+@register.filter
+def get_minutes(obj):
+    return to_persian(obj[2:-1])

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load homelinks_tags %}
 
 
 {% block title %}
@@ -13,24 +14,26 @@
     <div class="row mt-3">
         <div class="offset-lg-2 col-lg-8 col-12">
             <div class="content-section">
+                {% if failure_limit == 5 %}
+                    <div class="text-muted">شما ۵ تلاش ناموفق داشتید و به مدت {{ cooloff_time|get_minutes  }} دقیقه اجازه وارد شدن به سایت را ندارید.</div> 
+                {% else %}
+                    <form method="post">
+                        {% csrf_token %}
 
-                <form method="post">
-                    {% csrf_token %}
+                        <fieldset class="form-group">
+                            <legend class="border-bottom mb-4 text-center">فرم ورود</legend>
+                            {{ form|crispy }}
+                        </fieldset>
 
-                    <fieldset class="form-group">
-                        <legend class="border-bottom mb-4 text-center">فرم ورود</legend>
-                        {{ form|crispy }}
-                    </fieldset>
-
-                    <div class="form-group">
-                        <button class="btn btn-lg btn-outline-primary" type="submit">ورود</button>
-                    </div>
-                </form>
-
+                        <div class="form-group">
+                            <button class="btn btn-lg btn-outline-primary" type="submit">ورود</button>
+                        </div>
+                    </form>
+                {% endif %}
                 <div class="border-top pt-3">
                     <small class="text-muted">اگر در خانه لینک ها عضو نیستید ابتدا <a href="{% url 'dashboard:register' %}">ثبت نام</a> کنید.</small>
                 </div>
-                <div class="">
+                <div>
                     <small class="text-muted"><a href="{% url 'dashboard:password_reset' %}">گذرواژه را فراموش کرده ام.</a></small>
                 </div>
             </div>
