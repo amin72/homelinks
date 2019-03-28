@@ -20,67 +20,69 @@ def split_http(url):
     return url
 
 
-def check_channel_id(channel_id, application):
+def valid_instagram_id(value):
+    # regex to validate instagra username (@ striped)
+    compile = re.compile(
+    "^([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)$")
+    if compile.match(value):
+        return True
+    return False
+
+
+def valid_channel_id(channel_id, application):
     """
     Check if channel id of the `application` is correct.
     channel_id: object.channel_id
     application: object.application
     """
 
-    # Telegram
     if application == 'telegram':
         compile = re.compile(r'^([a-zA-Z]+)([\w\d]*)([a-zA-Z0-9]+)$')
-        if not compile.search(channel_id):
-            raise ValidationError({'channel_id':
-                _('Sorry, this name is invalid.')})
+        if compile.match(channel_id):
+            return True
 
-        if len(channel_id) < 5:
-            raise ValidationError({'channel_id':
-                _('Channel names must have at least 5 characters')})
-
-    # Soroush
     elif application == 'soroush':
         compile = re.compile(r'^([\w\d\.]+)$')
-        if not compile.search(channel_id):
-            raise ValidationError({'channel_id':
-                _('Sorry, this name is invalid.')})
+        if compile.match(channel_id):
+            return True
 
-        if len(channel_id) < 6:
-            raise ValidationError({'channel_id':
-                _('Channel names must have at least 6 characters')})
-
-    # Gap
     elif application == 'gap':
         compile = re.compile(r'^([a-zA-Z]+)([\w\d]*)([a-zA-Z0-9]+)$')
-        if not compile.search(channel_id):
-            raise ValidationError({'channel_id':
-                _('Sorry, this name is invalid.')})
+        if compile.match(channel_id):
+            return True
 
-        if len(channel_id) < 6:
-            raise ValidationError({'channel_id':
-                _('Channel names must have at least 6 characters')})
-
-    # IGap
     elif application == 'igap':
         compile = re.compile(r'^([a-zA-Z]+)([\w\d]*)([a-zA-Z0-9]+)$')
-        if not compile.search(channel_id):
-            raise ValidationError({'channel_id':
-                _('Sorry, this name is invalid.')})
+        if compile.match(channel_id):
+            return True
 
-        if len(channel_id) < 5:
-            raise ValidationError({'channel_id':
-                _('Channel names must have at least 5 characters')})
-
-    # Eitaa
     elif application == 'eitaa':
         compile = re.compile(r'^([a-zA-Z0-9]+)([\w\d]*)([a-zA-Z0-9]+)$')
-        if not compile.search(channel_id):
-            raise ValidationError({'channel_id':
-                _('Sorry, this name is invalid.')})
+        if compile.match(channel_id):
+            return True
 
-        if len(channel_id) < 4:
-            raise ValidationError({'channel_id':
-                _('Channel names must have at least 4 characters')})
+    return False
+
+
+def valid_channel_length(channel_id, application):
+    channel_name_length = len(channel_id)
+
+    if application == 'telegram':
+        if channel_name_length >= 5:
+            return True
+    elif application == 'soroush':
+        if channel_name_length >= 6:
+            return True
+    elif application == 'gap':
+        if channel_name_length >= 6:
+            return True
+    elif application == 'igap':
+        if channel_name_length >= 5:
+            return True
+    elif application == 'eitaa':
+        if channel_name_length >= 4:
+            return True
+    return False
 
 
 def generate_channel_url(channel_id, application):
@@ -118,21 +120,16 @@ def generate_instagram_url(page_id):
 
 
 def check_duplicate_url(object):
+    """
+    Check if the url already exists.
+    Return True on exiting the object else False.
+    """
     model = object.__class__ # get the model name
     instance = model.objects.filter(url__endswith=split_http(object.url))
     if not object.pk and instance.exists():
-        if model.__name__ == 'Website':
-            raise ValidationError({'url':
-                _('Website already registerd')})
-        elif model.__name__ == 'Channel':
-            raise ValidationError({'channel_id':
-                _('Channel already registerd')})
-        elif model.__name__ == 'Group':
-            raise ValidationError({'url':
-                _('Group already registerd')})
-        elif model.__name__ == 'Instagram':
-            raise ValidationError({'page_id':
-                _('Instagram page already registerd')})
+        return True
+    else:
+        return False
 
 
 def create_thumbnail(orig_path, thumbnail_path):

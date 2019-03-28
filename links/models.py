@@ -2,16 +2,20 @@ import uuid
 import os
 
 from django.db import models, IntegrityError, transaction
+from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils.translation import gettext, gettext_lazy as _
 from django.utils import timezone
-from django.db.models.signals import post_save
 from django.utils.text import slugify
 from django.urls import reverse
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import (
+    GenericForeignKey,
+    GenericRelation
+)
 from django.contrib.contenttypes.models import ContentType
 from taggit.managers import TaggableManager
 from . import utils
+from dashboard.models import Action
 
 
 class Category(models.Model):
@@ -63,6 +67,7 @@ class Link(models.Model):
     parent = models.ForeignKey("self", null=True, blank=True,
 		on_delete=models.CASCADE)
     tags = TaggableManager()
+    actions = GenericRelation(Action)
 
     @property
     def thumbnail_url(self):
@@ -117,6 +122,8 @@ class Link(models.Model):
             return False
         return True
 
+    # NOTE: exceptions in save method will be risen only in web-bse views
+    # for api views we need to raise specific exceptions
     def save(self, *args, **kwargs):
         # if object has parent (object is a child)
         if self.parent and self.status == 'published':
@@ -132,6 +139,48 @@ class Link(models.Model):
                 setattr(parent, field, attr_self_val)
             #self.status = 'draft'
             parent.save()
+
+        # set url, slug filed
+        model_name = self.__class__.__name__.lower()
+        if model_name == 'website':
+            # strip all characters after domain
+            url = self.url.rsplit("/", self.url.count("/") - 2)[0]
+            # slug: domain-extention => webiste-org, google-com
+            *domain, ext = utils.split_http(url).split('.')
+            slug = f'{domain}-{ext}'
+            self.slug = slugify(slug)
+
+        elif model_name == 'channel':
+            self.slug = f'{self.application}-{self.channel_id}'
+            self.url = utils.generate_channel_url(self.channel_id,
+                self.application)
+
+            # remove @ from channel id
+            if hasattr(self, 'channel_id'):
+                if self.channel_id.startswith('@'):
+                    self.channel_id = self.channel_id[1:]
+
+            # validate channel url
+            if utils.check_duplicate_url(self):
+                raise ValidationError({'channel_id':
+                        _('Channel already registerd')})
+
+        elif model_name == 'group':
+            self.slug = slugify(
+                f'{self.application}-{self.title}-f{self.uuid}',
+                allow_unicode=True)
+        elif model_name == 'instagram':
+            self.slug = slugify(f'ig-{self.page_id}')
+            self.url = utils.generate_instagram_url(self.page_id)
+
+            if utils.check_duplicate_url(self):
+                raise ValidationError({'page_id':
+                    _('Instagram page already registerd')})
+
+            # remove @ from page id
+            if hasattr(self, 'page_id'):
+                if self.page_id.startswith('@'):
+                    self.page_id = self.page_id[1:]
 
         super().save(*args, **kwargs)
         utils.create_thumbnail(self.image.path, self.thumbnail_path)
@@ -160,11 +209,9 @@ class Website(Link):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        utils.check_duplicate_url(self)
-        # slug: domain-extention => webiste-org, google-com
-        domain, ext = utils.split_http(self.url).split('.')
-        slug = f'{domain}-{ext}'
-        self.slug = slugify(slug)
+        if utils.check_duplicate_url(self):
+            raise ValidationError({'url':
+                _('Website already registerd')})
 
     class Meta:
         ordering = ('-created',)
@@ -190,15 +237,13 @@ class Channel(Link):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
+        if not utils.valid_channel_id(self.channel_id, self.application):
+            raise ValidationError({'channel_id':
+                _('Sorry, this name is invalid.')})
 
-        # remove @ from channel id
-        if self.channel_id.startswith('@'):
-            self.channel_id = self.channel_id[1:]
-
-        utils.check_channel_id(self.channel_id, self.application)
-        self.url = utils.generate_channel_url(self.channel_id, self.application)
-        utils.check_duplicate_url(self)
-        self.slug = slugify(f'{self.application}-{self.channel_id}')
+        if not utils.valid_channel_length(self.channel_id, self.application):
+            raise ValidationError({'channel_id':
+                _(f'Sorry, This name is too short')})
 
     class Meta:
         ordering = ('-created',)
@@ -226,10 +271,9 @@ class Group(Link):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        utils.check_duplicate_url(self)
-        self.slug = slugify(
-            f'{self.application}-{self.title}-f{self.uuid}',
-            allow_unicode=True)
+        if utils.check_duplicate_url(self):
+            raise ValidationError({'url':
+                _('Group already registerd')})
 
     class Meta:
         ordering = ('-created',)
@@ -238,21 +282,17 @@ class Group(Link):
 class Instagram(Link):
     url_reverse = 'links:instagram-detail'
 
-    page_id = models.CharField(max_length=30, verbose_name=_('Page ID'))
+    page_id = models.CharField(max_length=30, verbose_name=_('Page ID'),
+        help_text=_('without @ simple'))
 
     def __str__(self):
         return '{} ({})'.format(self.title, self.page_id)
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-
-        # remove @ from page id
-        if self.page_id.startswith('@'):
-            self.page_id = self.page_id[1:]
-
-        self.url = utils.generate_instagram_url(self.page_id)
-        utils.check_duplicate_url(self)
-        self.slug = slugify(f'{self.page_id}')
+        if not utils.valid_instagram_id(self.page_id):
+            raise ValidationError({'page_id':
+                _('Your Instagram page id is incorrect')})
 
     class Meta:
         ordering = ('-created',)

@@ -126,40 +126,35 @@ class UpdateMixIn(UpdateView):
             object_dup.parent = object
 
         # Assign all values that are sent with form to child.
-
-        # channel, group object have application attribute
-        if hasattr(object_dup, 'application'):
-            object_dup.application = cd.get('application')
-
-        # channel object
-        if hasattr(object_dup, 'channel_id'):
-            object_dup.channel_id = cd.get('channel_id')
-
-        # instagram object
-        if hasattr(object_dup, 'page_id'):
-            object_dup.page_id = cd.get('page_id')
-
-        # set slug and url for channel, group, instagram
+        # settings specific fields
         model_name = object_dup.__class__.__name__.lower()
         url = cd.get('url')
         if model_name == 'website':
+            object_dup.type = cd.get('type')
             object_dup.url = url
             domain, ext = utils.split_http(url).split('.')
             slug = f'{domain}-{ext}'
             self.slug = slugify(slug)
+
         elif model_name == 'channel':
+            object_dup.application = cd.get('application')
+            object_dup.channel_id = cd.get('channel_id')
             utils.check_channel_id(object_dup.channel_id,
                 object_dup.application)
             object_dup.url = utils.generate_channel_url(object_dup.channel_id,
                 object_dup.application)
             object_dup.slug = slugify(
                 f'{object_dup.application}-{object_dup.channel_id}')
+
         elif model_name == 'group':
+            object_dup.application = cd.get('application')
             utils.check_duplicate_url(object_dup)
             slug = \
                 f'{object_dup.application}-{object_dup.title}-{object_dup.uuid}'
             self.slug = slugify(slug)
+
         elif model_name == 'instagram':
+            object_dup.page_id = cd.get('page_id')
             object_dup.url = utils.generate_instagram_url(object_dup.page_id)
             object_dup.slug = slugify(f'{object_dup.page_id}')
 
@@ -192,8 +187,13 @@ class UpdateMixIn(UpdateView):
         # create action
         content_type = ContentType.objects.get(model=model_name,
             app_label='links')
-        Action.objects.get_or_create(type='link updated',
-            content_type=content_type, object_id=self.object.id)
+        action, created = Action.objects.get_or_create(type='link updated',
+            content_type=content_type, object_id=object_dup.id)
+
+        # if action already exists, set `is_read` to False
+        if not created:
+            action.is_read = False
+            action.save()
 
         messages.info(self.request, self.success_message)
         return redirect(object.get_absolute_url())

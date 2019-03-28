@@ -16,6 +16,13 @@ class ProfileAdmin(admin.ModelAdmin):
 # Action
 @admin.register(Action)
 class ActionAdmin(admin.ModelAdmin):
-    list_display = ('content_object', 'type', 'is_read')
+    list_display = ('content_object', 'type', 'is_read', 'is_child')
     list_editable = ('is_read',)
     list_filter = ('is_read', 'created')
+    orderings = ('-updated',)
+
+    def is_child(self, obj):
+        content_object = obj.content_object
+        if hasattr(content_object, 'child'):
+             return (content_object.parent is not None)
+        return False

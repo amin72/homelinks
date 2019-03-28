@@ -59,6 +59,7 @@ class Action(models.Model):
         choices=TYPES_OF_ACTIONS)
     is_read = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     # this model can manage many objects (report, website, groups, ...)
     content_type = models.ForeignKey(
@@ -69,7 +70,7 @@ class Action(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
-        ordering = ('-created',)
+        ordering = ('-updated',)
 
     def __str__(self):
         return f'{smart_text(self.content_object)}'

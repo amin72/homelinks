@@ -27,13 +27,14 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Website)
 class WebsiteAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'type', 'title', 'status', 'url', 'category',
-        'description', 'image', 'parent')
+        'description', 'image')
     list_display = ('title', 'url', 'slug', 'status', 'author', 'category',
-        'created', 'taggit_counter',)
+        'taggit_counter',)
     list_filter = ('type', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'url', 'description', 'type')
     raw_id_fields = ('author', 'category')
-    list_editable = ('status', 'created')
+    list_editable = ('status',)
+    readonly_fields = ('parent',)
     inlines = [TaggitStackedInline]
 
 
@@ -41,41 +42,49 @@ class WebsiteAdmin(TaggitCounter, admin.ModelAdmin):
 @admin.register(Channel)
 class ChannelAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'title', 'status', 'application', 'channel_id',
-        'category', 'description', 'image', 'parent')
+        'category', 'description', 'image')
     list_display = ('title', 'channel_id', 'application', 'slug', 'status',
-        'category', 'created', 'taggit_counter',)
+        'author', 'category', 'taggit_counter',)
     list_filter = ('application', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'channel_id', 'description')
     raw_id_fields = ('author', 'category')
-    list_editable = ('status', 'created')
+    list_editable = ('status',)
+    readonly_fields = ('application', 'parent')
     inlines = [TaggitStackedInline]
 
 
 # GROUP
 @admin.register(Group)
 class GroupAdmin(TaggitCounter, admin.ModelAdmin):
-    fields = ('author', 'title', 'status', 'url', 'application', 'category', 'description',
-        'image', 'parent')
-    list_display = ('title', 'status', 'slug', 'application', 'author',
-        'category', 'created', 'taggit_counter')
+    fields = ('author', 'title', 'status', 'url', 'application', 'category',
+        'description', 'image')
+    list_display = ('title', 'application', 'slug', 'status', 'author',
+        'category', 'taggit_counter')
     list_filter = ('application', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'url', 'description')
     raw_id_fields = ('author', 'category')
-    list_editable = ('status', 'created')
+    list_editable = ('status',)
+    readonly_fields = ('application', 'url', 'parent')
     inlines = [TaggitStackedInline]
 
 
 # INSTAGRAM
 @admin.register(Instagram)
 class InstagramAdmin(TaggitCounter, admin.ModelAdmin):
-    list_display = ('title', 'status', 'slug', 'page_id', 'author', 'category',
-        'created', 'taggit_counter')
+    fields = ('author', 'title', 'status', 'page_id', 'category', 'description',
+        'image')
+    list_display = ('title', 'slug', 'status', 'author', 'page_id', 'category',
+        'taggit_counter', 'is_parent')
     list_filter = ('created', 'status', 'updated', 'category')
-    search_fields = ('title', 'slug', 'page_id', 'description')
-    prepopulated_fields = {'slug': ('page_id',)}
+    search_fields = ('title', 'page_id', 'description')
     raw_id_fields = ('author', 'category')
-    list_editable = ('status', 'created')
+    list_editable = ('status',)
+    readonly_fields = ('parent',)
     inlines = [TaggitStackedInline]
+
+    def is_parent(self, obj):
+        return obj.is_parent
+
 
 
 # LINK_REPORT

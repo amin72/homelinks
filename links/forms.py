@@ -55,7 +55,6 @@ class CreateChannelForm(forms.ModelForm):
         )
 
 
-
 class CreateGroupForm(forms.ModelForm):
     captcha = ReCaptchaField()
 

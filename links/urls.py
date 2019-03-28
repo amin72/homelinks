@@ -1,6 +1,6 @@
-from django.contrib import admin
 from django.urls import path
 from . import views
+
 
 app_name = 'links'
 
@@ -18,13 +18,13 @@ urlpatterns = [
     path('websites/foreign/', views.ForeignWebsiteListView.as_view(),
         name='foreign-websites'),
 
-    # website details
-    path('website/<slug:slug>/', views.WebsiteDetailView.as_view(),
-        name='website-detail'),
-
     # website create
     path('websites/create/', views.WebsiteCreateView.as_view(),
         name='website-create'),
+
+    # website delete
+    path('websites/<slug:slug>/', views.WebsiteDetailView.as_view(),
+        name='website-detail'),
 
     # website update
     path('websites/<slug:slug>/update/', views.WebsiteUpdateView.as_view(),
@@ -116,22 +116,22 @@ urlpatterns = [
         name='group-delete'),
 
     # list instagrams
-    path('instagram/', views.InstagramListView.as_view(), name='instagrams'),
+    path('instagrams/', views.InstagramListView.as_view(), name='instagrams'),
 
     # instagram create
-    path('instagram/create/', views.InstagramCreateView.as_view(),
+    path('instagrams/create/', views.InstagramCreateView.as_view(),
         name='instagram-create'),
 
     # instagram details
-    path('instagram/<slug:slug>/', views.InstagramDetailView.as_view(),
+    path('instagrams/<slug:slug>/', views.InstagramDetailView.as_view(),
         name='instagram-detail'),
 
     # instagram update
-    path('instagram/<slug:slug>/update/', views.InstagramUpdateView.as_view(),
+    path('instagrams/<slug:slug>/update/', views.InstagramUpdateView.as_view(),
         name='instagram-update'),
 
     # instagram delete
-    path('instagram/<slug:slug>/delete/', views.InstagramDeleteView.as_view(),
+    path('instagrams/<slug:slug>/delete/', views.InstagramDeleteView.as_view(),
         name='instagram-delete'),
 
     # report link

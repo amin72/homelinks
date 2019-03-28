@@ -37,12 +37,12 @@ INSTALLED_APPS = [
     'contact.apps.ContactConfig',
 
     # third-party
+    'rest_framework',
     'crispy_forms',
     'jalali_date',
     'taggit',
     'taggit_helpers',
     'snowpenguin.django.recaptcha3',
-    'el_pagination',
     'axes',
 ]
 

@@ -18,6 +18,8 @@ urlpatterns = [
     path('', include('links.urls')),
 
     # APIs
+    # links-apis
+    #path('api/', include('links.api.urls')),
 ]
 
 if settings.DEBUG:
