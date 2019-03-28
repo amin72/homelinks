@@ -19,8 +19,8 @@ urlpatterns = [
         name='foreign-websites'),
 
     # website create
-    #path('websites/create/', views.WebsiteCreateAPIView.as_view(),
-    #    name='website-create'),
+    path('websites/create/', views.WebsiteCreateAPIView.as_view(),
+       name='website-create'),
 
     # website details
     path('websites/<slug:slug>/', views.WebsiteDetailAPIView.as_view(),
@@ -58,8 +58,8 @@ urlpatterns = [
         name='eitaa-channels'),
 
     # channel create
-    #path('channels/create/', views.ChannelCreateAPIView.as_view(),
-    #    name='channel-create'),
+    path('channels/create/', views.ChannelCreateAPIView.as_view(),
+       name='channel-create'),
 
     # channel details
     path('channels/<slug:slug>/', views.ChannelDetailAPIView.as_view(),
@@ -101,8 +101,8 @@ urlpatterns = [
         name='eitaa-groups'),
 
     # group create
-    #path('groups/create/', views.GroupCreateAPIView.as_view(),
-    #    name='group-create'),
+    path('groups/create/', views.GroupCreateAPIView.as_view(),
+       name='group-create'),
 
     # group details
     path('groups/<str:slug>/', views.GroupDetailAPIView.as_view(),
@@ -121,8 +121,8 @@ urlpatterns = [
         name='instagrams'),
 
     # instagram create
-    #path('instagrams/create/', views.InstagramCreateAPIView.as_view(),
-    #    name='instagram-create'),
+    path('instagrams/create/', views.InstagramCreateAPIView.as_view(),
+       name='instagram-create'),
 
     # instagram details
     path('instagrams/<slug:slug>/', views.InstagramDetailAPIView.as_view(),

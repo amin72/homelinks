@@ -173,12 +173,6 @@ class Link(models.Model):
                 allow_unicode=True)
         elif model_name == 'instagram':
             self.slug = slugify(f'ig-{self.page_id}')
-            self.url = utils.generate_instagram_url(self.page_id)
-
-            if utils.check_duplicate_url(self):
-                raise ValidationError({'page_id':
-                    _('Instagram page already registerd')})
-
             # remove @ from page id
             if hasattr(self, 'page_id'):
                 if self.page_id.startswith('@'):
@@ -294,8 +288,12 @@ class Instagram(Link):
         super().clean_fields(exclude=exclude)
         if not utils.valid_instagram_id(self.page_id):
             raise ValidationError({'page_id':
-                _('Your Instagram page id is incorrect')})
+                _('Your Instagram id is incorrect')})
 
+        self.url = utils.generate_instagram_url(self.page_id)
+        if utils.check_duplicate_url(self):
+            raise ValidationError({'page_id':
+                _('Instagram page already registerd')})
     class Meta:
         ordering = ('-created',)
 

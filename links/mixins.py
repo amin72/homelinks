@@ -59,6 +59,7 @@ class CreateMixIn(CreateView):
         model_name = self.model.__name__.lower()
         content_type = ContentType.objects.get(model=model_name,
             app_label='links')
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('dashboard:index')

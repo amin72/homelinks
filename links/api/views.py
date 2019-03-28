@@ -34,12 +34,16 @@ from links.models import (
 from .serializers import (
 	WebsiteListSerializer,
 	WebsiteDetailSerializer,
+	WebsiteCreateSerializer,
 	ChannelListSerializer,
 	ChannelDetailSerializer,
+	ChannelCreateSerializer,
 	GroupListSerializer,
 	GroupDetailSerializer,
+	GroupCreateSerializer,
 	InstagramListSerializer,
 	InstagramDetailSerializer,
+	InstagramCreateSerializer,
 )
 
 from .pagination import PostLimitOffsetPagination, PostPageNumberPagination
@@ -68,7 +72,7 @@ def index(request):
 		'websites': serialized_websites.data,
 		'channels': serialized_channels.data,
 		'groups': serialized_groups.data,
-		'instagram': serialized_groups.data,
+		'instagram': serialized_instagrams.data,
 	}
 	return Response(result)
 
@@ -95,6 +99,13 @@ class WebsiteDetailAPIView(RetrieveAPIView):
 	serializer_class = WebsiteDetailSerializer
 	queryset = Website.published.all()
 	lookup_field = 'slug'
+
+
+class WebsiteCreateAPIView(CreateAPIView):
+	serializer_class = WebsiteCreateSerializer
+
+	def perform_create(self, serializer):
+		serializer.save(author=self.request.user)
 # ---------------------------------------------------------
 
 
@@ -137,6 +148,14 @@ class ChannelDetailAPIView(RetrieveAPIView):
 	serializer_class = ChannelDetailSerializer
 	queryset = Channel.published.all()
 	lookup_field = 'slug'
+
+
+class ChannelCreateAPIView(CreateAPIView):
+	serializer_class = ChannelCreateSerializer
+
+	def perform_create(self, serializer):
+		# set author field
+		serializer.save(author=self.request.user)
 # ---------------------------------------------------------
 
 
@@ -186,6 +205,13 @@ class GroupDetailAPIView(RetrieveAPIView):
 	serializer_class = GroupDetailSerializer
 	queryset = Group.published.all()
 	lookup_field = 'slug'
+
+
+class GroupCreateAPIView(CreateAPIView):
+	serializer_class = GroupCreateSerializer
+
+	def perform_create(self, serializer):
+		serializer.save(author=self.request.user)
 # ---------------------------------------------------------
 
 
@@ -199,5 +225,11 @@ class InstagramDetailAPIView(RetrieveAPIView):
 	serializer_class = InstagramDetailSerializer
 	queryset = Instagram.published.all()
 	lookup_field = 'slug'
-# ---------------------------------------------------------
 
+
+class InstagramCreateAPIView(CreateAPIView):
+	serializer_class = InstagramCreateSerializer
+
+	def perform_create(self, serializer):
+		serializer.save(author=self.request.user)
+# ---------------------------------------------------------
