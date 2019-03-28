@@ -1,6 +1,8 @@
 import uuid
 import os
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.db import models, IntegrityError, transaction
 from django.core.exceptions import ValidationError
 from django.conf import settings
@@ -330,3 +332,38 @@ class Report(models.Model):
     def get_admin_url(self):
         model_name = self.__class__.__name__.lower()
         return reverse(f"admin:links_{model_name}_change", args=(self.id,))
+
+
+
+def create_action(sender, instance, created, **kwargs):
+    model_name = sender.__name__.lower()
+    content_type = ContentType.objects.get(model=model_name, app_label='links')
+    if created:
+        # link and report have different types of actions
+        if model_name == 'report':
+            type_of_action = 'link reported'
+        else:
+            type_of_action = 'link created'
+        Action.objects.create(type=type,
+            content_type=content_type,
+            object_id=instance.id)
+    else:
+        if model_name == 'report':
+            type_of_action = 'link reported'
+        else:
+            type_of_action = 'link updated'
+        action, created_action = Action.objects.get_or_create(
+            type=type_of_action,
+            content_type=content_type,
+            object_id=instance.id)
+
+        # if action already exists (was updated before), set `is_read` to False
+        if not created_action:
+            action.is_read = False
+            action.save()
+
+post_save.connect(create_action, sender=Website)
+post_save.connect(create_action, sender=Channel)
+post_save.connect(create_action, sender=Group)
+post_save.connect(create_action, sender=Instagram)
+post_save.connect(create_action, sender=Report)

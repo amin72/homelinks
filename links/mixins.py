@@ -59,9 +59,6 @@ class CreateMixIn(CreateView):
         model_name = self.model.__name__.lower()
         content_type = ContentType.objects.get(model=model_name,
             app_label='links')
-        Action.objects.get_or_create(type='link created',
-            content_type=content_type, object_id=self.object.id)
-        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('dashboard:index')
@@ -183,17 +180,6 @@ class UpdateMixIn(UpdateView):
             object.image.path != old_dup_image_path:
             os.remove(old_dup_image_path)
             os.remove(old_dup_thumbnail_path)
-
-        # create action
-        content_type = ContentType.objects.get(model=model_name,
-            app_label='links')
-        action, created = Action.objects.get_or_create(type='link updated',
-            content_type=content_type, object_id=object_dup.id)
-
-        # if action already exists, set `is_read` to False
-        if not created:
-            action.is_read = False
-            action.save()
 
         messages.info(self.request, self.success_message)
         return redirect(object.get_absolute_url())

@@ -376,13 +376,6 @@ def report_link(request, model_name, slug):
                 url=url,
             )
 
-            # create action for the report
-            model_name = Report.__name__.lower()
-            content_type = ContentType.objects.get(model=model_name,
-                app_label='links')
-            Action.objects.get_or_create(type='report created',
-                content_type=content_type, object_id=report.id)
-
             messages.success(request,
                 _('Your report was successfully submitted.'))
             return redirect(reverse('links:index'))
