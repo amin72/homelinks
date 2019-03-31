@@ -29,7 +29,7 @@ class WebsiteAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'type', 'title', 'status', 'url', 'category',
         'description', 'image')
     list_display = ('title', 'url', 'slug', 'status', 'author', 'category',
-        'taggit_counter',)
+        'taggit_counter', 'is_parent')
     list_filter = ('type', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'url', 'description', 'type')
     raw_id_fields = ('author', 'category')
@@ -44,7 +44,7 @@ class ChannelAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'title', 'status', 'application', 'channel_id',
         'category', 'description', 'image')
     list_display = ('title', 'channel_id', 'application', 'slug', 'status',
-        'author', 'category', 'taggit_counter',)
+        'author', 'category', 'taggit_counter', 'is_parent')
     list_filter = ('application', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'channel_id', 'description')
     raw_id_fields = ('author', 'category')
@@ -59,7 +59,7 @@ class GroupAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'title', 'status', 'url', 'application', 'category',
         'description', 'image')
     list_display = ('title', 'application', 'slug', 'status', 'author',
-        'category', 'taggit_counter')
+        'category', 'taggit_counter', 'is_parent')
     list_filter = ('application', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'url', 'description')
     raw_id_fields = ('author', 'category')
@@ -90,7 +90,7 @@ class InstagramAdmin(TaggitCounter, admin.ModelAdmin):
 # LINK_REPORT
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
-    list_display = ('email', 'url', 'type', 'is_read', 'created')
+    list_display = ('content_object', 'email', 'url', 'type', 'is_read', 'created')
     list_filter = ('created', 'type', 'is_read')
     search_fields = ('email', 'text')
     list_editable = ('type', 'is_read')

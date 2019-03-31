@@ -27,20 +27,20 @@
 
                       {% if user.profile.vip %}
                       <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:users_websites' %}">وبسایت ها من <span class="badge badge-primary pull-left">{{ websites_count }}</span></a>
+                          <a href="{% url 'dashboard:users_websites' %}">وبسایت ها من <span class="badge badge-primary pull-left">{{ websites_count|to_persian }}</span></a>
                       </li>
                       {% endif %}
 
                       <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:users_channels' %}">کانال های من <span class="badge badge-primary pull-left">{{ channels_count }}</span></a>
+                          <a href="{% url 'dashboard:users_channels' %}">کانال های من <span class="badge badge-primary pull-left">{{ channels_count|to_persian }}</span></a>
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:users_groups' %}">گروه های من <span class="badge badge-primary pull-left">{{ groups_count }}</span></a>
+                          <a href="{% url 'dashboard:users_groups' %}">گروه های من <span class="badge badge-primary pull-left">{{ groups_count|to_persian }}</span></a>
                       </li>
 
                       <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:users_instagrams' %}">صفحات اینستاگرام من <span class="badge badge-primary pull-left">{{ instagrams_count }}</span></a>
+                          <a href="{% url 'dashboard:users_instagrams' %}">صفحات اینستاگرام من <span class="badge badge-primary pull-left">{{ instagrams_count|to_persian }}</span></a>
                       </li>
 
                       {% if user.is_superuser or user.is_staff %}

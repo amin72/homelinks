@@ -7,10 +7,11 @@ from .models import Profile, Action
 # Profile
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone_number')
+    list_display = ('user', 'phone_number', 'vip')
     search_fields = ('user', 'phone_number')
     raw_id_fields = ('user',)
-    list_editable = ('phone_number',)
+    list_editable = ('phone_number', 'vip')
+    list_filter = ('vip',)
 
 
 # Action

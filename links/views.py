@@ -48,7 +48,6 @@ from .forms import (
 )
 
 from . import utils
-from dashboard.models import Action
 
 
 ## ------- MESSAGES -------------------------------------------------
@@ -352,7 +351,7 @@ def report_link(request, model_name, slug):
 
     initial = {
         'content_type': model_name,
-        'object_slug': slug,
+        'object_id': object.id,
         'url': url,
     }
 
@@ -372,7 +371,7 @@ def report_link(request, model_name, slug):
                 type=type,
                 text=text,
                 content_type=content_type,
-                object_slug=object_slug,
+                object_id=object.id,
                 url=url,
             )
 

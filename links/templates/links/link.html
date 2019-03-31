@@ -47,6 +47,8 @@
         </div>
     </div><!-- post-content -->
 
+    {% with object.tags.all as tags %}
+    {% if tags %}
     <div class="border border-info rounded mt-3">
         <article class="p-2">
 
@@ -56,4 +58,6 @@
 
         </article>
     </div>
+    {% endif %}
+    {% endwith %}
 </section>

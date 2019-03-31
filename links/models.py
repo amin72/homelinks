@@ -16,8 +16,9 @@ from django.contrib.contenttypes.fields import (
 )
 from django.contrib.contenttypes.models import ContentType
 from taggit.managers import TaggableManager
-from . import utils
+
 from dashboard.models import Action
+from . import utils
 
 
 class Category(models.Model):
@@ -124,6 +125,10 @@ class Link(models.Model):
             return False
         return True
 
+    @property
+    def model_name(self):
+        return self.__class__.__name__.lower()
+
     # NOTE: exceptions in save method will be risen only in web-bse views
     # for api views we need to raise specific exceptions
     def save(self, *args, **kwargs):
@@ -142,41 +147,22 @@ class Link(models.Model):
             #self.status = 'draft'
             parent.save()
 
-        # set url, slug filed
+        # set slug filed
         model_name = self.__class__.__name__.lower()
         if model_name == 'website':
             # strip all characters after domain
             url = self.url.rsplit("/", self.url.count("/") - 2)[0]
             # slug: domain-extention => webiste-org, google-com
-            *domain, ext = utils.split_http(url).split('.')
-            slug = f'{domain}-{ext}'
-            self.slug = slugify(slug)
-
+            *domain, ext = utils.split_protocol(url).split('.')
+            self.slug = slugify(f'{domain}-{ext}')
         elif model_name == 'channel':
             self.slug = f'{self.application}-{self.channel_id}'
-            self.url = utils.generate_channel_url(self.channel_id,
-                self.application)
-
-            # remove @ from channel id
-            if hasattr(self, 'channel_id'):
-                if self.channel_id.startswith('@'):
-                    self.channel_id = self.channel_id[1:]
-
-            # validate channel url
-            if utils.check_duplicate_url(self):
-                raise ValidationError({'channel_id':
-                        _('Channel already registerd')})
-
         elif model_name == 'group':
             self.slug = slugify(
                 f'{self.application}-{self.title}-f{self.uuid}',
                 allow_unicode=True)
         elif model_name == 'instagram':
             self.slug = slugify(f'ig-{self.page_id}')
-            # remove @ from page id
-            if hasattr(self, 'page_id'):
-                if self.page_id.startswith('@'):
-                    self.page_id = self.page_id[1:]
 
         super().save(*args, **kwargs)
         utils.create_thumbnail(self.image.path, self.thumbnail_path)
@@ -205,9 +191,8 @@ class Website(Link):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if utils.check_duplicate_url(self):
-            raise ValidationError({'url':
-                _('Website already registerd')})
+        if utils.duplicate_url(self):
+            raise utils.validation_exceptions[self.model_name]
 
     class Meta:
         ordering = ('-created',)
@@ -234,12 +219,14 @@ class Channel(Link):
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
         if not utils.valid_channel_id(self.channel_id, self.application):
-            raise ValidationError({'channel_id':
-                _('Sorry, this name is invalid.')})
+            raise ValidationError({'channel_id': utils.INVALID_NAME})
 
         if not utils.valid_channel_length(self.channel_id, self.application):
-            raise ValidationError({'channel_id':
-                _(f'Sorry, This name is too short')})
+            raise ValidationError({'channel_id': utils.SHORT_NAME})
+
+        self.url = utils.generate_channel_url(self.channel_id, self.application)
+        if utils.duplicate_url(self):
+            raise utils.validation_exceptions[self.model_name]
 
     class Meta:
         ordering = ('-created',)
@@ -267,9 +254,8 @@ class Group(Link):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if utils.check_duplicate_url(self):
-            raise ValidationError({'url':
-                _('Group already registerd')})
+        if utils.duplicate_url(self):
+            raise utils.validation_exceptions[self.model_name]
 
     class Meta:
         ordering = ('-created',)
@@ -287,13 +273,12 @@ class Instagram(Link):
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
         if not utils.valid_instagram_id(self.page_id):
-            raise ValidationError({'page_id':
-                _('Your Instagram id is incorrect')})
+            raise ValidationError({'page_id': utils.INVALID_NAME})
 
         self.url = utils.generate_instagram_url(self.page_id)
-        if utils.check_duplicate_url(self):
-            raise ValidationError({'page_id':
-                _('Instagram page already registerd')})
+        if utils.duplicate_url(self):
+            raise utils.validation_exceptions[self.model_name]
+
     class Meta:
         ordering = ('-created',)
 
@@ -316,52 +301,27 @@ class Report(models.Model):
         help_text=_("Text up to 1024 characters"),)
     is_read = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    actions = GenericRelation(Action)
+
     # this model can manage many objects (website, groups, ...)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_slug = models.SlugField(allow_unicode=True)
-    content_object = GenericForeignKey('content_type', 'object_slug')
+    object_id = models.IntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
         ordering = ('-created',)
 
     def __str__(self):
-        return '{} - {}'.format(self.email, self.type)
+        return f'{self.content_object}'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        utils.create_or_update_action(self, 'link reported')
+
+    @property
+    def model_name(self):
+        return self.__class__.__name__.lower()
 
     def get_admin_url(self):
-        model_name = self.__class__.__name__.lower()
+        model_name = self.model_name
         return reverse(f"admin:links_{model_name}_change", args=(self.id,))
-
-
-
-def create_action(sender, instance, created, **kwargs):
-    model_name = sender.__name__.lower()
-    content_type = ContentType.objects.get(model=model_name, app_label='links')
-    if created:
-        # link and report have different types of actions
-        if model_name == 'report':
-            type_of_action = 'link reported'
-        else:
-            type_of_action = 'link created'
-        Action.objects.create(type=type,
-            content_type=content_type,
-            object_id=instance.id)
-    else:
-        if model_name == 'report':
-            type_of_action = 'link reported'
-        else:
-            type_of_action = 'link updated'
-        action, created_action = Action.objects.get_or_create(
-            type=type_of_action,
-            content_type=content_type,
-            object_id=instance.id)
-
-        # if action already exists (was updated before), set `is_read` to False
-        if not created_action:
-            action.is_read = False
-            action.save()
-
-post_save.connect(create_action, sender=Website)
-post_save.connect(create_action, sender=Channel)
-post_save.connect(create_action, sender=Group)
-post_save.connect(create_action, sender=Instagram)
-post_save.connect(create_action, sender=Report)

@@ -1,16 +1,7 @@
-from copy import deepcopy
 import re
 import os
 import datetime
 
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    View,
-)
 from django.http import Http404
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, get_object_or_404
@@ -20,11 +11,16 @@ from django.utils.translation import gettext, ugettext as _
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
-from django.utils.text import slugify
 from django.contrib.contenttypes.models import ContentType
-
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    View,
+)
 from . import utils
-from dashboard.models import Action
 
 
 class ApplicationMixIn(ListView):
@@ -47,18 +43,12 @@ class CreateMixIn(CreateView):
     def form_valid(self, form):
         """
         On validation set the author of the link,
-        Create Action object for admins,
         Call set_tags() function to set tags of the links.
         """
         self.object = form.save(commit=False)
         self.object.author = self.request.user
         self.object.save()
-        self.object.tags.add(self.object.title)
-
-        # create action
-        model_name = self.model.__name__.lower()
-        content_type = ContentType.objects.get(model=model_name,
-            app_label='links')
+        utils.create_or_update_action(self.object, 'link created')
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -75,6 +65,12 @@ class PublishedObjectMixIn(UserPassesTestMixin):
         slug = self.kwargs.get("slug")
         queryset = self.model.objects.filter(slug=slug)
         object = queryset.first()
+
+        # if both parent and child are in published status, return parent
+        # this only happens if object was modified in admin area
+        if object.status == 'published':
+            if object.child and object.child.status == 'published':
+                return object
 
         # for the owner, let them see the child object (updated object)
         if object and object.author == self.request.user and object.child:
@@ -97,90 +93,17 @@ class OwnerMixin(UserPassesTestMixin):
         self.object = self.get_object()
         return (self.request.user == self.object.author)
 
-
 class UpdateMixIn(UpdateView):
     def form_valid(self, form):
         cd = form.cleaned_data
         object = self.get_object()
 
-        # check if values are the same before and after updating
-        # if none of the values changed do not create child or update it
-        for field in self.fields: # check all form fields
-            if hasattr(object, field):
-                value = getattr(object, field)
-                if cd.get(field) != value:
-                    break
-        else:
-            # object values are the same, redirect
+        if not utils.link_updated(object, cd, self.fields):
             return redirect(object.get_absolute_url())
 
-        # Create child if child does not exist.
-        if object.parent:
-            object_dup = object # update child
-        else:
-            object_dup = self.get_object() # create a child
-            object_dup.pk = None
-            object_dup.save()
-            object_dup.parent = object
-
-        # Assign all values that are sent with form to child.
-        # settings specific fields
-        model_name = object_dup.__class__.__name__.lower()
-        url = cd.get('url')
-        if model_name == 'website':
-            object_dup.type = cd.get('type')
-            object_dup.url = url
-            domain, ext = utils.split_http(url).split('.')
-            slug = f'{domain}-{ext}'
-            self.slug = slugify(slug)
-
-        elif model_name == 'channel':
-            object_dup.application = cd.get('application')
-            object_dup.channel_id = cd.get('channel_id')
-            utils.check_channel_id(object_dup.channel_id,
-                object_dup.application)
-            object_dup.url = utils.generate_channel_url(object_dup.channel_id,
-                object_dup.application)
-            object_dup.slug = slugify(
-                f'{object_dup.application}-{object_dup.channel_id}')
-
-        elif model_name == 'group':
-            object_dup.application = cd.get('application')
-            utils.check_duplicate_url(object_dup)
-            slug = \
-                f'{object_dup.application}-{object_dup.title}-{object_dup.uuid}'
-            self.slug = slugify(slug)
-
-        elif model_name == 'instagram':
-            object_dup.page_id = cd.get('page_id')
-            object_dup.url = utils.generate_instagram_url(object_dup.page_id)
-            object_dup.slug = slugify(f'{object_dup.page_id}')
-
-        # check for duplicate url
-        utils.check_duplicate_url(object_dup)
-
-        object_dup.title = cd.get('title')
-        object_dup.category = cd.get('category')
-        object_dup.description = cd.get('description')
-        object_dup.status = 'draft'
-
-        # save old image and thumbnail path
-        old_dup_image_path = object_dup.image.path
-        old_dup_thumbnail_path = object_dup.thumbnail_path
-        object_dup.image = cd.get('image')
-
-        # set tags
-        for tag in object.tags.all():
-           object_dup.tags.set(tag)
-        object_dup.tags = None
-
-        object_dup.save()
-
-        # remove unused image and thumbnail
-        if object_dup.image.path != old_dup_image_path and \
-            object.image.path != old_dup_image_path:
-            os.remove(old_dup_image_path)
-            os.remove(old_dup_thumbnail_path)
+        # if updating link wasn't successful raise exception
+        if not utils.validate_and_update_link(object, cd):
+            raise utils.validation_exceptions[object.model_name]
 
         messages.info(self.request, self.success_message)
         return redirect(object.get_absolute_url())

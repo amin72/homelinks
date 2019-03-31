@@ -23,15 +23,15 @@ urlpatterns = [
         name='website-create'),
 
     # website delete
-    path('websites/<slug:slug>/', views.WebsiteDetailView.as_view(),
+    path('website/<slug:slug>/', views.WebsiteDetailView.as_view(),
         name='website-detail'),
 
     # website update
-    path('websites/<slug:slug>/update/', views.WebsiteUpdateView.as_view(),
+    path('website/<slug:slug>/update/', views.WebsiteUpdateView.as_view(),
         name='website-update'),
 
     # website delete
-    path('websites/<slug:slug>/delete/', views.WebsiteDeleteView.as_view(),
+    path('website/<slug:slug>/delete/', views.WebsiteDeleteView.as_view(),
         name='website-delete'),
 
     # list channels
@@ -62,15 +62,15 @@ urlpatterns = [
         name='channel-create'),
 
     # channel details
-    path('channels/<slug:slug>/', views.ChannelDetailView.as_view(),
+    path('channel/<slug:slug>/', views.ChannelDetailView.as_view(),
         name='channel-detail'),
 
     # channel update
-    path('channels/<slug:slug>/update/', views.ChannelUpdateView.as_view(),
+    path('channel/<slug:slug>/update/', views.ChannelUpdateView.as_view(),
         name='channel-update'),
 
     # channel delete
-    path('channels/<slug:slug>/delete/', views.ChannelDeleteView.as_view(),
+    path('channel/<slug:slug>/delete/', views.ChannelDeleteView.as_view(),
         name='channel-delete'),
 
     # list groups
@@ -104,15 +104,15 @@ urlpatterns = [
     path('groups/create/', views.GroupCreateView.as_view(), name='group-create'),
 
     # group details
-    path('groups/<str:slug>/', views.GroupDetailView.as_view(),
+    path('group/<str:slug>/', views.GroupDetailView.as_view(),
         name='group-detail'),
 
     # group update
-    path('groups/<str:slug>/update/', views.GroupUpdateView.as_view(),
+    path('group/<str:slug>/update/', views.GroupUpdateView.as_view(),
         name='group-update'),
 
     # group delete
-    path('groups/<str:slug>/delete/', views.GroupDeleteView.as_view(),
+    path('group/<str:slug>/delete/', views.GroupDeleteView.as_view(),
         name='group-delete'),
 
     # list instagrams
@@ -123,15 +123,15 @@ urlpatterns = [
         name='instagram-create'),
 
     # instagram details
-    path('instagrams/<slug:slug>/', views.InstagramDetailView.as_view(),
+    path('instagram/<slug:slug>/', views.InstagramDetailView.as_view(),
         name='instagram-detail'),
 
     # instagram update
-    path('instagrams/<slug:slug>/update/', views.InstagramUpdateView.as_view(),
+    path('instagram/<slug:slug>/update/', views.InstagramUpdateView.as_view(),
         name='instagram-update'),
 
     # instagram delete
-    path('instagrams/<slug:slug>/delete/', views.InstagramDeleteView.as_view(),
+    path('instagram/<slug:slug>/delete/', views.InstagramDeleteView.as_view(),
         name='instagram-delete'),
 
     # report link
