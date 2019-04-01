@@ -159,23 +159,17 @@ class DeleteMixIn(LoginRequiredMixin, OwnerMixin, DeleteView):
 
     # send flash message and do the rest (deleting the thumbnail then the link)
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
-        try:
-            # remove image and thumbnail
-            os.remove(self.object.image.path)
-            os.remove(self.object.thumbnail_path)
-
-            # if object has child remove child's image and thumbnail too
-            child = self.object.child
-            if child:
-                os.remove(child.image.path)
-                os.remove(child.thumbnail_path)
-        except FileNotFoundError:
-            pass
-
+        obj = self.get_object()
+        utils.delete_images(obj)
         messages.success(request, self.success_message)
         return super().post(request, *args, **kwargs)
+
+
+class DeleteAPIMixIn(DestroyAPIView):
+	def perform_destroy(self, instance):
+		obj = self.get_object()
+		utils.delete_images(obj)
+		super().perform_destroy(instance)
 
 
 class InfoMessageMixin:

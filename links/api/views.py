@@ -61,6 +61,7 @@ from .serializers import (
 from links.mixins import (
 	CreateAPIMixIn,
 	RetrieveUpdateAPIMixIn,
+	DeleteAPIMixIn,
 )
 
 from links import utils
@@ -125,6 +126,11 @@ class WebsiteUpdateAPIView(RetrieveUpdateAPIMixIn):
 	queryset = Website.published.all()
 	lookup_field = 'slug'
 	model = Website
+
+
+class WebsiteDeleteAPIView(DeleteAPIMixIn):
+	queryset = Website.published.all()
+	lookup_field = 'slug'
 #----------------------------------------------------------
 
 
@@ -163,6 +169,7 @@ class EitaaChannelListAPIView(ListAPIView):
     queryset = Channel.published.filter(application='eitaa')
     pagination_class = PostPageNumberPagination
 
+
 class ChannelDetailAPIView(RetrieveAPIView):
 	serializer_class = ChannelDetailSerializer
 	queryset = Channel.published.all()
@@ -178,6 +185,16 @@ class ChannelUpdateAPIView(RetrieveUpdateAPIMixIn):
 	queryset = Channel.published.all()
 	lookup_field = 'slug'
 	model = Channel
+
+
+class ChannelDeleteAPIView(DestroyAPIView):
+	queryset = Channel.published.all()
+	lookup_field = 'slug'
+
+
+class ChannelDeleteAPIView(DeleteAPIMixIn):
+	queryset = Channel.published.all()
+	lookup_field = 'slug'
 # ---------------------------------------------------------
 
 
@@ -238,7 +255,17 @@ class GroupUpdateAPIView(RetrieveUpdateAPIMixIn):
 	queryset = Group.published.all()
 	lookup_field = 'slug'
 	model = Group
-# ---------------------------------------------------------
+
+
+class GroupDeleteAPIView(DestroyAPIView):
+	queryset = Group.published.all()
+	lookup_field = 'slug'
+
+
+class GroupDeleteAPIView(DeleteAPIMixIn):
+	queryset = Group.published.all()
+	lookup_field = 'slug'
+# --------------------------------------------------------
 
 
 class InstagramListAPIView(ListAPIView):
@@ -262,4 +289,14 @@ class InstagramUpdateAPIView(RetrieveUpdateAPIMixIn):
 	queryset = Instagram.published.all()
 	lookup_field = 'slug'
 	model = Instagram
+
+
+class InstagramDeleteAPIView(DestroyAPIView):
+	queryset = Instagram.published.all()
+	lookup_field = 'slug'
+
+
+class InstagramDeleteAPIView(DeleteAPIMixIn):
+	queryset = Instagram.published.all()
+	lookup_field = 'slug'
 # ---------------------------------------------------------

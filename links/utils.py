@@ -301,3 +301,25 @@ def get_parent_or_child_object(object):
     if child:
         return child
     return obj
+
+
+def delete_images(object):
+    """Delete image and thumbnail files"""
+    try:
+        # remove image and thumbnail
+        os.remove(object.image.path)
+        os.remove(object.thumbnail_path)
+
+        # if object has child remove child's image and thumbnail too
+        child = object.child
+        if child:
+            os.remove(child.image.path)
+            os.remove(child.thumbnail_path)
+
+        # if object has parent remove parent's image and thumbnail too
+        parent = object.parent
+        if parent:
+            os.remove(parent.image.path)
+            os.remove(parent.thumbnail_path)
+    except FileNotFoundError as e:
+        pass

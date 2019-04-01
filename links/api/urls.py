@@ -30,10 +30,10 @@ urlpatterns = [
     path('website/<slug:slug>/update/', views.WebsiteUpdateAPIView.as_view(),
         name='website-update'),
 
-    # # website delete
-    # path('website/<slug:slug>/delete/', views.WebsiteDeleteView.as_view(),
-    #     name='website-delete'),
-    #
+    # website delete
+    path('website/<slug:slug>/delete/', views.WebsiteDeleteAPIView.as_view(),
+        name='website-delete'),
+
     # list channels
     path('channels/', views.ChannelListAPIView.as_view(), name='channels'),
 
@@ -69,9 +69,9 @@ urlpatterns = [
     path('channel/<slug:slug>/update/', views.ChannelUpdateAPIView.as_view(),
         name='channel-update'),
 
-    # # channel delete
-    # path('channel/<slug:slug>/delete/', views.ChannelDeleteView.as_view(),
-    #     name='channel-delete'),
+    # channel delete
+    path('channel/<slug:slug>/delete/', views.ChannelDeleteAPIView.as_view(),
+        name='channel-delete'),
 
     # list groups
     path('groups/', views.GroupListAPIView.as_view(), name='groups'),
@@ -112,9 +112,9 @@ urlpatterns = [
     path('group/<str:slug>/update/', views.GroupUpdateAPIView.as_view(),
         name='group-update'),
 
-    # # group delete
-    # path('groups/<str:slug>/delete/', views.GroupDeleteView.as_view(),
-    #     name='group-delete'),
+    # group delete
+    path('group/<str:slug>/delete/', views.GroupDeleteAPIView.as_view(),
+        name='group-delete'),
 
     # list instagrams
     path('instagrams/', views.InstagramListAPIView.as_view(),
@@ -132,11 +132,11 @@ urlpatterns = [
     path('instagram/<slug:slug>/update/', views.InstagramUpdateAPIView.as_view(),
         name='instagram-update'),
 
-    # # instagram delete
-    # path('instagrams/<slug:slug>/delete/',
-        # views.InstagramDeleteView.as_view(),
-        # name='instagram-delete'),
-    #
+    # instagram delete
+    path('instagram/<slug:slug>/delete/',
+        views.InstagramDeleteAPIView.as_view(),
+        name='instagram-delete'),
+
     # # report link
     # path('report/<str:model_name>/<str:slug>/', views.report_link,
     #     name='report'),
