@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext, gettext_lazy as _
 
 from links import utils
@@ -12,7 +11,7 @@ from links.models import (
     Instagram,
     Report,
 )
-
+from links import utils
 
 User = get_user_model()
 
@@ -86,10 +85,23 @@ class WebsiteCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         instance = Website(**data)
-        if utils.check_duplicate_url(instance):
+        if utils.is_duplicate_url(instance):
             raise serializers.ValidationError({'url':
-                _('Website already registerd')})
+                utils.WEBSITE_EXISTS})
         return data
+
+
+class WebsiteUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Website
+        fields = [
+            'title',
+            'url',
+            'type',
+            'category',
+            'description',
+            'image',
+        ]
 #----------------------------------------------------------
 
 
@@ -152,11 +164,24 @@ class ChannelCreateSerializer(serializers.ModelSerializer):
 
         instance.url = utils.generate_channel_url(instance.channel_id,
                                                 instance.application)
-        if utils.check_duplicate_url(instance):
+        if utils.is_duplicate_url(instance):
             raise serializers.ValidationError({'channel_id':
-                _('Channel already registerd')})
+                utils.CHANNEL_EXISTS})
 
         return data
+
+
+class ChannelUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Channel
+        fields = [
+            'application',
+            'title',
+            'channel_id',
+            'category',
+            'description',
+            'image',
+        ]
 #----------------------------------------------------------
 
 
@@ -206,10 +231,23 @@ class GroupCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         instance = Group(**data)
-        if utils.check_duplicate_url(instance):
+        if utils.is_duplicate_url(instance):
             raise serializers.ValidationError({'url':
-                _('Group already registerd')})
+                utils.GROUP_EXISTS})
         return data
+
+
+class GroupUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = [
+            'application',
+            'title',
+            'url',
+            'category',
+            'description',
+            'image',
+        ]
 #----------------------------------------------------------
 
 
@@ -262,9 +300,21 @@ class InstagramCreateSerializer(serializers.ModelSerializer):
                 _('Your Instagram id is incorrect')})
 
         instance.url = utils.generate_instagram_url(instance.page_id)
-        if utils.check_duplicate_url(instance):
+        if utils.is_duplicate_url(instance):
             raise serializers.ValidationError({'page_id':
-                _('Instagram page already registerd')})
+                utils.INSTAGRAM_EXISTS})
 
         return data
+
+
+class InstagramUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Instagram
+        fields = [
+            'title',
+            'page_id',
+            'category',
+            'description',
+            'image',
+        ]
 #----------------------------------------------------------

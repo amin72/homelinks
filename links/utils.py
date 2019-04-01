@@ -1,4 +1,5 @@
 from copy import deepcopy
+import os
 import re
 
 from django.core.exceptions import ValidationError
@@ -8,6 +9,7 @@ from django.utils.text import slugify
 from rest_framework.serializers import ValidationError as drf_ValidationError
 from PIL import Image
 from dashboard.models import Action
+from links import models
 
 
 TELEGRAM_LINK = 'https://t.me/'
@@ -148,7 +150,7 @@ def generate_instagram_url(page_id):
     return url
 
 
-def duplicate_url(object):
+def is_duplicate_url(object):
     """
     Check if the url already exists.
     Return True on exiting the object else False.
@@ -165,13 +167,14 @@ def duplicate_url(object):
     return False # object not found (no duplicate object)
 
 
-def create_thumbnail(orig_path, thumbnail_path):
-    # make two version of the image
-    img = Image.open(orig_path)
-    # the original one
+def scale_image(image_path: str):
+    img = Image.open(image_path)
     img.thumbnail((320, 240))
-    img.save(orig_path)
-    # thumbnail
+    img.save(image_path)
+
+
+def create_thumbnail(image_path: str, thumbnail_path: str):
+    img = Image.open(image_path)
     img.thumbnail((160, 120))
     img.save(thumbnail_path)
 
@@ -218,7 +221,6 @@ def validate_and_update_link(object, data):
     else:
         object_dup = deepcopy(object) # create a child
         object_dup.pk = None
-        print('saving child...')
         object_dup.save()
         object_dup.parent = object
 
@@ -251,7 +253,7 @@ def validate_and_update_link(object, data):
         object_dup.application = data.get('application')
         slug = \
             f'{object_dup.application}-{object_dup.title}-{object_dup.uuid}'
-        self.slug = slugify(slug)
+        object_dup.slug = slugify(slug)
 
     elif model_name == 'instagram':
         object_dup.page_id = data.get('page_id')
@@ -259,17 +261,16 @@ def validate_and_update_link(object, data):
         object_dup.slug = slugify(f'{object_dup.page_id}')
 
     # check for duplicate url
-    if duplicate_url(object_dup):
-        print('not successful')
+    if is_duplicate_url(object_dup):
         return False # operation was not successful
-
-    print('successful')
 
     # if `url` was valid, set other attributes
     object_dup.title = data.get('title')
-    object_dup.category = data.get('category')
     object_dup.description = data.get('description')
     object_dup.status = 'draft'
+    category = data.get('category')
+    #category = models.Category.objects.get(pk=cat_id)
+    object_dup.category = category
 
     # save old image and thumbnail path
     old_dup_image_path = object_dup.image.path
@@ -290,3 +291,13 @@ def validate_and_update_link(object, data):
         os.remove(old_dup_image_path)
         os.remove(old_dup_thumbnail_path)
     return True
+
+
+def get_parent_or_child_object(object):
+    """Return child if child exists, else parent"""
+    slug = object.kwargs.get('slug')
+    obj = object.model.objects.filter(slug=slug).first()
+    child = obj.child
+    if child:
+        return child
+    return obj

@@ -23,15 +23,15 @@ urlpatterns = [
        name='website-create'),
 
     # website details
-    path('websites/<slug:slug>/', views.WebsiteDetailAPIView.as_view(),
+    path('website/<slug:slug>/', views.WebsiteDetailAPIView.as_view(),
         name='website-detail'),
 
-    # # website update
-    # path('websites/<slug:slug>/update/', views.WebsiteUpdateView.as_view(),
-    #     name='website-update'),
-    #
+    # website update
+    path('website/<slug:slug>/update/', views.WebsiteUpdateAPIView.as_view(),
+        name='website-update'),
+
     # # website delete
-    # path('websites/<slug:slug>/delete/', views.WebsiteDeleteView.as_view(),
+    # path('website/<slug:slug>/delete/', views.WebsiteDeleteView.as_view(),
     #     name='website-delete'),
     #
     # list channels
@@ -62,15 +62,15 @@ urlpatterns = [
        name='channel-create'),
 
     # channel details
-    path('channels/<slug:slug>/', views.ChannelDetailAPIView.as_view(),
+    path('channel/<slug:slug>/', views.ChannelDetailAPIView.as_view(),
         name='channel-detail'),
 
-    # # channel update
-    # path('channels/<slug:slug>/update/', views.ChannelUpdateView.as_view(),
-    #     name='channel-update'),
-    #
+    # channel update
+    path('channel/<slug:slug>/update/', views.ChannelUpdateAPIView.as_view(),
+        name='channel-update'),
+
     # # channel delete
-    # path('channels/<slug:slug>/delete/', views.ChannelDeleteView.as_view(),
+    # path('channel/<slug:slug>/delete/', views.ChannelDeleteView.as_view(),
     #     name='channel-delete'),
 
     # list groups
@@ -105,13 +105,13 @@ urlpatterns = [
        name='group-create'),
 
     # group details
-    path('groups/<str:slug>/', views.GroupDetailAPIView.as_view(),
+    path('group/<str:slug>/', views.GroupDetailAPIView.as_view(),
         name='group-detail'),
 
-    # # group update
-    # path('groups/<str:slug>/update/', views.GroupUpdateView.as_view(),
-    #     name='group-update'),
-    #
+    # group update
+    path('group/<str:slug>/update/', views.GroupUpdateAPIView.as_view(),
+        name='group-update'),
+
     # # group delete
     # path('groups/<str:slug>/delete/', views.GroupDeleteView.as_view(),
     #     name='group-delete'),
@@ -125,14 +125,13 @@ urlpatterns = [
        name='instagram-create'),
 
     # instagram details
-    path('instagrams/<slug:slug>/', views.InstagramDetailAPIView.as_view(),
+    path('instagram/<slug:slug>/', views.InstagramDetailAPIView.as_view(),
         name='instagram-detail'),
 
-    # # instagram update
-    # path('instagrams/<slug:slug>/update/',
-        # views.InstagramUpdateView.as_view(),
-        # name='instagram-update'),
-    #
+    # instagram update
+    path('instagram/<slug:slug>/update/', views.InstagramUpdateAPIView.as_view(),
+        name='instagram-update'),
+
     # # instagram delete
     # path('instagrams/<slug:slug>/delete/',
         # views.InstagramDeleteView.as_view(),

@@ -1,6 +1,10 @@
+from PIL import Image
 from django.db.models import Q
 from django.utils.text import slugify
+from rest_framework.generics import get_object_or_404
 from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 from rest_framework.generics import (
 	ListAPIView,
@@ -8,6 +12,7 @@ from rest_framework.generics import (
 	RetrieveUpdateAPIView,
 	DestroyAPIView,
 	CreateAPIView,
+	UpdateAPIView,
 )
 
 from rest_framework.permissions import (
@@ -35,24 +40,36 @@ from .serializers import (
 	WebsiteListSerializer,
 	WebsiteDetailSerializer,
 	WebsiteCreateSerializer,
+	WebsiteUpdateSerializer,
+
 	ChannelListSerializer,
 	ChannelDetailSerializer,
 	ChannelCreateSerializer,
+	ChannelUpdateSerializer,
+
 	GroupListSerializer,
 	GroupDetailSerializer,
 	GroupCreateSerializer,
+	GroupUpdateSerializer,
+
 	InstagramListSerializer,
 	InstagramDetailSerializer,
 	InstagramCreateSerializer,
+	InstagramUpdateSerializer,
 )
 
-from .pagination import PostLimitOffsetPagination, PostPageNumberPagination
+from links.mixins import (
+	CreateAPIMixIn,
+	RetrieveUpdateAPIMixIn,
+)
 
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from links import utils
+from .pagination import PostLimitOffsetPagination, PostPageNumberPagination
 
 
 @api_view()
+
+
 def index(request):
 	websites = Website.published.all()[:6]
 	channels = Channel.published.all()[:6]
@@ -75,8 +92,6 @@ def index(request):
 		'instagram': serialized_instagrams.data,
 	}
 	return Response(result)
-
-
 class WebsiteListAPIView(ListAPIView):
     serializer_class = WebsiteListSerializer
     queryset = Website.published.all()
@@ -101,12 +116,16 @@ class WebsiteDetailAPIView(RetrieveAPIView):
 	lookup_field = 'slug'
 
 
-class WebsiteCreateAPIView(CreateAPIView):
+class WebsiteCreateAPIView(CreateAPIMixIn):
 	serializer_class = WebsiteCreateSerializer
 
-	def perform_create(self, serializer):
-		serializer.save(author=self.request.user)
-# ---------------------------------------------------------
+
+class WebsiteUpdateAPIView(RetrieveUpdateAPIMixIn):
+	serializer_class = WebsiteUpdateSerializer
+	queryset = Website.published.all()
+	lookup_field = 'slug'
+	model = Website
+#----------------------------------------------------------
 
 
 class ChannelListAPIView(ListAPIView):
@@ -150,12 +169,15 @@ class ChannelDetailAPIView(RetrieveAPIView):
 	lookup_field = 'slug'
 
 
-class ChannelCreateAPIView(CreateAPIView):
+class ChannelCreateAPIView(CreateAPIMixIn):
 	serializer_class = ChannelCreateSerializer
 
-	def perform_create(self, serializer):
-		# set author field
-		serializer.save(author=self.request.user)
+
+class ChannelUpdateAPIView(RetrieveUpdateAPIMixIn):
+	serializer_class = ChannelUpdateSerializer
+	queryset = Channel.published.all()
+	lookup_field = 'slug'
+	model = Channel
 # ---------------------------------------------------------
 
 
@@ -207,11 +229,15 @@ class GroupDetailAPIView(RetrieveAPIView):
 	lookup_field = 'slug'
 
 
-class GroupCreateAPIView(CreateAPIView):
+class GroupCreateAPIView(CreateAPIMixIn):
 	serializer_class = GroupCreateSerializer
 
-	def perform_create(self, serializer):
-		serializer.save(author=self.request.user)
+
+class GroupUpdateAPIView(RetrieveUpdateAPIMixIn):
+	serializer_class = GroupUpdateSerializer
+	queryset = Group.published.all()
+	lookup_field = 'slug'
+	model = Group
 # ---------------------------------------------------------
 
 
@@ -227,9 +253,13 @@ class InstagramDetailAPIView(RetrieveAPIView):
 	lookup_field = 'slug'
 
 
-class InstagramCreateAPIView(CreateAPIView):
+class InstagramCreateAPIView(CreateAPIMixIn):
 	serializer_class = InstagramCreateSerializer
 
-	def perform_create(self, serializer):
-		serializer.save(author=self.request.user)
+
+class InstagramUpdateAPIView(RetrieveUpdateAPIMixIn):
+	serializer_class = InstagramUpdateSerializer
+	queryset = Instagram.published.all()
+	lookup_field = 'slug'
+	model = Instagram
 # ---------------------------------------------------------

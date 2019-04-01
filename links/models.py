@@ -165,6 +165,7 @@ class Link(models.Model):
             self.slug = slugify(f'ig-{self.page_id}')
 
         super().save(*args, **kwargs)
+        utils.scale_image(self.image.path)
         utils.create_thumbnail(self.image.path, self.thumbnail_path)
 
     # Managers
@@ -191,7 +192,7 @@ class Website(Link):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if utils.duplicate_url(self):
+        if utils.is_duplicate_url(self):
             raise utils.validation_exceptions[self.model_name]
 
     class Meta:
@@ -225,7 +226,7 @@ class Channel(Link):
             raise ValidationError({'channel_id': utils.SHORT_NAME})
 
         self.url = utils.generate_channel_url(self.channel_id, self.application)
-        if utils.duplicate_url(self):
+        if utils.is_duplicate_url(self):
             raise utils.validation_exceptions[self.model_name]
 
     class Meta:
@@ -254,7 +255,7 @@ class Group(Link):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if utils.duplicate_url(self):
+        if utils.is_duplicate_url(self):
             raise utils.validation_exceptions[self.model_name]
 
     class Meta:
@@ -276,7 +277,7 @@ class Instagram(Link):
             raise ValidationError({'page_id': utils.INVALID_NAME})
 
         self.url = utils.generate_instagram_url(self.page_id)
-        if utils.duplicate_url(self):
+        if utils.is_duplicate_url(self):
             raise utils.validation_exceptions[self.model_name]
 
     class Meta:

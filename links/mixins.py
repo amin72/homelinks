@@ -20,6 +20,16 @@ from django.views.generic import (
     DeleteView,
     View,
 )
+
+from rest_framework.generics import (
+	ListAPIView,
+	RetrieveAPIView,
+	RetrieveUpdateAPIView,
+	DestroyAPIView,
+	CreateAPIView,
+	UpdateAPIView,
+)
+
 from . import utils
 
 
@@ -53,6 +63,12 @@ class CreateMixIn(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('dashboard:index')
+
+
+class CreateAPIMixIn(CreateAPIView):
+	def perform_create(self, serializer):
+		instance = serializer.save(author=self.request.user)
+		utils.create_or_update_action(instance, 'link created')
 
 
 class PublishedObjectMixIn(UserPassesTestMixin):
@@ -93,6 +109,7 @@ class OwnerMixin(UserPassesTestMixin):
         self.object = self.get_object()
         return (self.request.user == self.object.author)
 
+
 class UpdateMixIn(UpdateView):
     def form_valid(self, form):
         cd = form.cleaned_data
@@ -109,15 +126,19 @@ class UpdateMixIn(UpdateView):
         return redirect(object.get_absolute_url())
 
     def get_object(self):
-        slug = self.kwargs.get('slug')
-        # if result is 1 object, only parent object is present
-        # if result is 2 objects, parent and child are present
-        queryset = self.model.objects.filter(slug=slug)
-        self.object = queryset.first() # get parent object
-        child = self.object.child
-        if child:
-            return child
-        return self.object
+        return utils.get_parent_or_child_object(self)
+
+
+class RetrieveUpdateAPIMixIn(RetrieveUpdateAPIView):
+    def perform_update(self, serializer):
+        obj = self.get_object()
+        data = serializer.validated_data
+        if not utils.validate_and_update_link(obj, data):
+        	raise utils.serialize_validation_exceptions[obj.model_name]
+        return serializer
+
+    def get_object(self):
+        return utils.get_parent_or_child_object(self)
 
 
 class DeleteMixIn(LoginRequiredMixin, OwnerMixin, DeleteView):
