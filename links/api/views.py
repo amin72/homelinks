@@ -291,12 +291,8 @@ class InstagramUpdateAPIView(RetrieveUpdateAPIMixIn):
 	model = Instagram
 
 
-class InstagramDeleteAPIView(DestroyAPIView):
-	queryset = Instagram.published.all()
-	lookup_field = 'slug'
-
-
 class InstagramDeleteAPIView(DeleteAPIMixIn):
 	queryset = Instagram.published.all()
 	lookup_field = 'slug'
+	model = Instagram
 # ---------------------------------------------------------

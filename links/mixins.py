@@ -154,8 +154,8 @@ class DeleteMixIn(LoginRequiredMixin, OwnerMixin, DeleteView):
 
     def get_object(self):
         slug = self.kwargs.get('slug')
-        object = self.model.objects.get(slug=slug, parent=None)
-        return object
+        obj = self.model.objects.get(slug=slug, parent=None)
+        return obj
 
     # send flash message and do the rest (deleting the thumbnail then the link)
     def post(self, request, *args, **kwargs):
@@ -166,10 +166,15 @@ class DeleteMixIn(LoginRequiredMixin, OwnerMixin, DeleteView):
 
 
 class DeleteAPIMixIn(DestroyAPIView):
-	def perform_destroy(self, instance):
-		obj = self.get_object()
-		utils.delete_images(obj)
-		super().perform_destroy(instance)
+    def perform_destroy(self, instance):
+        obj = self.get_object()
+        utils.delete_images(obj)
+        super().perform_destroy(instance)
+
+    def get_object(self):
+        slug = self.kwargs.get('slug')
+        obj = self.model.objects.get(slug=slug, parent=None)
+        return obj
 
 
 class InfoMessageMixin:

@@ -134,6 +134,12 @@ class Link(models.Model):
     def save(self, *args, **kwargs):
         # if object has parent (object is a child)
         if self.parent and self.status == 'published':
+            # save parent image and thumbnail path
+            # if parent and child are pointing to same filles then
+            # parent images must be removed
+            old_image_path = self.parent.image.path
+            old_thumbnail_path = self.parent.thumbnail_path
+
             parent = self.parent
             # make parent and child equal
             fields = [f.name for f in self._meta.fields]
@@ -146,6 +152,10 @@ class Link(models.Model):
                 setattr(parent, field, attr_self_val)
             #self.status = 'draft'
             parent.save()
+
+            # remove old parent images
+            os.remove(old_image_path)
+            os.remove(old_thumbnail_path)
 
         # set slug filed
         model_name = self.__class__.__name__.lower()
