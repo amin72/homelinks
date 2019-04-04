@@ -17,11 +17,15 @@ urlpatterns = [
     # links
     path('', include('links.urls')),
 
-    # APIs
+    ### APIs ###
     # links-apis
     path('api/', include('links.api.urls')),
+
     # contact-apis
     path('api/contact/', include('contact.api.urls')),
+
+    # dashboard-apis
+    # path('api/dashboard/', include('dashboard.api.urls')),
 ]
 
 if settings.DEBUG:

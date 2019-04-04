@@ -285,13 +285,11 @@ def validate_and_update_link(object, data):
     object_dup.save()
     create_or_update_action(object_dup, 'link updated')
 
-    import pdb
-    pdb.set_trace()
     # remove unused image and thumbnail
-    if object_dup.image.path != old_image_path and \
-        object.image.path != old_image_path:
-        os.remove(old_image_path)
-        os.remove(old_thumbnail_path)
+    if object_dup.image.path != old_dup_image_path and \
+        object.image.path != old_dup_thumbnail_path:
+        os.remove(old_dup_image_path)
+        os.remove(old_dup_thumbnail_path)
     return True
 
 

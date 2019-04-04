@@ -39,7 +39,7 @@ INSTAGRAM_DETAIL_URL = serializers.HyperlinkedIdentityField(
 #----------------------------------------------------------
 
 
-class WebsiteListSerializer(serializers.ModelSerializer):
+class WebsiteSerializer(serializers.ModelSerializer):
     detail_url = WEBSITE_DETAIL_URL
     thumbnail = serializers.SerializerMethodField()
 
@@ -105,7 +105,7 @@ class WebsiteUpdateSerializer(serializers.ModelSerializer):
 #----------------------------------------------------------
 
 
-class ChannelListSerializer(serializers.ModelSerializer):
+class ChannelSerializer(serializers.ModelSerializer):
     detail_url = CHANNEL_DETAIL_URL
     thumbnail = serializers.SerializerMethodField()
 
@@ -185,7 +185,7 @@ class ChannelUpdateSerializer(serializers.ModelSerializer):
 #----------------------------------------------------------
 
 
-class GroupListSerializer(serializers.ModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     detail_url = GROUP_DETAIL_URL
     thumbnail = serializers.SerializerMethodField()
 
@@ -251,7 +251,7 @@ class GroupUpdateSerializer(serializers.ModelSerializer):
 #----------------------------------------------------------
 
 
-class InstagramListSerializer(serializers.ModelSerializer):
+class InstagramSerializer(serializers.ModelSerializer):
     detail_url = INSTAGRAM_DETAIL_URL
     thumbnail = serializers.SerializerMethodField()
 

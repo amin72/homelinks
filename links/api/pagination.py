@@ -4,10 +4,10 @@ from rest_framework.pagination import (
 )
 
 
-class PostLimitOffsetPagination(LimitOffsetPagination):
+class LinkLimitOffsetPagination(LimitOffsetPagination):
 	max_limit = 10
 	default_limit = 20
 
 
-class PostPageNumberPagination(PageNumberPagination):
+class LinkPageNumberPagination(PageNumberPagination):
 	page_size = 20

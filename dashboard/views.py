@@ -20,6 +20,7 @@ from .forms import (
 )
 from .mixins import UserMixIn, ReplaceChildWithParent
 from .models import Profile, Action
+from . import utils
 
 
 User = get_user_model()
@@ -36,26 +37,14 @@ def get_paginated_object_list(request, queryset, num):
         object_list = paginator.page(paginator.num_pages)
     return object_list, page
 
+
 # list latest user's links: websites, channels, groups, and instagrams
 @login_required
 def index(request):
     user = request.user
-    websites = Website.objects.filter(author=user, parent=None)
-    channels = Channel.objects.filter(author=user, parent=None)
-    groups = Group.objects.filter(author=user, parent=None)
-    instagrams = Instagram.objects.filter(author=user, parent=None)
-
-    links = sorted(chain(websites, channels, groups, instagrams),
-        key=lambda link: link.created, reverse=True)
-
+    sorted_links = utils.get_sorted_users_links(user)
     # if links have child, sent their child instead of them.
-    links_and_children = []
-    for link in links:
-        child = link.child
-        if child:
-            links_and_children.append(child)
-        else:
-            links_and_children.append(link)
+    links_and_children = utils.replace_child_with_parent(sorted_links)
 
     object_list, page = get_paginated_object_list(request,
                                         links_and_children, 10)

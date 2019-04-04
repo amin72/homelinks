@@ -37,22 +37,22 @@ from links.models import (
 )
 
 from .serializers import (
-	WebsiteListSerializer,
+	WebsiteSerializer,
 	WebsiteDetailSerializer,
 	WebsiteCreateSerializer,
 	WebsiteUpdateSerializer,
 
-	ChannelListSerializer,
+	ChannelSerializer,
 	ChannelDetailSerializer,
 	ChannelCreateSerializer,
 	ChannelUpdateSerializer,
 
-	GroupListSerializer,
+	GroupSerializer,
 	GroupDetailSerializer,
 	GroupCreateSerializer,
 	GroupUpdateSerializer,
 
-	InstagramListSerializer,
+	InstagramSerializer,
 	InstagramDetailSerializer,
 	InstagramCreateSerializer,
 	InstagramUpdateSerializer,
@@ -65,25 +65,23 @@ from links.mixins import (
 )
 
 from links import utils
-from .pagination import PostLimitOffsetPagination, PostPageNumberPagination
+from .pagination import LinkLimitOffsetPagination, LinkPageNumberPagination
 
 
 @api_view()
-
-
 def index(request):
 	websites = Website.published.all()[:6]
 	channels = Channel.published.all()[:6]
 	groups = Group.published.all()[:6]
 	instagrams = Instagram.published.all()[:6]
 
-	serialized_websites = WebsiteListSerializer(websites, many=True,
+	serialized_websites = WebsiteSerializer(websites, many=True,
 		context={'request': request})
-	serialized_channels = ChannelListSerializer(channels, many=True,
+	serialized_channels = ChannelSerializer(channels, many=True,
 		context={'request': request})
-	serialized_groups = GroupListSerializer(groups, many=True,
+	serialized_groups = GroupSerializer(groups, many=True,
 		context={'request': request})
-	serialized_instagrams = InstagramListSerializer(instagrams, many=True,
+	serialized_instagrams = InstagramSerializer(instagrams, many=True,
 		context={'request': request})
 
 	result = {
@@ -93,22 +91,24 @@ def index(request):
 		'instagram': serialized_instagrams.data,
 	}
 	return Response(result)
+
+
 class WebsiteListAPIView(ListAPIView):
-    serializer_class = WebsiteListSerializer
+    serializer_class = WebsiteSerializer
     queryset = Website.published.all()
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class IranianWebsiteListAPIView(ListAPIView):
-    serializer_class = WebsiteListSerializer
+    serializer_class = WebsiteSerializer
     queryset = Website.published.filter(type='iranian')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class ForeignWebsiteListAPIView(ListAPIView):
-    serializer_class = WebsiteListSerializer
+    serializer_class = WebsiteSerializer
     queryset = Website.published.filter(type='foreign')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class WebsiteDetailAPIView(RetrieveAPIView):
@@ -135,39 +135,39 @@ class WebsiteDeleteAPIView(DeleteAPIMixIn):
 
 
 class ChannelListAPIView(ListAPIView):
-    serializer_class = ChannelListSerializer
+    serializer_class = ChannelSerializer
     queryset = Channel.published.all()
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class TelegramChannelListAPIView(ListAPIView):
-    serializer_class = ChannelListSerializer
+    serializer_class = ChannelSerializer
     queryset = Channel.published.filter(application='telegram')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class SoroushChannelListAPIView(ListAPIView):
-    serializer_class = ChannelListSerializer
+    serializer_class = ChannelSerializer
     queryset = Channel.published.filter(application='soroush')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class GapChannelListAPIView(ListAPIView):
-    serializer_class = ChannelListSerializer
+    serializer_class = ChannelSerializer
     queryset = Channel.published.filter(application='gap')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class IGapChannelListAPIView(ListAPIView):
-    serializer_class = ChannelListSerializer
+    serializer_class = ChannelSerializer
     queryset = Channel.published.filter(application='igap')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class EitaaChannelListAPIView(ListAPIView):
-    serializer_class = ChannelListSerializer
+    serializer_class = ChannelSerializer
     queryset = Channel.published.filter(application='eitaa')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class ChannelDetailAPIView(RetrieveAPIView):
@@ -199,45 +199,45 @@ class ChannelDeleteAPIView(DeleteAPIMixIn):
 
 
 class GroupListAPIView(ListAPIView):
-    serializer_class = GroupListSerializer
+    serializer_class = GroupSerializer
     queryset = Group.published.all()
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class WhatsappGroupListAPIView(ListAPIView):
-    serializer_class = GroupListSerializer
+    serializer_class = GroupSerializer
     queryset = Group.published.filter(application='whatsapp')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class TelegramGroupListAPIView(ListAPIView):
-    serializer_class = GroupListSerializer
+    serializer_class = GroupSerializer
     queryset = Group.published.filter(application='telegram')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class SoroushGroupListAPIView(ListAPIView):
-    serializer_class = GroupListSerializer
+    serializer_class = GroupSerializer
     queryset = Group.published.filter(application='soroush')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class GapGroupListAPIView(ListAPIView):
-    serializer_class = GroupListSerializer
+    serializer_class = GroupSerializer
     queryset = Group.published.filter(application='gap')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class IGapGroupListAPIView(ListAPIView):
-    serializer_class = GroupListSerializer
+    serializer_class = GroupSerializer
     queryset = Group.published.filter(application='igap')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class EitaaGroupListAPIView(ListAPIView):
-    serializer_class = GroupListSerializer
+    serializer_class = GroupSerializer
     queryset = Group.published.filter(application='eitaa')
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class GroupDetailAPIView(RetrieveAPIView):
@@ -269,9 +269,9 @@ class GroupDeleteAPIView(DeleteAPIMixIn):
 
 
 class InstagramListAPIView(ListAPIView):
-    serializer_class = InstagramListSerializer
+    serializer_class = InstagramSerializer
     queryset = Instagram.published.all()
-    pagination_class = PostPageNumberPagination
+    pagination_class = LinkPageNumberPagination
 
 
 class InstagramDetailAPIView(RetrieveAPIView):
