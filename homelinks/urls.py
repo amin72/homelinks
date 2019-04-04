@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/contact/', include('contact.api.urls')),
 
     # dashboard-apis
-    # path('api/dashboard/', include('dashboard.api.urls')),
+    path('api/dashboard/', include('dashboard.api.urls')),
 ]
 
 if settings.DEBUG:
