@@ -20,6 +20,8 @@ urlpatterns = [
     # APIs
     # links-apis
     path('api/', include('links.api.urls')),
+    # contact-apis
+    path('api/contact/', include('contact.api.urls')),
 ]
 
 if settings.DEBUG:
