@@ -153,9 +153,12 @@ class Link(models.Model):
             #self.status = 'draft'
             parent.save()
 
-            # remove old parent images
-            os.remove(old_image_path)
-            os.remove(old_thumbnail_path)
+            try:
+                # remove old parent images
+                os.remove(old_image_path)
+                os.remove(old_thumbnail_path)
+            except FileNotFoundError:
+                pass
 
         # set slug filed
         model_name = self.__class__.__name__.lower()

@@ -15,19 +15,19 @@ urlpatterns = [
     path('add_link/', views.add_link, name='add_link'),
 
     # list user's websites
-    path('users_websites/', views.UserWebsitesListView.as_view(),
+    path('users_websites/', views.UserWebsiteListView.as_view(),
         name='users_websites'),
 
     # list user's channels
-    path('users_channels/', views.UserChannelsListView.as_view(),
+    path('users_channels/', views.UserChannelListView.as_view(),
         name='users_channels'),
 
     # list user's groups
-    path('users_groups/', views.UserGroupsListView.as_view(),
+    path('users_groups/', views.UserGroupListView.as_view(),
         name='users_groups'),
 
     # list user's instagrams
-    path('users_instagrams/', views.UserInstagramsListView.as_view(),
+    path('users_instagrams/', views.UserInstagramListView.as_view(),
         name='users_instagrams'),
 
     # login user
@@ -44,7 +44,7 @@ urlpatterns = [
         template_name='dashboard/logout.html'), name='logout'),
 
     # user update
-    path('update/', views.update_user_info, name='update'),
+    path('user_update/', views.user_update, name='user_update'),
 
     # change password urls
     path('password_change/',

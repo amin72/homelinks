@@ -93,7 +93,7 @@ def add_link(request):
 
 
 # list user's websites
-class UserWebsitesListView(LoginRequiredMixin,
+class UserWebsiteListView(LoginRequiredMixin,
     ReplaceChildWithParent,
     UserMixIn,
     ListView):
@@ -102,7 +102,7 @@ class UserWebsitesListView(LoginRequiredMixin,
 
 
 # list user's channels
-class UserChannelsListView(LoginRequiredMixin,
+class UserChannelListView(LoginRequiredMixin,
     ReplaceChildWithParent,
     UserMixIn,
     ListView):
@@ -111,7 +111,7 @@ class UserChannelsListView(LoginRequiredMixin,
 
 
 # list user's groups
-class UserGroupsListView(LoginRequiredMixin,
+class UserGroupListView(LoginRequiredMixin,
     ReplaceChildWithParent,
     UserMixIn,
     ListView):
@@ -120,7 +120,7 @@ class UserGroupsListView(LoginRequiredMixin,
 
 
 # list user's instagrams
-class UserInstagramsListView(LoginRequiredMixin,
+class UserInstagramListView(LoginRequiredMixin,
     ReplaceChildWithParent,
     UserMixIn,
     ListView):
@@ -147,7 +147,7 @@ def register(request):
 
 
 @login_required
-def update_user_info(request):
+def user_update(request):
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST,
@@ -160,7 +160,7 @@ def update_user_info(request):
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
-    return render(request, 'dashboard/update_user_info.html', {
+    return render(request, 'dashboard/user_update.html', {
         'user_form': user_form,
         'profile_form': profile_form,
         'active_dashboard': True,

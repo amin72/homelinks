@@ -14,22 +14,22 @@ urlpatterns = [
     # # add-link
     # path('add_link/', views.add_link, name='add_link'),
     #
-    # # list user's websites
-    # path('users_websites/', views.UserWebsitesListView.as_view(),
-    #     name='users_websites'),
-    #
-    # # list user's channels
-    # path('users_channels/', views.UserChannelsListView.as_view(),
-    #     name='users_channels'),
-    #
-    # # list user's groups
-    # path('users_groups/', views.UserGroupsListView.as_view(),
-    #     name='users_groups'),
-    #
-    # # list user's instagrams
-    # path('users_instagrams/', views.UserInstagramsListView.as_view(),
-    #     name='users_instagrams'),
-    #
+    # list user's websites
+    path('users_websites/', views.UserWebsiteListAPIView.as_view(),
+        name='users_websites'),
+
+    # list user's channels
+    path('users_channels/', views.UserChannelListAPIView.as_view(),
+        name='users_channels'),
+
+    # list user's groups
+    path('users_groups/', views.UserGroupListAPIView.as_view(),
+        name='users_groups'),
+
+    # list user's instagrams
+    path('users_instagrams/', views.UserInstagramListAPIView.as_view(),
+        name='users_instagrams'),
+
     # # login user
     # path('login/', auth_views.LoginView.as_view(
     #         template_name='dashboard/login.html',
@@ -44,7 +44,7 @@ urlpatterns = [
     #     template_name='dashboard/logout.html'), name='logout'),
     #
     # # user update
-    # path('update/', views.update_user_info, name='update'),
+    # path('user_update/', views.user_update, name='user_update'),
     #
     # # change password urls
     # path('password_change/',

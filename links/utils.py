@@ -269,7 +269,6 @@ def validate_and_update_link(object, data):
     object_dup.description = data.get('description')
     object_dup.status = 'draft'
     category = data.get('category')
-    #category = models.Category.objects.get(pk=cat_id)
     object_dup.category = category
 
     # save old image and thumbnail path
@@ -287,7 +286,7 @@ def validate_and_update_link(object, data):
 
     # remove unused image and thumbnail
     if object_dup.image.path != old_dup_image_path and \
-        object.image.path != old_dup_thumbnail_path:
+        object.image.path != old_dup_image_path:
         os.remove(old_dup_image_path)
         os.remove(old_dup_thumbnail_path)
     return True

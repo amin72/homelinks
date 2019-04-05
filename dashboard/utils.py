@@ -15,11 +15,14 @@ def get_sorted_users_links(user):
 
 
 def replace_child_with_parent(links: list):
-    # if links have child, sent their child instead of them.
+    # if links have child, send their child instead of them.
     links_and_children = []
     for link in links:
         child = link.child
         if child:
+            # set child status to `updated` if link was updated
+            if link.status == 'published' and child.status == 'draft':
+                child.status = 'updated'
             links_and_children.append(child)
         else:
             links_and_children.append(link)

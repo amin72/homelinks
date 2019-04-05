@@ -1,18 +1,6 @@
-from itertools import chain
-from rest_framework.generics import get_object_or_404
-from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.pagination import PageNumberPagination
 
-from rest_framework.generics import (
-	ListAPIView,
-	RetrieveAPIView,
-	RetrieveUpdateAPIView,
-	DestroyAPIView,
-	CreateAPIView,
-	UpdateAPIView,
-)
 from rest_framework.views import APIView
 
 from rest_framework.permissions import (
@@ -35,15 +23,16 @@ from links.models import (
     Instagram,
 )
 
-from links.api.serializers import (
-    WebsiteSerializer,
-    ChannelSerializer,
+from .serializers import (
+	WebsiteSerializer,
+	ChannelSerializer,
     GroupSerializer,
     InstagramSerializer,
 )
 
-# from dashboard.mixins import (
-# )
+from dashboard.mixins import (
+	ReplaceChildWithParentMixIn,
+)
 
 #from dashboard import utils
 from links.api.pagination import (
@@ -61,7 +50,7 @@ class LinkListAPIView(APIView):
 		links_and_children = utils.replace_child_with_parent(sorted_links)
 
 		serialized_links = []
-		for link in sorted_links:
+		for link in links_and_children:
 			if link.model_name == 'website':
 				serialized_link = WebsiteSerializer(link,
 					context={'request': request})
@@ -82,3 +71,27 @@ class LinkListAPIView(APIView):
 			'links': serialized_links[:10],
 		}
 		return Response(result)
+
+
+class UserWebsiteListAPIView(ReplaceChildWithParentMixIn):
+	serializer_class = WebsiteSerializer
+	pagination_class = LinkPageNumberPagination
+	model = Website
+
+
+class UserChannelListAPIView(ReplaceChildWithParentMixIn):
+	serializer_class = ChannelSerializer
+	pagination_class = LinkPageNumberPagination
+	model = Channel
+
+
+class UserGroupListAPIView(ReplaceChildWithParentMixIn):
+	serializer_class = GroupSerializer
+	pagination_class = LinkPageNumberPagination
+	model = Group
+
+
+class UserInstagramListAPIView(ReplaceChildWithParentMixIn):
+	serializer_class = InstagramSerializer
+	pagination_class = LinkPageNumberPagination
+	model = Instagram
