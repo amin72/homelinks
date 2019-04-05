@@ -1,9 +1,13 @@
+from itertools import chain
+
+from django.db.models import Q
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 
 from rest_framework.generics import (
 	ListAPIView,
@@ -324,3 +328,34 @@ class ReportLinkAPIView(CreateAPIView):
         )
 
 		return serializer
+
+
+class LinkSearchAPIView(APIView):
+	def get(self, request, format=None):
+		q = request.GET.get('q')
+		if q:
+		    query = (Q(title__icontains=q) | Q(description__icontains=q))
+
+		    # search the query in published links
+		    search_result = chain(
+		        WebsiteSerializer(
+					Website.published.filter(query),
+					many=True,
+					context={'request': request}).data,
+		        ChannelSerializer(
+					Channel.published.filter(query),
+					many=True,
+					context={'request': request}).data,
+		        GroupSerializer(
+					Group.published.filter(query),
+					many=True,
+					context={'request': request}).data,
+		        InstagramSerializer(
+					Instagram.published.filter(query),
+					many=True,
+					context={'request': request}).data
+			)
+		else:
+		    search_result = None
+
+		return Response(search_result)

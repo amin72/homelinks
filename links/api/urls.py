@@ -144,7 +144,7 @@ urlpatterns = [
 
     # # tagged items
     # path('tag/<str:tag_slug>/', views.tagged_items, name='tagged_items'),
-    #
-    # # search
-    # path('search/', views.search, name='search'),
+
+    # search
+    path('search/', views.LinkSearchAPIView.as_view(), name='search'),
 ]
