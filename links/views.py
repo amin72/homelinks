@@ -346,13 +346,12 @@ def report_link(request, model_name, slug):
     # app_label is required to not conflict with other models
     content_type = ContentType.objects.get(model=model_name, app_label='links')
     model = content_type.model_class()
-    object = model.published.get(slug=slug)
-    url = object.url
+    obj = model.published.get(slug=slug)
 
     initial = {
         'content_type': model_name,
-        'object_id': object.id,
-        'url': url,
+        'object_id': obj.id,
+        'url': obj.url,
     }
 
     if request.method == 'POST':
@@ -360,7 +359,6 @@ def report_link(request, model_name, slug):
         if form.is_valid():
             cd = form.cleaned_data
             c_type = cd.get('content_type')
-            object_slug = cd.get('object_slug')
             text = cd.get('text')
             type = cd.get('type')
             email = cd.get('email')
@@ -371,21 +369,21 @@ def report_link(request, model_name, slug):
                 type=type,
                 text=text,
                 content_type=content_type,
-                object_id=object.id,
-                url=url,
+                object_id=obj.id,
+                url=obj.url,
             )
 
             messages.success(request,
                 _('Your report was successfully submitted.'))
             return redirect(reverse('links:index'))
         else:
-            error_message = "Something went wrong. Fill all fields and try again."
+            error_message="Something went wrong. Fill all fields and try again."
             messages.error(request, _(error_message))
     else:
         form = ReportForm(initial=initial)
 
     context = {
-        'object': object,
+        'object': obj,
         'form': form,
     }
     return render(request, 'links/report.html', context)

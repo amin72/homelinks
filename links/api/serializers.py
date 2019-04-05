@@ -318,3 +318,26 @@ class InstagramUpdateSerializer(serializers.ModelSerializer):
             'image',
         ]
 #----------------------------------------------------------
+
+
+class LinkReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = [
+            'type',
+            'email',
+            'text',
+        ]
+
+    # def validate(self, data):
+    #     instance = Instagram(**data)
+    #     if not utils.valid_instagram_id(instance.page_id):
+    #         raise serializers.ValidationError({'page_id':
+    #             _('Your Instagram id is incorrect')})
+    #
+    #     instance.url = utils.generate_instagram_url(instance.page_id)
+    #     if utils.is_duplicate_url(instance):
+    #         raise serializers.ValidationError({'page_id':
+    #             utils.INSTAGRAM_EXISTS})
+    #
+    #     return data

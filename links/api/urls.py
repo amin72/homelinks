@@ -137,10 +137,11 @@ urlpatterns = [
         views.InstagramDeleteAPIView.as_view(),
         name='instagram-delete'),
 
-    # # report link
-    # path('report/<str:model_name>/<str:slug>/', views.report_link,
-    #     name='report'),
-    #
+    # report link
+    path('report/<str:model_name>/<str:slug>/',
+        views.ReportLinkAPIView.as_view(),
+        name='report'),
+
     # # tagged items
     # path('tag/<str:tag_slug>/', views.tagged_items, name='tagged_items'),
     #

@@ -1,6 +1,5 @@
-from PIL import Image
-from django.db.models import Q
-from django.utils.text import slugify
+from django.http import Http404
+from django.contrib.contenttypes.models import ContentType
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
@@ -56,6 +55,8 @@ from .serializers import (
 	InstagramDetailSerializer,
 	InstagramCreateSerializer,
 	InstagramUpdateSerializer,
+
+	LinkReportSerializer,
 )
 
 from links.mixins import (
@@ -296,3 +297,30 @@ class InstagramDeleteAPIView(DeleteAPIMixIn):
 	lookup_field = 'slug'
 	model = Instagram
 # ---------------------------------------------------------
+
+
+class ReportLinkAPIView(CreateAPIView):
+	serializer_class = LinkReportSerializer
+
+	def perform_create(self, serializer):
+		model_name = self.kwargs.get('model_name')
+		slug = self.kwargs.get('slug')
+
+		content_type = ContentType.objects.get(model=model_name,
+			app_label='links')
+		model = content_type.model_class()
+		obj = model.published.filter(slug=slug).first()
+		if obj is None:
+			raise Http404
+		data = serializer.data
+
+		report = Report.objects.create(
+            email=data.get('email'),
+            type=data.get('type'),
+            text=data.get('text'),
+            content_type=content_type,
+            object_id=obj.id,
+            url=obj.url,
+        )
+
+		return serializer
