@@ -5,7 +5,7 @@ from . import views
 app_name = 'links-apis'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.IndexAPIView.as_view(), name='index'),
 
     # list websites
     path('websites/', views.WebsiteListAPIView.as_view(), name='websites'),
@@ -138,7 +138,7 @@ urlpatterns = [
         name='instagram-delete'),
 
     # report link
-    path('report/<str:model_name>/<str:slug>/',
+    path('<str:model_name>/<str:slug>/report/',
         views.ReportLinkAPIView.as_view(),
         name='report'),
 

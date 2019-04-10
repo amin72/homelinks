@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.authtoken import views as drf_views
 
 
 urlpatterns = [
@@ -26,6 +27,9 @@ urlpatterns = [
 
     # dashboard-apis
     path('api/dashboard/', include('dashboard.api.urls')),
+
+    # auth token
+    path('api/auth/token/', drf_views.obtain_auth_token, name='auth_token'),
 ]
 
 if settings.DEBUG:

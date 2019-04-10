@@ -358,7 +358,6 @@ def report_link(request, model_name, slug):
         form = ReportForm(request.POST, initial=initial)
         if form.is_valid():
             cd = form.cleaned_data
-            c_type = cd.get('content_type')
             text = cd.get('text')
             type = cd.get('type')
             email = cd.get('email')
@@ -368,8 +367,7 @@ def report_link(request, model_name, slug):
                 email=email,
                 type=type,
                 text=text,
-                content_type=content_type,
-                object_id=obj.id,
+                content_object=obj,
                 url=obj.url,
             )
 

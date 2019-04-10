@@ -170,12 +170,15 @@ class Link(models.Model):
             self.slug = slugify(f'{domain}-{ext}')
         elif model_name == 'channel':
             self.slug = f'{self.application}-{self.channel_id}'
+            self.url = utils.generate_channel_url(self.channel_id,
+                self.application)
         elif model_name == 'group':
             self.slug = slugify(
                 f'{self.application}-{self.title}-f{self.uuid}',
                 allow_unicode=True)
         elif model_name == 'instagram':
             self.slug = slugify(f'ig-{self.page_id}')
+            self.url = utils.generate_instagram_url(self.page_id)
 
         super().save(*args, **kwargs)
         utils.scale_image(self.image.path)

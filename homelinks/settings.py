@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     # third-party
     'rest_framework',
+    'rest_framework.authtoken',
     'crispy_forms',
     'jalali_date',
     'taggit',
@@ -155,6 +156,16 @@ RECAPTCHA_SCORE_THRESHOLD = 0.5
 handler404 = 'homelinks.views.handler404'
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesModelBackend',
     'django.contrib.auth.backends.ModelBackend',
@@ -163,7 +174,7 @@ AUTHENTICATION_BACKENDS = [
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     },
     'axes_cache': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',

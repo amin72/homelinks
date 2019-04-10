@@ -150,13 +150,24 @@ def generate_instagram_url(page_id):
     return url
 
 
+def add_slash(url: str):
+    """
+    Add / to end of url if given url does not have it.
+    This function can be used for website and group links.
+    """
+    if url and url.endswith('/'):
+        return url + '/'
+    return url
+
+
 def is_duplicate_url(object):
     """
     Check if the url already exists.
     Return True on exiting the object else False.
     """
     model = object.__class__ # get the model name
-    instance = model.objects.filter(url__endswith=split_protocol(object.url))
+    url = add_slash(object.url)
+    instance = model.objects.filter(url__endswith=split_protocol(url))
 
     if instance.exists(): # object exists
         instance = instance.first()

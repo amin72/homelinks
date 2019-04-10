@@ -55,10 +55,11 @@ class CreateMixIn(CreateView):
         On validation set the author of the link,
         Call set_tags() function to set tags of the links.
         """
-        self.object = form.save(commit=False)
-        self.object.author = self.request.user
-        self.object.save()
-        utils.create_or_update_action(self.object, 'link created')
+        obj = form.save(commit=False)
+        obj.author = self.request.user
+        obj.url = utils.add_slash(obj.url)
+        obj.save()
+        utils.create_or_update_action(obj, 'link created')
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -66,9 +67,11 @@ class CreateMixIn(CreateView):
 
 
 class CreateAPIMixIn(CreateAPIView):
-	def perform_create(self, serializer):
-		instance = serializer.save(author=self.request.user)
-		utils.create_or_update_action(instance, 'link created')
+    def perform_create(self, serializer):
+        url = serializer.validated_data.get('url')
+        instance = serializer.save(author=self.request.user,
+            url=utils.add_slash(url))
+        utils.create_or_update_action(instance, 'link created')
 
 
 class PublishedObjectMixIn(UserPassesTestMixin):
@@ -138,7 +141,10 @@ class RetrieveUpdateAPIMixIn(RetrieveUpdateAPIView):
         return serializer
 
     def get_object(self):
-        return utils.get_parent_or_child_object(self)
+        obj = utils.get_parent_or_child_object(self)
+        # raise permission error if user don't have update permission
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 
 class DeleteMixIn(LoginRequiredMixin, OwnerMixin, DeleteView):
@@ -174,6 +180,8 @@ class DeleteAPIMixIn(DestroyAPIView):
     def get_object(self):
         slug = self.kwargs.get('slug')
         obj = self.model.objects.get(slug=slug, parent=None)
+        # raise permission error if user don't have delete permission
+        self.check_object_permissions(self.request, obj)
         return obj
 
 
