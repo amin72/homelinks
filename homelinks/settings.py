@@ -185,3 +185,7 @@ AXES_CACHE = 'axes_cache'
 AXES_FAILURE_LIMIT = 5
 AXES_LOCKOUT_TEMPLATE = 'dashboard/login.html'
 AXES_COOLOFF_TIME = timedelta(minutes=5)
+
+
+# Custom User Model
+AUTH_USER_MODEL = 'dashboard.User'

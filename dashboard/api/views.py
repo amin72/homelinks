@@ -1,6 +1,6 @@
+from django.contrib.auth import get_user_model
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-
+from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 
 from rest_framework.permissions import (
@@ -8,11 +8,6 @@ from rest_framework.permissions import (
 	IsAuthenticated,
 	IsAdminUser,
 	IsAuthenticatedOrReadOnly,
-)
-
-from rest_framework.filters import (
-	SearchFilter,
-	OrderingFilter,
 )
 
 from links.models import (
@@ -28,6 +23,7 @@ from .serializers import (
 	ChannelSerializer,
     GroupSerializer,
     InstagramSerializer,
+	UserCreateSerializer,
 )
 
 from dashboard.mixins import (
@@ -40,6 +36,9 @@ from links.api.pagination import (
 	LinkPageNumberPagination,
 )
 from dashboard import utils
+
+
+User = get_user_model()
 
 
 class LinkListAPIView(APIView):
@@ -95,3 +94,9 @@ class UserInstagramListAPIView(ReplaceChildWithParentMixIn):
 	serializer_class = InstagramSerializer
 	pagination_class = LinkPageNumberPagination
 	model = Instagram
+
+
+class UserRegisterAPIView(CreateAPIView):
+	model = User
+	permission_classes = [AllowAny]
+	serializer_class = UserCreateSerializer

@@ -14,11 +14,15 @@ from django.contrib.contenttypes.fields import (
     GenericForeignKey,
     GenericRelation
 )
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from taggit.managers import TaggableManager
 
 from dashboard.models import Action
 from . import utils
+
+
+User = get_user_model()
 
 
 class Category(models.Model):
@@ -49,8 +53,7 @@ class Link(models.Model):
         ('published', _('Published')),
     )
 
-    author = models.ForeignKey(settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=60, verbose_name=_('Title'))
     slug = models.SlugField(max_length=60, blank=True)
     url = models.URLField(verbose_name=_('URL'))

@@ -1,6 +1,7 @@
 import re
 
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.utils.translation import gettext, gettext_lazy as _
 from django.db.models.signals import post_save
@@ -10,7 +11,12 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_text
 from django.urls import reverse
+from django.utils.translation import gettext, gettext_lazy as _
 from rest_framework.authtoken.models import Token
+
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True, verbose_name=_('Email'))
 
 
 def phone_number_validator(value):
@@ -25,8 +31,7 @@ def phone_number_validator(value):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=11, blank=True, null=True,
         unique=True, verbose_name=_('Phone Number'),
         validators=[phone_number_validator],
@@ -37,14 +42,14 @@ class Profile(models.Model):
         return f"{self.user.username}'s profile"
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+@receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
         Token.objects.create(user=instance)
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+@receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 

@@ -1,7 +1,13 @@
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
-from .models import Profile, Action
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import Profile, Action, User
+
+
+# User
+admin.site.register(User, UserAdmin)
 
 
 # Profile

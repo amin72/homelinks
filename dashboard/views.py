@@ -1,6 +1,6 @@
 from itertools import chain
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
@@ -131,7 +131,7 @@ class UserInstagramListView(LoginRequiredMixin,
 def register(request):
     # redirect logged in users to their dashboard
     if request.user.is_authenticated:
-        return redirect(reverse_lazy('dashboard:index'))
+        return redirect(reverse('dashboard:index'))
 
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
