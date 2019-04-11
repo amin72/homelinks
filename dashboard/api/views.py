@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.views import APIView
 
 from rest_framework.permissions import (
@@ -24,6 +24,7 @@ from .serializers import (
     GroupSerializer,
     InstagramSerializer,
 	UserCreateSerializer,
+	UserUpdateSerializer,
 )
 
 from dashboard.mixins import (
@@ -97,6 +98,23 @@ class UserInstagramListAPIView(ReplaceChildWithParentMixIn):
 
 
 class UserRegisterAPIView(CreateAPIView):
-	model = User
-	permission_classes = [AllowAny]
 	serializer_class = UserCreateSerializer
+	permission_classes = [AllowAny]
+	model = User
+
+
+class UserUpdateAPIView(APIView):
+	serializer_class = UserUpdateSerializer
+	#permission_classes = [AllowAny]
+	model = User
+
+	def get(self, request, format=None):
+		serializer = self.serializer_class(request.user)
+		return Response(serializer.data)
+
+	def put(self, request, format=None):
+		serializer = self.serializer_class(request.user, request.POST)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=200)
+		return Response(serializer.errors, status=401)

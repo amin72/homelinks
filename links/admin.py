@@ -18,9 +18,9 @@ from .models import (
 # CATEGORY
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('title',)
-    search_fields = ('title',)
-    ordering = ('title',)
+    list_display = ('name',)
+    search_fields = ('name',)
+    ordering = ('name',)
 
 
 # WEBSITE

@@ -42,10 +42,10 @@ urlpatterns = [
     # # logout user
     # path('logout/', auth_views.LogoutView.as_view(
     #     template_name='dashboard/logout.html'), name='logout'),
-    #
-    # # user update
-    # path('user_update/', views.user_update, name='user_update'),
-    #
+    
+    # user update
+    path('user_update/', views.UserUpdateAPIView.as_view(), name='user_update'),
+
     # # change password urls
     # path('password_change/',
     #     auth_views.PasswordChangeView.as_view(
