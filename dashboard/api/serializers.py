@@ -120,3 +120,19 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
         ]
+
+
+class UserPasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField()
+    new_password1 = serializers.CharField()
+    new_password2 = serializers.CharField()
+
+    def validate(self, data):
+        """
+        Check if new_password1 and new_password2 are the same
+        """
+        if data['new_password1'] != data['new_password2']:
+            raise serializers.ValidationError(
+                {'new_password1': 'New Passwords do not match'})
+        else:
+            return data

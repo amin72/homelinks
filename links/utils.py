@@ -240,17 +240,17 @@ def validate_and_update_link(object, data):
     # settings specific fields
     model_name = object_dup.model_name
     if model_name == 'website':
-        object_dup.type = data.get('type')
-        object_dup.url = data.get('url')
+        object_dup.type = data.get('type', object_dup.type)
+        object_dup.url = data.get('url', object_dup.url)
         domain, ext = split_protocol(object_dup.url).split('.')
         slug = f'{domain}-{ext}'
         object.slug = slugify(slug)
 
     elif model_name == 'channel':
-        object_dup.application = data.get('application')
-        object_dup.channel_id = data.get('channel_id')
+        object_dup.application = data.get('application', object_dup.application)
+        object_dup.channel_id = data.get('channel_id', object_dup.channel_id)
         if not valid_channel_id(object_dup.channel_id,
-                                      object_dup.application):
+                                object_dup.application):
             raise ValidationError({'channel_id': INVALID_NAME_MESSAGE})
         if not valid_channel_length(object_dup.channel_id,
                                     object_dup.application):
@@ -262,13 +262,13 @@ def validate_and_update_link(object, data):
             f'{object_dup.application}-{object_dup.channel_id}')
 
     elif model_name == 'group':
-        object_dup.application = data.get('application')
+        object_dup.application = data.get('application', object_dup.application)
         slug = \
             f'{object_dup.application}-{object_dup.title}-{object_dup.uuid}'
         object_dup.slug = slugify(slug)
 
     elif model_name == 'instagram':
-        object_dup.page_id = data.get('page_id')
+        object_dup.page_id = data.get('page_id', object_dup.page_id)
         object_dup.url = generate_instagram_url(object_dup.page_id)
         object_dup.slug = slugify(f'{object_dup.page_id}')
 
@@ -277,16 +277,16 @@ def validate_and_update_link(object, data):
         return False # operation was not successful
 
     # if `url` was valid, set other attributes
-    object_dup.title = data.get('title')
-    object_dup.description = data.get('description')
+    object_dup.title = data.get('title', object_dup.title)
+    object_dup.description = data.get('description', object_dup.description)
     object_dup.status = 'draft'
-    category = data.get('category')
+    category = data.get('category', object_dup.category)
     object_dup.category = category
 
     # save old image and thumbnail path
     old_dup_image_path = object_dup.image.path
     old_dup_thumbnail_path = object_dup.thumbnail_path
-    object_dup.image = data.get('image')
+    object_dup.image = data.get('image', object_dup.image)
 
     # set tags
     for tag in object.tags.all():

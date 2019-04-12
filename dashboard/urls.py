@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # rules
-    path('rules/', views.rules, name='rules'),
+    # path('rules/', views.rules, name='rules'),
 
     # add-link
     path('add_link/', views.add_link, name='add_link'),

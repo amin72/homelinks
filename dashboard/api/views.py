@@ -25,6 +25,7 @@ from .serializers import (
     InstagramSerializer,
 	UserCreateSerializer,
 	UserUpdateSerializer,
+	UserPasswordChangeSerializer,
 )
 
 from dashboard.mixins import (
@@ -118,3 +119,24 @@ class UserUpdateAPIView(APIView):
 			serializer.save()
 			return Response(serializer.data, status=200)
 		return Response(serializer.errors, status=401)
+
+
+class PasswordChangeAPIView(APIView):
+	serializer_class = UserPasswordChangeSerializer
+
+	def post(self, request, format=None):
+		data = request.POST
+		serializer = self.serializer_class(data=data)
+		if serializer.is_valid():
+			user = request.user
+			old_password = serializer.validated_data.get('old_password')
+			new_password = serializer.validated_data.get('new_password1')
+
+			if user.check_password(old_password):
+				user.set_password(serializer.validated_data.get('new_password1'))
+				user.save()
+				return Response('Password changed successfully')
+			else:
+				return Response('Old password do not match', 403)
+		else:
+			return Response('Password did not changed', status=403)

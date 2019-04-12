@@ -31,10 +31,6 @@ from rest_framework.generics import (
     GenericAPIView,
 )
 
-from rest_framework.mixins import (
-    UpdateModelMixin,
-)
-
 from . import utils
 
 
