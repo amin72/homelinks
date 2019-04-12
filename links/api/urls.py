@@ -147,4 +147,7 @@ urlpatterns = [
 
     # search
     path('search/', views.LinkSearchAPIView.as_view(), name='search'),
+
+    # categories
+    path('categories/', views.CategoryListAPIView.as_view(), name='categories'),
 ]

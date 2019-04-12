@@ -6,7 +6,7 @@ class IsPremiumUser(BasePermission):
     message = _('Only premium users are allowed to do this operation')
 
     def has_permission(self, request, view):
-        return request.user.profile.vip
+        return request.user.is_premium
 
 
 class IsOwner(BasePermission):

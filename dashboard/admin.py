@@ -3,21 +3,16 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Profile, Action, User
+from .models import Action, User
 
 
 # User
-admin.site.register(User, UserAdmin)
-
-
-# Profile
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone_number', 'vip')
-    search_fields = ('user', 'phone_number')
-    raw_id_fields = ('user',)
-    list_editable = ('phone_number', 'vip')
-    list_filter = ('vip',)
+@admin.register(User)
+class ProfileAdmin(UserAdmin):
+    list_display = ('username', 'email', 'first_name', 'last_name',
+        'phone_number', 'is_premium', 'is_staff')
+    list_editable = ('phone_number', 'is_premium')
+    list_filter = ('is_staff', 'is_superuser', 'is_premium',)
 
 
 # Action

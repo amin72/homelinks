@@ -57,6 +57,7 @@ from .serializers import (
 	InstagramUpdateSerializer,
 
 	LinkReportSerializer,
+	CategorySerializer,
 )
 
 from links.mixins import (
@@ -382,3 +383,9 @@ class LinkSearchAPIView(APIView):
 		    search_result = None
 
 		return Response(search_result)
+
+
+class CategoryListAPIView(ListAPIView):
+	serializer_class = CategorySerializer
+	queryset = Category.objects.all()
+	permission_classes = [AllowAny]

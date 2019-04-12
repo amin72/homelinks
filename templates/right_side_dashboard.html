@@ -25,7 +25,7 @@
                           <a href="{% url 'dashboard:add_link' %}">ثبت لینک</a>
                       </li>
 
-                      {% if user.profile.vip %}
+                      {% if user.is_premium %}
                       <li class="list-group-item light-even">
                           <a href="{% url 'dashboard:users_websites' %}">وبسایت ها من <span class="badge badge-primary pull-left">{{ websites_count|to_persian }}</span></a>
                       </li>

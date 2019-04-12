@@ -15,15 +15,15 @@ from .models import (
 )
 
 
-# CATEGORY
+# Category
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'order')
     search_fields = ('name',)
-    ordering = ('name',)
+    list_editable = ('order',)
 
 
-# WEBSITE
+# Website
 @admin.register(Website)
 class WebsiteAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'type', 'title', 'status', 'url', 'category',
@@ -38,7 +38,7 @@ class WebsiteAdmin(TaggitCounter, admin.ModelAdmin):
     inlines = [TaggitStackedInline]
 
 
-# CHANNEL
+# Channel
 @admin.register(Channel)
 class ChannelAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'title', 'status', 'application', 'channel_id',
@@ -53,7 +53,7 @@ class ChannelAdmin(TaggitCounter, admin.ModelAdmin):
     inlines = [TaggitStackedInline]
 
 
-# GROUP
+# Group
 @admin.register(Group)
 class GroupAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'title', 'status', 'url', 'application', 'category',
@@ -68,7 +68,7 @@ class GroupAdmin(TaggitCounter, admin.ModelAdmin):
     inlines = [TaggitStackedInline]
 
 
-# INSTAGRAM
+# Instagram
 @admin.register(Instagram)
 class InstagramAdmin(TaggitCounter, admin.ModelAdmin):
     fields = ('author', 'title', 'status', 'page_id', 'category', 'description',
@@ -87,7 +87,7 @@ class InstagramAdmin(TaggitCounter, admin.ModelAdmin):
 
 
 
-# LINK_REPORT
+# Report
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('content_object', 'email', 'url', 'type', 'is_read', 'created')

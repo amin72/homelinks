@@ -3,7 +3,6 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from snowpenguin.django.recaptcha3.fields import ReCaptchaField
-from .models import Profile
 
 
 User = get_user_model()
@@ -42,11 +41,6 @@ class UserUpdateForm(forms.ModelForm):
             'first_name',
             'last_name',
             'email',
+            'phone_number',
             'captcha',
         )
-
-
-class ProfileUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ('phone_number',)

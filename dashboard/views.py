@@ -16,10 +16,9 @@ from .forms import (
     SelectLinkForm,
     UserRegisterForm,
     UserUpdateForm,
-    ProfileUpdateForm
 )
 from .mixins import UserMixIn, ReplaceChildWithParent
-from .models import Profile, Action
+from .models import Action
 from . import utils
 
 
@@ -79,7 +78,7 @@ def add_link(request):
     else:
         form = SelectLinkForm()
 
-        if not request.user.profile.vip:
+        if not request.user.is_premium:
             # remove website from choices if user is not `vip`
             choices = form.fields.get('link_type').choices
             choices.remove(('website', 'Website'))
@@ -136,7 +135,7 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save() # create user and profile
+            form.save() # create user
             messages.success(request,
                 _('Your account has been created! You are now able to log in')
             )
@@ -150,19 +149,14 @@ def register(request):
 def user_update(request):
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST,
-            instance=request.user.profile)
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             user_form.save()
-            profile_form.save()
             messages.success(request, _('Your account has been updated'))
             return redirect('dashboard:index')
     else:
         user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
     return render(request, 'dashboard/user_update.html', {
         'user_form': user_form,
-        'profile_form': profile_form,
         'active_dashboard': True,
     })
 

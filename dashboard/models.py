@@ -11,12 +11,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_text
 from django.urls import reverse
-from django.utils.translation import gettext, gettext_lazy as _
 from rest_framework.authtoken.models import Token
-
-
-class User(AbstractUser):
-    email = models.EmailField(unique=True, verbose_name=_('Email'))
 
 
 def phone_number_validator(value):
@@ -24,34 +19,26 @@ def phone_number_validator(value):
     A phone validator
     """
     if value:
-        regex = re.compile('09(0[1-5]|1[0-9]|3[0-9]|2[0-2])-?[0-9]{3}-?[0-9]{4}')
+        regex= re.compile('09(0[1-5]|1[0-9]|3[0-9]|2[0-2])-?[0-9]{3}-?[0-9]{4}')
         result = regex.search(value)
         if result is None:
             raise ValidationError(_('Enter a valid phone number'))
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class User(AbstractUser):
+    email = models.EmailField(unique=True, verbose_name=_('Email'))
+
     phone_number = models.CharField(max_length=11, blank=True, null=True,
         unique=True, verbose_name=_('Phone Number'),
         validators=[phone_number_validator],
         help_text=_('User Phone Number, example: 09123456790 (Optional)'))
-    vip = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.user.username}'s profile"
+    is_premium = models.BooleanField(default=False, verbose_name=_('Premium'))
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_user_token(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
         Token.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
 
 
 class Action(models.Model):

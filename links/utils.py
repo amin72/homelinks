@@ -25,6 +25,7 @@ GROUP_EXISTS = _('Group already exists')
 INSTAGRAM_EXISTS = _('Instagram page already exists')
 SHORT_NAME = _('Sorry, This name is too short')
 INVALID_NAME = _('Sorry, this name is invalid.')
+INSTAGRAM_ID_INCORRECT = _('Instagram id is incorrect')
 
 validation_exceptions = {
     'website': ValidationError({'url': WEBSITE_EXISTS}),

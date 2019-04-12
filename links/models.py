@@ -26,13 +26,15 @@ User = get_user_model()
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=60, unique=True)
+    name = models.CharField(max_length=40, unique=True)
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name_plural = _('Categories')
+        ordering = ('order', 'name')
 
 
 def image_upload_path(instance, filename):

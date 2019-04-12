@@ -11,7 +11,7 @@ from links.models import (
     Instagram,
     Report,
 )
-from links import utils
+from links import utils as links_utils
 from dashboard.api.serializers import UserSerializer
 from . import utils
 
@@ -21,7 +21,7 @@ User = get_user_model()
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['name']
+        fields = ['id', 'name']
 #----------------------------------------------------------
 
 
@@ -61,8 +61,6 @@ class WebsiteDetailSerializer(serializers.ModelSerializer):
 
 
 class WebsiteCreateSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-
     class Meta:
         model = Website
         fields = [
@@ -76,9 +74,8 @@ class WebsiteCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         instance = Website(**data)
-        if utils.is_duplicate_url(instance):
-            raise serializers.ValidationError({'url':
-                utils.WEBSITE_EXISTS})
+        if links_utils.is_duplicate_url(instance):
+            raise links_utils.serialize_validation_exceptions['website']
         return data
 
 
@@ -132,8 +129,6 @@ class ChannelDetailSerializer(serializers.ModelSerializer):
 
 
 class ChannelCreateSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-
     class Meta:
         model = Channel
         fields = [
@@ -148,21 +143,18 @@ class ChannelCreateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         instance = Channel(**data)
 
-        if not utils.valid_channel_id(instance.channel_id,
-                                        instance.application):
-            raise serializers.ValidationError({'channel_id':
-                _('Sorry, this name is invalid')})
+        if not links_utils.valid_channel_id(instance.channel_id,
+                                            instance.application):
+            raise serializers.ValidationError({'channel_id': INVALID_NAME})
 
-        if not utils.valid_channel_length(instance.channel_id,
-                                        instance.application):
-            raise serializers.ValidationError({'channel_id':
-                _(f'Sorry, This name is too short')})
+        if not links_utils.valid_channel_length(instance.channel_id,
+                                            instance.application):
+            raise serializers.ValidationError({'channel_id': SHORT_NAME})
 
-        instance.url = utils.generate_channel_url(instance.channel_id,
+        instance.url = links_utils.generate_channel_url(instance.channel_id,
                                                 instance.application)
-        if utils.is_duplicate_url(instance):
-            raise serializers.ValidationError({'channel_id':
-                utils.CHANNEL_EXISTS})
+        if links_utils.is_duplicate_url(instance):
+            raise links_utils.serialize_validation_exceptions['channel']
 
         return data
 
@@ -217,8 +209,6 @@ class GroupDetailSerializer(serializers.ModelSerializer):
 
 
 class GroupCreateSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-
     class Meta:
         model = Group
         fields = [
@@ -232,9 +222,8 @@ class GroupCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         instance = Group(**data)
-        if utils.is_duplicate_url(instance):
-            raise serializers.ValidationError({'url':
-                utils.GROUP_EXISTS})
+        if links_utils.is_duplicate_url(instance):
+            raise links_utils.serialize_validation_exceptions['group']
         return data
 
 
@@ -287,8 +276,6 @@ class InstagramDetailSerializer(serializers.ModelSerializer):
 
 
 class InstagramCreateSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-
     class Meta:
         model = Instagram
         fields = [
@@ -301,14 +288,13 @@ class InstagramCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         instance = Instagram(**data)
-        if not utils.valid_instagram_id(instance.page_id):
+        if not links_utils.valid_instagram_id(instance.page_id):
             raise serializers.ValidationError({'page_id':
-                _('Your Instagram id is incorrect')})
+                                    links_utils.INSTAGRAM_ID_INCORRECT})
 
-        instance.url = utils.generate_instagram_url(instance.page_id)
-        if utils.is_duplicate_url(instance):
-            raise serializers.ValidationError({'page_id':
-                utils.INSTAGRAM_EXISTS})
+        instance.url = links_utils.generate_instagram_url(instance.page_id)
+        if links_utils.is_duplicate_url(instance):
+            raise links_utils.serialize_validation_exceptions['instagram']
 
         return data
 
