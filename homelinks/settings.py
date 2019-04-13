@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     # third-party
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_auth',
+    # 'allauth',
+    # 'allauth.account',
+    # 'rest_auth.registration',
     'crispy_forms',
     'jalali_date',
     'taggit',
@@ -190,3 +194,6 @@ AXES_COOLOFF_TIME = timedelta(minutes=5)
 
 # Custom User Model
 AUTH_USER_MODEL = 'dashboard.User'
+
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

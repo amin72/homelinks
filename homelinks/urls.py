@@ -31,6 +31,7 @@ urlpatterns = [
 
     # auth token
     path('api/auth/token/', drf_views.obtain_auth_token, name='auth_token'),
+    path('api/auth/', include('rest_auth.urls')),
     path('api/auth/register/', dashboard_views.UserRegisterAPIView.as_view(),
         name='register'),
 ]
