@@ -2,7 +2,6 @@ Django>=2.1.7
 django-axes>=4.5.4
 django-crispy-forms>=1.7.2
 django-ipware==2.1.0
-django-jalali==3.1.0
 django-jalali-date-3==0.2.1
 django-recaptcha3>=0.1.0
 django-taggit>=0.23.0
