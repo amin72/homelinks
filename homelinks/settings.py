@@ -31,12 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # apps
-    'links.apps.LinksConfig',
-    'dashboard.apps.DashboardConfig',
-    'contact.apps.ContactConfig',
-
     # third-party
+    'debug_toolbar',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -46,6 +42,12 @@ INSTALLED_APPS = [
     'taggit_helpers',
     'snowpenguin.django.recaptcha3',
     'axes',
+
+    # apps
+    'links.apps.LinksConfig',
+    'dashboard.apps.DashboardConfig',
+    'contact.apps.ContactConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -57,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware', # must be the last
 ]
 
@@ -199,3 +202,5 @@ AUTH_USER_MODEL = 'dashboard.User'
 
 # Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+INTERNAL_IPS = ['127.0.0.1', '::1']
