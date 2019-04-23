@@ -1,7 +1,3 @@
-"""
-Django 2.1.7.
-"""
-
 import os
 from datetime import timedelta
 

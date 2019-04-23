@@ -142,7 +142,7 @@ def register(request):
             return redirect('dashboard:login')
     else:
         form = UserRegisterForm()
-    return render(request, 'dashboard/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})
 
 
 @login_required

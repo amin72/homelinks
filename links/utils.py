@@ -296,11 +296,12 @@ def validate_and_update_link(object, data):
     object_dup.save()
     create_or_update_action(object_dup, 'link updated')
 
-    # remove unused image and thumbnail
+    # after saving child, if child images changed remove old ones
     if object_dup.image.path != old_dup_image_path and \
-        object.image.path != old_dup_image_path:
+        object_dup.parent.image.path != old_dup_image_path:
         os.remove(old_dup_image_path)
         os.remove(old_dup_thumbnail_path)
+
     return True
 
 

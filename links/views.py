@@ -1,4 +1,5 @@
 from itertools import chain
+from urllib.parse import unquote
 
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
@@ -387,29 +388,16 @@ def report_link(request, model_name, slug):
     return render(request, 'links/report.html', context)
 
 
-def tagged_items(request, tag_slug=None):
+def tagged_items(request, tag_slug):
     """
     list all links that are tagged with `tag_slug`
     """
-    websites = Website.published.all()
-    channels = Channel.published.all()
-    groups = Group.published.all()
-    instagrams = Instagram.published.all()
-    tag = None
-
-    if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        websites = websites.filter(tags__in=[tag])
-        channels = channels.filter(tags__in=[tag])
-        groups = groups.filter(tags__in=[tag])
-        instagrams = instagrams.filter(tags__in=[tag])
-
-    context = {
-        'websites': websites,
-        'channels': channels,
-        'groups': groups,
-        'instagrams': instagrams,
-    }
+    tag_slug = unquote(tag_slug)
+    tag = get_object_or_404(Tag, slug=tag_slug)
+    websites = Website.published.filter(tags__in=[tag])
+    channels = Channel.published.filter(tags__in=[tag])
+    groups = Group.published.filter(tags__in=[tag])
+    instagrams = Instagram.published.filter(tags__in=[tag])
 
     object_list = list(chain(websites, channels, groups, instagrams))
 

@@ -138,10 +138,9 @@ class Link(models.Model):
     # for api views we need to raise specific exceptions
     def save(self, *args, **kwargs):
         # if object has parent (object is a child)
-        if self.parent and self.status == 'published':
+        if self.parent and \
+            self.parent.status == 'published' and self.status == 'published':
             # save parent image and thumbnail path
-            # if parent and child are pointing to same filles then
-            # parent images must be removed
             old_image_path = self.parent.image.path
             old_thumbnail_path = self.parent.thumbnail_path
 
@@ -155,15 +154,13 @@ class Link(models.Model):
             for field in fields:
                 attr_self_val = getattr(self, field)
                 setattr(parent, field, attr_self_val)
-            #self.status = 'draft'
             parent.save()
 
-            try:
-                # remove old parent images
+            # if parent and child are not pointing to old images, remove them
+            if self.image.path != old_image_path and \
+                self.parent.image.path != old_image_path:
                 os.remove(old_image_path)
                 os.remove(old_thumbnail_path)
-            except FileNotFoundError:
-                pass
 
         # set slug filed
         model_name = self.__class__.__name__.lower()
