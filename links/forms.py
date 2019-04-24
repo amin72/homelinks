@@ -1,5 +1,5 @@
 from django import forms
-from django.utils.translation import gettext, ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from snowpenguin.django.recaptcha3.fields import ReCaptchaField
 from .models import (
     Website,
@@ -14,9 +14,9 @@ class ReportForm(forms.Form):
     url = forms.URLField(
         label=_('Reported Link'),
         widget=forms.HiddenInput)
-    type = forms.ChoiceField(choices=Report.TYPES)
-    email = forms.EmailField()
-    text = forms.CharField(widget=forms.Textarea,
+    type = forms.ChoiceField(label=_('Type'), choices=Report.TYPES)
+    email = forms.EmailField(label=_('Email'))
+    text = forms.CharField(label=_('Text'), widget=forms.Textarea,
         help_text=_("Text up to 1024 characters"))
     captcha = ReCaptchaField()
 

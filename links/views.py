@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import gettext, ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from taggit.models import Tag
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -49,18 +49,6 @@ from .forms import (
 )
 
 from . import utils
-
-
-## ------- MESSAGES -------------------------------------------------
-create_message = _('Your link was successfully created. And it will be '
-                   'processed and published in 24 hours.')
-
-update_message = _('Your link was successfully updated. And it will be '
-                   'processed and published in 24 hours.')
-
-delete_message = _('Your link was successfully deleted.')
-## ------------------------------------------------------------------
-
 
 
 # list all links: websites, channels, groups, and instagrams
@@ -119,13 +107,13 @@ class WebsiteDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
 class WebsiteCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
     model = Website
     form_class = CreateWebsiteForm
-    success_message = create_message
+    success_message = utils.CREATE_MESSAGE
 
 
 # website update
 class WebsiteUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
     model = Website
-    success_message = update_message
+    success_message = utils.UPDATE_MESSAGE
     fields = (
         'title',
         'url',
@@ -139,7 +127,7 @@ class WebsiteUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
 # website delete
 class WebsiteDeleteView(DeleteMixIn):
     model = Website
-    success_message = delete_message
+    success_message = utils.DELETE_MESSAGE
 ## -----------------------------------------------------
 
 
@@ -195,13 +183,13 @@ class ChannelDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
 class ChannelCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
     model = Channel
     form_class = CreateChannelForm
-    success_message = create_message
+    success_message = utils.CREATE_MESSAGE
 
 
 # channel update
 class ChannelUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
     model = Channel
-    success_message = update_message
+    success_message = utils.UPDATE_MESSAGE
     fields = (
         'application',
         'title',
@@ -215,7 +203,7 @@ class ChannelUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
 # channel delete
 class ChannelDeleteView(DeleteMixIn):
     model = Channel
-    success_message = delete_message
+    success_message = utils.DELETE_MESSAGE
 ## -----------------------------------------------------
 
 
@@ -278,7 +266,7 @@ class GroupDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
 class GroupCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
     model = Group
     form_class = CreateGroupForm
-    success_message = create_message
+    success_message = utils.CREATE_MESSAGE
 
 
 # group update
@@ -292,13 +280,13 @@ class GroupUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
         'description',
         'image'
     )
-    success_message = update_message
+    success_message = utils.UPDATE_MESSAGE
 
 
 # group delete
 class GroupDeleteView(DeleteMixIn):
     model = Group
-    success_message = delete_message
+    success_message = utils.DELETE_MESSAGE
 ## -----------------------------------------------------
 
 
@@ -319,7 +307,7 @@ class InstagramDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
 class InstagramCreateView(LoginRequiredMixin, InfoMessageMixin, CreateMixIn):
     model = Instagram
     form_class = CreateInstagramForm
-    success_message = create_message
+    success_message = utils.CREATE_MESSAGE
 
 
 # instagram update
@@ -332,13 +320,13 @@ class InstagramUpdateView(LoginRequiredMixin, OwnerMixin, UpdateMixIn):
         'description',
         'image'
     )
-    success_message = update_message
+    success_message = utils.UPDATE_MESSAGE
 
 
 # instagram delete
 class InstagramDeleteView(DeleteMixIn):
     model = Instagram
-    success_message = delete_message
+    success_message = utils.DELETE_MESSAGE
 ## --------------------------------------------------------
 
 
@@ -376,8 +364,7 @@ def report_link(request, model_name, slug):
                 _('Your report was successfully submitted.'))
             return redirect(reverse('links:index'))
         else:
-            error_message="Something went wrong. Fill all fields and try again."
-            messages.error(request, _(error_message))
+            messages.error(request, utils.FAILED_FORM_SUBMISSION)
     else:
         form = ReportForm(initial=initial)
 

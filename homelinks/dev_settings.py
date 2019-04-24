@@ -1,5 +1,6 @@
 import os
 from datetime import timedelta
+from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,13 +44,14 @@ INSTALLED_APPS = [
     'links.apps.LinksConfig',
     'dashboard.apps.DashboardConfig',
     'contact.apps.ContactConfig',
-
+    'i18n_switcher.apps.I18NSwitcherConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.cache.UpdateCacheMiddleware', # must be the first
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -96,7 +98,6 @@ DATABASES = {
 }
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -119,9 +120,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fa'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -200,3 +201,12 @@ AUTH_USER_MODEL = 'dashboard.User'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 INTERNAL_IPS = ['127.0.0.1', '::1']
+
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('fa', _('Persian')),
+]

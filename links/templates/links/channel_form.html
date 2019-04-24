@@ -1,4 +1,5 @@
 {% extends "base_dashboard.html" %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% load jalali_tags %}
 {% load static %}
@@ -24,6 +25,7 @@
 
 
 {% block content %}
+{% language 'fa' %}
 <section class="col-xl-9 col-md-8">
     <div class="row mt-3">
         <div class="col-lg-6 col-12">
@@ -52,7 +54,7 @@
                     <div class="row">
                         <div class="col-12">
                             <img class="img-fluid rounded link-img border"
-                            src="{% static "img/logo.png" %}">
+                            src="{% static "img/logo.png" %}" alt="homelinks خانه لینکها">
                         </div>
 
                         <div class="col-12 pt-3">
@@ -68,4 +70,5 @@
         </div>
     </div>
 </section>
+{% endlanguage %}
 {% endblock %}

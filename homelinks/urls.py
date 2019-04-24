@@ -1,3 +1,4 @@
+from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -5,11 +6,7 @@ from django.conf.urls.static import static
 from rest_framework.authtoken import views as drf_views
 from dashboard.api import views as dashboard_views
 
-
-urlpatterns = [
-    # admin
-    path('admin/', admin.site.urls),
-
+urlpatterns = i18n_patterns(
     # dashboard
     path('dashboard/', include('dashboard.urls')),
 
@@ -34,7 +31,16 @@ urlpatterns = [
     path('api/auth/', include('rest_auth.urls')),
     path('api/auth/register/', dashboard_views.UserRegisterAPIView.as_view(),
         name='register'),
-]
+
+    prefix_default_language=False
+)
+
+# admin
+urlpatterns += i18n_patterns(
+    path('admin/', admin.site.urls),
+    prefix_default_language=True
+)
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

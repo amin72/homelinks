@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from django.db import models, IntegrityError, transaction
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.text import slugify
 from django.urls import reverse
@@ -113,6 +113,8 @@ class Link(models.Model):
 
     def get_admin_url(self):
         model_name = self.__class__.__name__.lower()
+        from django.utils.translation import activate
+        activate('en')
         return reverse(f"admin:links_{model_name}_change", args=(self.id,))
 
     @property

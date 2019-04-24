@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% load homelinks_tags %}
 
@@ -10,12 +11,13 @@
 
 
 {% block content %}
+{% language 'fa' %}
 <section class="col-xl-10 col-md-9">
     <div class="row mt-3">
         <div class="offset-lg-2 col-lg-8 col-12">
             <div class="content-section">
                 {% if failure_limit == 5 %}
-                    <div class="text-muted">شما ۵ تلاش ناموفق داشتید و به مدت {{ cooloff_time|get_minutes  }} دقیقه اجازه وارد شدن به سایت را ندارید.</div> 
+                    <div class="text-muted">شما ۵ تلاش ناموفق داشتید و به مدت {{ cooloff_time|get_minutes  }} دقیقه اجازه وارد شدن به سایت را ندارید.</div>
                 {% else %}
                     <form method="post">
                         {% csrf_token %}
@@ -40,4 +42,5 @@
         </div>
     </div>
 </section>
+{% endlanguage %}
 {% endblock %}

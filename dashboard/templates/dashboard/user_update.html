@@ -1,6 +1,6 @@
 {% extends "base_dashboard.html" %}
+{% load i18n %}
 {% load crispy_forms_tags %}
-{% load recaptcha3 %}
 
 
 {% block title %}
@@ -9,14 +9,8 @@
 {% endblock %}
 
 
-{% block rechaptcha %}
-    {% recaptcha_init %}
-    {% recaptcha_ready action_name='homepage' %}
-{% endblock %}
-
-
 {% block content %}
-
+{% language 'fa' %}
 <!-- left sidebar -->
 <section class="col-xl-9 col-md-8">
     <div class="row mt-3">
@@ -28,7 +22,7 @@
                     {% csrf_token %}
 
                     <fieldset class="form-group">
-                        {{ user_form|crispy }}
+                        {{ form|crispy }}
                     </fieldset>
 
                     <!-- submit -->
@@ -43,5 +37,5 @@
         </div>
     </div>
 </section><!-- left sidebar -->
-
+{% endlanguage %}
 {% endblock %}

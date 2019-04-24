@@ -8,9 +8,9 @@ INTERP = os.path.expanduser("~/virtualenv/homelinks/3.6/bin/python3")
 
 if sys.executable != INTERP: os.execl(INTERP, INTERP, *sys.argv)
 
-sys.path.insert(0,'$HOME/virtualenv/homelinks/3.6/bin')
-sys.path.insert(0,'$HOME/virtualenv/homelinks/3.6/lib/python3.6/site-packages/django')
-sys.path.insert(0,'$HOME/virtualenv/homelinks/3.6/lib/python3.6/site-packages')
+sys.path.insert(0, '$HOME/virtualenv/homelinks/3.6/bin')
+sys.path.insert(0, '$HOME/virtualenv/homelinks/3.6/lib/python3.6/site-packages/django')
+sys.path.insert(0, '$HOME/virtualenv/homelinks/3.6/lib/python3.6/site-packages')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'homelinks.settings'
 from django.core.wsgi import get_wsgi_application

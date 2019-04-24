@@ -3,7 +3,7 @@ import os
 import re
 
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.utils.text import slugify
 from rest_framework.serializers import ValidationError as drf_ValidationError
@@ -12,13 +12,16 @@ from dashboard.models import Action
 from links import models
 
 
+### LINKS
 TELEGRAM_LINK = 'https://t.me/'
 SOROUSH_LINK = 'https://sapp.ir/'
 GAP_LINK = 'https://gap.im/'
 IGAP_LINK = 'https://profile.igap.net/'
 EITAA_LINK = 'https://eitaa.com/'
 INSTAGRAM_LINK = 'https://instagram.com/'
+#----------------------------------------------
 
+# MESSAGES AND EXCEPTIONS
 WEBSITE_EXISTS = _('Website already exists')
 CHANNEL_EXISTS = _('Channel already exists')
 GROUP_EXISTS = _('Group already exists')
@@ -40,6 +43,18 @@ serialize_validation_exceptions = {
     'group': drf_ValidationError({'url': GROUP_EXISTS}),
     'instagram': drf_ValidationError({'page_id': INSTAGRAM_EXISTS}),
 }
+
+FAILED_FORM_SUBMISSION = \
+    _("Something went wrong. Fill all fields and try again.")
+
+CREATE_MESSAGE = \
+_('Your link was successfully created. And it will be processed and published in 24 hours.')
+
+UPDATE_MESSAGE = \
+_('Your link was successfully updated. And it will be processed and published in 24 hours.')
+
+DELETE_MESSAGE = _('Your link was successfully deleted.')
+#--------------------------------------------------------------
 
 
 def split_protocol(url):

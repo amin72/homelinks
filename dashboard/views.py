@@ -1,13 +1,15 @@
 from itertools import chain
 
+from django.contrib import messages
 from django.shortcuts import render, redirect, reverse
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 
@@ -145,20 +147,25 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
-@login_required
-def user_update(request):
-    if request.method == 'POST':
-        user_form = UserUpdateForm(request.POST, instance=request.user)
-        if user_form.is_valid():
-            user_form.save()
-            messages.success(request, _('Your account has been updated'))
-            return redirect('dashboard:index')
-    else:
-        user_form = UserUpdateForm(instance=request.user)
-    return render(request, 'dashboard/user_update.html', {
-        'user_form': user_form,
-        'active_dashboard': True,
-    })
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    template_name = 'dashboard/user_update.html'
+    success_url = reverse_lazy('dashboard:index')
+    success_message = _('Your account has been updated')
+
+    fields = [
+        'first_name',
+        'last_name',
+        'email',
+        'phone_number',
+    ]
+
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, self.success_message)
+        return super().form_valid(form)
 
 
 @login_required

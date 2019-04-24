@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% load recaptcha3 %}
 
@@ -18,6 +19,7 @@
 
 
 {% block content %}
+{% language 'fa' %}
 <section class="col-xl-10 col-md-9">
     <div class="row ml-auto mr-auto mt-3 pb-1">
         <div class="offset-lg-2 col-lg-8 col-12">
@@ -42,4 +44,5 @@
         </div>
     </div>
 </section>
+{% endlanguage %}
 {% endblock %}

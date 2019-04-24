@@ -1,4 +1,4 @@
-from django.utils.translation import gettext, ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 

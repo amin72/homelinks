@@ -27,7 +27,7 @@
 
                       {% if user.is_premium %}
                       <li class="list-group-item light-even">
-                          <a href="{% url 'dashboard:users_websites' %}">وبسایت ها من <span class="badge badge-primary pull-left">{{ websites_count|to_persian }}</span></a>
+                          <a href="{% url 'dashboard:users_websites' %}">وبسایت های من<span class="badge badge-primary pull-left">{{ websites_count|to_persian }}</span></a>
                       </li>
                       {% endif %}
 

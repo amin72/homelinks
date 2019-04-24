@@ -4,8 +4,9 @@
 {% for link in links %}
     <div class="col-lg-6 col-12 mt-3">
         <article class="media post-section post">
-            <a href="{{ link.get_absolute_url }}"
-                ><img class="rounded-circle article-img" src="{{ link.thumbnail_url }}"></a>
+            <a href="{{ link.get_absolute_url }}">
+                <img class="rounded-circle article-img" src="{{ link.thumbnail_url }}" alt="{{ link.title }}">
+            </a>
             <div class="media-body">
                 <div class="article-metadata">
                     <h5><a class="article-title" href="{{ link.get_absolute_url }}">{{ link.title }}</a></h5>

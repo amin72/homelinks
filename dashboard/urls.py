@@ -44,7 +44,8 @@ urlpatterns = [
         template_name='dashboard/logout.html'), name='logout'),
 
     # user update
-    path('user_update/', views.user_update, name='user_update'),
+    # path('user_update/', views.user_update, name='user_update'),
+    path('user_update/', views.UserUpdateView.as_view(), name='user_update'),
 
     # change password urls
     path('password_change/',

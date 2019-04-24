@@ -22,6 +22,7 @@ class ActionAdmin(admin.ModelAdmin):
     list_editable = ('is_read',)
     list_filter = ('is_read', 'created')
     orderings = ('-updated',)
+    readonly_fields = ['type', 'content_object', 'content_type', 'object_id']
 
     def is_child(self, obj):
         content_object = obj.content_object

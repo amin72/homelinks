@@ -7,7 +7,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from django.utils.translation import gettext, ugettext as _
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
