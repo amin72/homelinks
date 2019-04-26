@@ -70,4 +70,9 @@ RECAPTCHA_PUBLIC_KEY = ''
 
 
 # Email
-EMAIL_BACKEND = ''
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'mail.homelinks.ir'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'support@homelinks.ir'
+EMAIL_HOST_PASSWORD = ''
