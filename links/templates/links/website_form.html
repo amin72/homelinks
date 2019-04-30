@@ -1,9 +1,8 @@
 {% extends "base_dashboard.html" %}
+{% load static %}
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load jalali_tags %}
-{% load static %}
-{% load recaptcha3 %}
 
 
 {% block title %}
@@ -16,13 +15,6 @@
 {% endblock %}
 
 
-{% block rechaptcha %}
-    {% if not object %}
-        {% recaptcha_init %}
-        {% recaptcha_ready action_name='homepage' %}
-    {% endif %}
-{% endblock %}
-
 
 {% block content %}
 {% language 'fa' %}
@@ -31,7 +23,7 @@
         <div class="col-lg-6 col-12">
             <div class="content-section">
 
-                <form action="?" method="post" enctype="multipart/form-data">
+                <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <fieldset class="form-group">

@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.text import slugify
 from django.urls import reverse
+from django.utils.translation import activate
 from django.contrib.contenttypes.fields import (
     GenericForeignKey,
     GenericRelation
@@ -113,7 +114,6 @@ class Link(models.Model):
 
     def get_admin_url(self):
         model_name = self.__class__.__name__.lower()
-        from django.utils.translation import activate
         activate('en')
         return reverse(f"admin:links_{model_name}_change", args=(self.id,))
 
@@ -140,8 +140,7 @@ class Link(models.Model):
     # for api views we need to raise specific exceptions
     def save(self, *args, **kwargs):
         # if object has parent (object is a child)
-        if self.parent and \
-            self.parent.status == 'published' and self.status == 'published':
+        if self.parent and self.status == 'published':
             # save parent image and thumbnail path
             old_image_path = self.parent.image.path
             old_thumbnail_path = self.parent.thumbnail_path
@@ -313,7 +312,7 @@ class Report(models.Model):
     )
 
     url = models.URLField(verbose_name=_('URL'))
-    email = models.EmailField(verbose_name=_('Your Email'))
+    email = models.EmailField(verbose_name=_('Email'))
     type = models.CharField(max_length=256,
         choices=TYPES,
         verbose_name=_('Type of Report'))
@@ -345,4 +344,5 @@ class Report(models.Model):
 
     def get_admin_url(self):
         model_name = self.model_name
+        activate('en')
         return reverse(f"admin:links_{model_name}_change", args=(self.id,))

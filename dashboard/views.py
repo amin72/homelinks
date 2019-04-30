@@ -1,7 +1,7 @@
 from itertools import chain
 
 from django.contrib import messages
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -81,9 +81,9 @@ def add_link(request):
         form = SelectLinkForm()
 
         if not request.user.is_premium:
-            # remove website from choices if user is not `vip`
+            # remove website from choices if user is not `premium`
             choices = form.fields.get('link_type').choices
-            choices.remove(('website', 'Website'))
+            choices.remove(('website', _('Website')))
             form.fields.get('link_type').choices = choices
 
         context = {
@@ -184,3 +184,20 @@ def recent_actions(request):
         'active_dashboard': True,
     }
     return render(request, 'dashboard/recent_actions.html', context)
+
+
+@login_required
+def hide_action(request, pk):
+    """
+    This view set `is_read` property of the action to True, so it won't be
+    listed in the recent_actions page.
+    """
+    user = request.user
+    if not (user.is_superuser or user.is_staff):
+        # none admin users won't be able to see this view/page
+        raise PermissionDenied
+
+    action = get_object_or_404(Action, pk=pk)
+    action.is_read = True
+    action.save()
+    return redirect(reverse('dashboard:recent_actions'))

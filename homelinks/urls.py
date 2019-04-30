@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 from rest_framework.authtoken import views as drf_views
 from dashboard.api import views as dashboard_views
 
+
 urlpatterns = i18n_patterns(
     # dashboard
     path('dashboard/', include('dashboard.urls')),
@@ -40,7 +41,6 @@ urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
     prefix_default_language=True
 )
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

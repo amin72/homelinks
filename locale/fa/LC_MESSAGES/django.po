@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-25 01:20+0430\n"
+"POT-Creation-Date: 2019-04-28 08:34+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,39 +18,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: contact/models.py:8
+#: contact/models.py:9
 msgid "Request"
 msgstr "درخواست"
 
-#: contact/models.py:9
+#: contact/models.py:10
 msgid "Suggestion and Recommendation"
 msgstr "پیشنهاد و انتقاد"
 
-#: contact/models.py:10
+#: contact/models.py:11
 msgid "Advertisement"
 msgstr "تبلیغات"
 
-#: contact/models.py:11
+#: contact/models.py:12
 msgid "Support"
 msgstr "پشتیبانی"
 
-#: contact/models.py:14 links/models.py:316
-msgid "Your Email"
+#: contact/models.py:15 dashboard/models.py:29 links/forms.py:18
+msgid "Email"
 msgstr "ایمیل"
 
-#: contact/models.py:16 links/forms.py:19 links/models.py:321
+#: contact/models.py:17 links/forms.py:19 links/models.py:320
 msgid "Text"
 msgstr "متن پیام"
 
-#: contact/models.py:17 links/forms.py:20 links/models.py:322
+#: contact/models.py:18 links/forms.py:20 links/models.py:321
 msgid "Text up to 1024 characters"
 msgstr "حداکثر تعداد کاراکترها ۱۰۲۴ عدد است."
 
-#: contact/models.py:20 links/forms.py:17
+#: contact/models.py:21 links/forms.py:17
 msgid "Type"
 msgstr "موضوع"
 
-#: contact/models.py:25 dashboard/models.py:49
+#: contact/models.py:26 dashboard/models.py:49
 msgid "Contact Us"
 msgstr "ارتباط با ما"
 
@@ -58,7 +58,7 @@ msgstr "ارتباط با ما"
 msgid "Your message was successfully submitted."
 msgstr "پیام شما با موفقیت ارسال شد."
 
-#: dashboard/forms.py:13
+#: dashboard/forms.py:13 dashboard/views.py:86
 msgid "Website"
 msgstr "وبسایت"
 
@@ -81,10 +81,6 @@ msgstr "نوع لینک"
 #: dashboard/models.py:25
 msgid "Enter a valid phone number"
 msgstr ".شماره تلفن را صحیح وارد کنید"
-
-#: dashboard/models.py:29 links/forms.py:18
-msgid "Email"
-msgstr "ایمیل"
 
 #: dashboard/models.py:32
 msgid "Phone Number"
@@ -130,11 +126,11 @@ msgstr "حساب کاربری شما ساخته شد! الان می توانید
 msgid "Your account has been updated"
 msgstr "حساب کاربری شما بروز رسانی شد."
 
-#: homelinks/dev_settings.py:210
+#: homelinks/dev_settings.py:211
 msgid "English"
 msgstr "انگلیسی"
 
-#: homelinks/dev_settings.py:211
+#: homelinks/dev_settings.py:212
 msgid "Persian"
 msgstr "فارسی"
 
@@ -150,107 +146,111 @@ msgstr "شما اجازه بروز رسانی یا حذف این لینک را �
 msgid "Reported Link"
 msgstr "لینک گزارش شده"
 
-#: links/models.py:36
+#: links/models.py:37
 msgid "Categories"
 msgstr "دسته بندی ها"
 
-#: links/models.py:54
+#: links/models.py:55
 msgid "Draft"
 msgstr "پيش نويس"
 
-#: links/models.py:55
+#: links/models.py:56
 msgid "Published"
 msgstr "منتشر شده"
 
-#: links/models.py:59
+#: links/models.py:60
 msgid "Title"
 msgstr "عنوان"
 
-#: links/models.py:61 links/models.py:315
+#: links/models.py:62 links/models.py:314
 msgid "URL"
 msgstr "لینک"
 
-#: links/models.py:64
+#: links/models.py:65
 msgid "Category"
 msgstr "دسته بندی"
 
-#: links/models.py:67
+#: links/models.py:68
 msgid "Description"
 msgstr "توضیحات"
 
-#: links/models.py:68
+#: links/models.py:69
 msgid "Link's description up to 500 characters"
 msgstr "حداکثر تعداد کاراکترها ۵۰۰ عدد است."
 
-#: links/models.py:70
+#: links/models.py:71
 msgid "Image"
 msgstr "تصویر"
 
-#: links/models.py:203
+#: links/models.py:202
 msgid "Iranian"
 msgstr "ایرانی"
 
-#: links/models.py:204
+#: links/models.py:203
 msgid "Foreign"
 msgstr "خارجی"
 
-#: links/models.py:208
+#: links/models.py:207
 msgid "Type of Link"
 msgstr "نوع سایت"
 
-#: links/models.py:226 links/models.py:261
+#: links/models.py:225 links/models.py:260
 msgid "Telegram"
 msgstr "تلگرام"
 
-#: links/models.py:227 links/models.py:262
+#: links/models.py:226 links/models.py:261
 msgid "Soroush"
 msgstr "سروش"
 
-#: links/models.py:228 links/models.py:263
+#: links/models.py:227 links/models.py:262
 msgid "Gap"
 msgstr "گپ"
 
-#: links/models.py:229 links/models.py:264
+#: links/models.py:228 links/models.py:263
 msgid "IGap"
 msgstr "آی‌گپ"
 
-#: links/models.py:230 links/models.py:265
+#: links/models.py:229 links/models.py:264
 msgid "Eitaa"
 msgstr "ایتا"
 
-#: links/models.py:234 links/models.py:269
+#: links/models.py:233 links/models.py:268
 msgid "Application"
 msgstr "اپلیکیشن"
 
-#: links/models.py:235
+#: links/models.py:234
 msgid "Channel ID"
 msgstr "شناسه کانال"
 
-#: links/models.py:260
+#: links/models.py:259
 msgid "Whatsapp"
 msgstr "واتس اپ"
 
-#: links/models.py:288
+#: links/models.py:287
 msgid "Page ID"
 msgstr "شناسه اینستاگرام"
 
-#: links/models.py:289
+#: links/models.py:288
 msgid "without @ simple"
 msgstr "بدون علامت @"
 
-#: links/models.py:309
+#: links/models.py:308
 msgid "Inappropriate content"
 msgstr "محتوای نامناسب"
 
-#: links/models.py:311
+#: links/models.py:310
 msgid "Mismatched title and description"
 msgstr "عدم تطابق با عنوان و توضیحات"
 
-#: links/models.py:312
+#: links/models.py:311
 msgid "Broken link"
 msgstr "لینک خراب"
 
-#: links/models.py:319
+#: links/models.py:315
+msgid "Your Email"
+msgstr "ایمیل"
+
+#: links/models.py:318
 msgid "Type of Report"
 msgstr "نوع گزارش"
 
@@ -287,26 +287,39 @@ msgid "Something went wrong. Fill all fields and try again."
 msgstr "اشکالی در ارسال اطلاعات پیش آمد. دوباره امتحان کنید."
 
 #: links/utils.py:51
-msgid ""
-"Your link was successfully created. And it will be processed and published "
+msgid "Your link was successfully created. And it will be processed and published "
 "in 24 hours."
 msgstr "لینک شما با موفقیت ثبت شد. و تا ۲۴ ساعت آینده بررسی و منتشر خواهد شد."
 
 #: links/utils.py:54
-msgid ""
-"Your link was successfully updated. And it will be processed and published "
+msgid "Your link was successfully updated. And it will be processed and published "
 "in 24 hours."
-msgstr ""
-"لینک شما با موفقیت بروز رسانی شد. و تا ۲۴ ساعت آینده بررسی و منتشر خواهد شد."
+msgstr "لینک شما با موفقیت بروز رسانی شد. و تا ۲۴ ساعت آینده بررسی و منتشر خواهد شد."
 
 #: links/utils.py:56
 msgid "Your link was successfully deleted."
 msgstr "لینک شما با موفقیت حذف شد."
 
-#: links/utils.py:157
+#: links/utils.py:160
 msgid "This application is not registered in the system."
 msgstr "اپلیکیشن در سیستم ثبت نشده است."
 
-#: links/views.py:364
+#: links/views.py:377
 msgid "Your report was successfully submitted."
 msgstr "گزارش شما با موفقیت ثبت شد."
+
+#: templates/admin/base_site.html:9 templates/admin/base_site.html:12
+msgid "Homelinks administration"
+msgstr "مدیریت خانه لینک ها"
+
+#: templates/admin/base_site.html:33
+msgid "Documentation"
+msgstr ""
+
+#: templates/admin/base_site.html:37
+msgid "Change password"
+msgstr ""
+
+#: templates/admin/base_site.html:39
+msgid "Log out"
+msgstr ""

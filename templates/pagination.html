@@ -1,26 +1,26 @@
 <div class="col-12 mt-3 d-flex justify-content-center">
 
     {% if page_obj.has_next %}
-        <a class="btn btn-outline-info mb-4 mr-1"  href="?page={{ page_obj.next_page_number }}">بعدی</a>
-        <a class="btn btn-outline-info mb-4 mr-1" href="?page={{ page_obj.paginator.num_pages }}">آخرین</a>
+        <a class="btn btn-outline-info mb-4 mr-1"  href="?page={{ page_obj.next_page_number }}{{ query_string }}">بعدی</a>
+        <a class="btn btn-outline-info mb-4 mr-1" href="?page={{ page_obj.paginator.num_pages }}{{ query_string }}">آخرین</a>
     {% else %}
         <a class="btn btn-outline-info mb-4 mr-1 disabled"  href="#">بعدی</a>
-        <a class="btn btn-outline-info mb-4 mr-1 disabled" href="?page={{ page_obj.paginator.num_pages }}">آخرین</a>
+        <a class="btn btn-outline-info mb-4 mr-1 disabled" href="?page={{ page_obj.paginator.num_pages }}{{ query_string }}">آخرین</a>
     {% endif %}
 
     {% for num in page_obj.paginator.page_range reversed %}
         {% if page_obj.number == num %}
-            <a class="btn btn-info mb-4 mr-1" href="?page={{ num }}">{{ num }}</a>
+            <a class="btn btn-info mb-4 mr-1" href="?page={{ num }}{{ query_string }}">{{ num }}</a>
         {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'6' %}
-            <a class="btn btn-outline-info mb-4 mr-1" href="?page={{ num }}">{{ num }}</a>
+            <a class="btn btn-outline-info mb-4 mr-1" href="?page={{ num }}{{ query_string }}">{{ num }}</a>
         {% endif %}
     {% endfor %}
 
     {% if page_obj.has_previous %}
-        <a class="btn btn-outline-info mb-4 mr-1" href="?page=1">اولین</a>
-        <a class="btn btn-outline-info mb-4 mr-1"  href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+        <a class="btn btn-outline-info mb-4 mr-1" href="?page=1{{ query_string }}">اولین</a>
+        <a class="btn btn-outline-info mb-4 mr-1"  href="?page={{ page_obj.previous_page_number }}{{ query_string }}">قبلی</a>
     {% else %}
-        <a class="btn btn-outline-info mb-4 mr-1 disabled" href="?page=1">اولین</a>
+        <a class="btn btn-outline-info mb-4 mr-1 disabled" href="?page=1{{ query_string }}">اولین</a>
         <a class="btn btn-outline-info mb-4 mr-1 disabled"  href="#">قبلی</a>
     {% endif %}
 

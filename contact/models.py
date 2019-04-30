@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import activate
 
 
 class ContactUs(models.Model):
@@ -11,7 +12,7 @@ class ContactUs(models.Model):
         ('support', _('Support')),
     )
 
-    email = models.EmailField(verbose_name=_('Your Email'))
+    email = models.EmailField(verbose_name=_('Email'))
     text = models.TextField(max_length=1024,
         verbose_name=_('Text'),
         help_text=_("Text up to 1024 characters"))
@@ -29,4 +30,5 @@ class ContactUs(models.Model):
 
     def get_admin_url(self):
         model_name = self.__class__.__name__.lower()
+        activate('en')
         return reverse(f"admin:contact_{model_name}_change", args=(self.id,))

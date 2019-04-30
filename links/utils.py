@@ -56,6 +56,9 @@ _('Your link was successfully updated. And it will be processed and published in
 DELETE_MESSAGE = _('Your link was successfully deleted.')
 #--------------------------------------------------------------
 
+# Pagination page limit
+MAX_PAGE_LIMIT = 20
+
 
 def split_protocol(url):
     """

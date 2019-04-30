@@ -39,10 +39,21 @@
                 </div>
 
                 <div class="col-lg-4 col-sm-6 offset-lg-4 col-12 mt-2">
+                    {% if object.status == 'published' %}
                     <a class="btn btn-sm btn-danger float-right"
-                       href="{% url 'links:report' model_name object.slug %}">گزارش</a>
+                        href="{% url 'links:report' model_name object.slug %}"
+                    {% else %}
+                    <a class="btn btn-sm btn-danger float-right disabled"
+                        href="#"
+                     {% endif %}>گزارش</a>
+
+                    {% if object.status == 'published' %}
                     <a class="btn btn-sm btn-success float-right mr-1"
-                        href="{{ object.url }}">مشاهده/عضویت</a>
+                        href="{{ object.url }}"
+                    {% else %}
+                    <a class="btn btn-sm btn-success float-right mr-1 disabled"
+                        href="#"
+                    {% endif %}>مشاهده/عضویت</a>
                 </div>
             </div>
         </div>

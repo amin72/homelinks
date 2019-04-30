@@ -130,6 +130,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+LANGUAGES = [
+    ('fa', _('Persian')),
+    ('en', _('English')),
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -199,15 +203,9 @@ AUTH_USER_MODEL = 'dashboard.User'
 
 # Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+DEFAULT_FROM_EMAIL = 'support@homelinks.ir'
 
 INTERNAL_IPS = ['127.0.0.1', '::1']
 
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
-
-
-LANGUAGES = [
-    ('en', _('English')),
-    ('fa', _('Persian')),
-]

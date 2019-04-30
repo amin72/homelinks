@@ -14,6 +14,10 @@
     <!-- list instagrams -->
     <div class="row">
         {% include "links/links.html" with links=object_list %}
+
+        {% if is_paginated %}
+            {% include "pagination.html" with page_obj=page_obj %}
+        {% endif %}
     </div><!-- row: list instagrams -->
 </section>
 {% endblock %}

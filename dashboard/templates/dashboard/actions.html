@@ -44,13 +44,12 @@
     <div class="col-xl-2 col-3">
         <div class="col-12 px-lg-4 px-sm-3 px-0">
             <a target="_blank" class="btn btn-sm btn-primary mt-2 w-80 float-right"
-                href="{{ object.get_admin_url }}"
-                >مدیریت لینک</a>
+                href="{{ object.get_admin_url }}">مدیریت لینک</a>
         </div>
         <div class="col-12 px-lg-4 px-sm-3 px-0">
-            <a target="_blank" class="btn btn-sm btn-success mt-2 w-80 float-right px-0"
-                href="{{ action.get_admin_url }}"
-                >مدیریت فعالیت</a>
+            <a class="btn btn-sm btn-success mt-2 w-80 float-right px-0"
+                href="{% url 'dashboard:hide_action' pk=action.pk %}"
+                >حذف فعالیت</a>
         </div>
     </div>
 </div>

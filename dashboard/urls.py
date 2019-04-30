@@ -78,4 +78,6 @@ urlpatterns = [
         name='password_reset_complete'),
 
     path('recent_actions/', views.recent_actions, name='recent_actions'),
+
+    path('hide_action/<int:pk>/', views.hide_action, name='hide_action'),
 ]

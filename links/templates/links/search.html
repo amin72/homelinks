@@ -9,15 +9,19 @@
 
 {% block content %}
 <section class="col-xl-10 col-md-9">
-    <div class="row mt-3">
-        <div class="col-12">
-            <h1 class="mb-4"><span class="badge badge-info">نتایج جستجو</span></h1>
+<div class="row mt-3">
+    <div class="col-12">
+        <h1 class="mb-4"><span class="badge badge-info">نتایج جستجو</span></h1>
 
-            <!-- list channels -->
-            <div class="row">
-                {% include "links/links.html" with links=search_result %}
-            </div><!-- row: list channels -->
-        </div>
+        <!-- list channels -->
+        <div class="row">
+            {% include "links/links.html" with links=page_obj %}
+
+            {% if is_paginated %}
+                {% include "pagination.html" with page_obj=page_obj %}
+            {% endif %}
+        </div><!-- row: list channels -->
     </div>
+</div>
 </section>
 {% endblock %}

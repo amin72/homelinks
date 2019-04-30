@@ -33,7 +33,6 @@ class CreateWebsiteForm(forms.ModelForm):
             'category',
             'description',
             'image',
-            'captcha',
         )
 
 
@@ -49,7 +48,6 @@ class CreateChannelForm(forms.ModelForm):
             'category',
             'description',
             'image',
-            'captcha',
         )
 
 
@@ -65,7 +63,6 @@ class CreateGroupForm(forms.ModelForm):
             'category',
             'description',
             'image',
-            'captcha',
         )
 
 
@@ -80,5 +77,4 @@ class CreateInstagramForm(forms.ModelForm):
             'category',
             'description',
             'image',
-            'captcha',
         )

@@ -39,6 +39,8 @@ class ApplicationMixIn(ListView):
     published and parent objects.
     `model` property must be set in the class base view.
     """
+    paginate_by = 20
+
     def get_queryset(self):
         """
         Get published object with the specific application
