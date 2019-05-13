@@ -148,6 +148,11 @@ class Link(models.Model):
     def save(self, *args, **kwargs):
         # if object has parent (object is a child)
         if self.parent and self.status == 'published':
+            # hide update action once object is published
+            action = self.actions.first()
+            if action:
+                utils.hide_action(action)
+
             # save parent image and thumbnail path
             old_image_path = self.parent.image.path
             old_thumbnail_path = self.parent.thumbnail_path
@@ -193,6 +198,13 @@ class Link(models.Model):
         super().save(*args, **kwargs)
         utils.scale_image(self.image.path)
         utils.create_thumbnail(self.image.path, self.thumbnail_path)
+
+        # if object is parent and is published, hide created action
+        if not self.parent and self.status == 'published':
+            action = self.actions.first()
+            if action:
+                utils.hide_action(action)
+
 
     # Managers
     objects = models.Manager()

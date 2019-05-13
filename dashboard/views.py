@@ -184,20 +184,3 @@ def recent_actions(request):
         'active_dashboard': True,
     }
     return render(request, 'dashboard/recent_actions.html', context)
-
-
-@login_required
-def hide_action(request, pk):
-    """
-    This view set `is_read` property of the action to True, so it won't be
-    listed in the recent_actions page.
-    """
-    user = request.user
-    if not (user.is_superuser or user.is_staff):
-        # none admin users won't be able to see this view/page
-        raise PermissionDenied
-
-    action = get_object_or_404(Action, pk=pk)
-    action.is_read = True
-    action.save()
-    return redirect(reverse('dashboard:recent_actions'))

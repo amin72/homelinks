@@ -349,3 +349,9 @@ def delete_images(object):
         # this exception onlly happens when parent and child both point to the
         # same image, thumbnail files. we simply just ignore it.
         pass
+
+
+def hide_action(action):
+    """Hide an object's action by make `is_read` attr set to True"""
+    action.is_read = True
+    action.save()
