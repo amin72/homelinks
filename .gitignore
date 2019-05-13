@@ -22,3 +22,4 @@ script.sh
 contact/migrations/000*
 dashboard/migrations/000*
 links/migrations/000*
+tmp/

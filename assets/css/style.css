@@ -470,3 +470,43 @@ li.light-even:nth-of-type(2n + 1) {
 .error-background {
     background: #edefe6
 }
+
+post-meta a:hover,.single-secondline-post-meta a{color:#fff}
+
+
+/* Tags */
+.tags-secondline {
+    margin-top:20px;
+    margin-bottom:50px
+}
+
+.tags-secondline i {
+    padding-right:5px;
+    color:#4b4b4b;
+    font-size:17px;
+    position:relative;
+    top:1px
+}
+
+.tags-secondline a {
+    display:inline-block;
+    line-height:1;
+    margin-left:5px;
+    margin-bottom:7px;
+    border-radius:0;
+    font-family:neuton,serif;padding:6px 12px;
+    font-size:14px;
+    color:#575757;
+    background:#e5e5e5
+}
+
+.tags-secondline a:hover {
+    color:#fff;
+    background:#575757
+}
+
+
+.legend-header {
+    background: lightblue;
+    border-radius: 8px;
+}

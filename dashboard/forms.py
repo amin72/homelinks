@@ -15,7 +15,8 @@ class SelectLinkForm(forms.Form):
         ('group', _('Group')),
         ('instagram', _('Instagram')),
     )
-    link_type = forms.ChoiceField(choices=choices, label=_('Link Type'))
+    link_type = forms.ChoiceField(choices=choices, label=_('Link Type'),
+        help_text=_("Select link's type (Website, Channel, Group or Instagram)"))
 
 
 class UserRegisterForm(UserCreationForm):

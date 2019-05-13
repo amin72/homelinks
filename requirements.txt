@@ -13,3 +13,4 @@ requests>=2.20.0
 django-rest-auth>=0.9.5
 django-allauth>=0.39.1
 django-appconf>=1.0.3
+django-ratelimit>=2.0.0

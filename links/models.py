@@ -55,9 +55,16 @@ class Link(models.Model):
         ('draft', _('Draft')),
         ('published', _('Published')),
     )
+    url_help_text = ''
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        url = self._meta.get_field('url')
+        url.help_text = self.url_help_text
 
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=60, verbose_name=_('Title'))
+    title = models.CharField(max_length=60, verbose_name=_('Title'),
+        help_text=_("Write a title for your link"))
     slug = models.SlugField(max_length=60, blank=True)
     url = models.URLField(verbose_name=_('URL'))
     category = models.ForeignKey(Category,
@@ -197,6 +204,7 @@ class Link(models.Model):
 
 class Website(Link):
     url_reverse = 'links:website-detail'
+    url_help_text = _('example: https://www.google.com')
 
     TYPE_CHOICESS = (
         ('iranian', _('Iranian')),
@@ -204,7 +212,8 @@ class Website(Link):
     )
 
     type = models.CharField(max_length=7, choices=TYPE_CHOICESS,
-        verbose_name=_('Type of Link'))
+        verbose_name=_('Type of Link'),
+        help_text=_("Iranian or foreign website"))
 
     def __str__(self):
         return f'{self.title} - ({self.url})'
@@ -231,7 +240,8 @@ class Channel(Link):
 
     application = models.CharField(max_length=8, choices=APPLICATION_CHOICES,
         verbose_name=_('Application'))
-    channel_id = models.CharField(max_length=32, verbose_name=_('Channel ID'))
+    channel_id = models.CharField(max_length=32, verbose_name=_('Channel ID'),
+        help_text=_('Your channel ID without @ simple'))
 
     def __str__(self):
         return '{} ({})'.format(self.title, self.channel_id)
@@ -254,6 +264,8 @@ class Channel(Link):
 
 class Group(Link):
     url_reverse = 'links:group-detail'
+    url_help_text = \
+    _('example: https://chat.whatsapp.com/46CvXH44diaHVpTRFGA55K')
 
     APPLICATION_CHOICES = (
         ('whatsapp', _('Whatsapp')),
@@ -285,7 +297,7 @@ class Instagram(Link):
     url_reverse = 'links:instagram-detail'
 
     page_id = models.CharField(max_length=30, verbose_name=_('Page ID'),
-        help_text=_('without @ simple'))
+        help_text=_('Your instagram ID without @ simple'))
 
     def __str__(self):
         return '{} ({})'.format(self.title, self.page_id)

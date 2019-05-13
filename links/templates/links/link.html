@@ -61,15 +61,13 @@
 
     {% with object.tags.all as tags %}
     {% if tags %}
-    <div class="border border-info rounded mt-3">
-        <article class="p-2">
+        <div class="tags-secondline">
+            <i class="fa fa-tags"></i>
 
             {% for tag in object.tags.all %}
                 <a class="badge badge-secondary tag-size" href="{% url 'links:tagged_items' tag.slug %}">{{ tag }}</a>
             {% endfor %}
-
-        </article>
-    </div>
+        </div>
     {% endif %}
     {% endwith %}
 </section>

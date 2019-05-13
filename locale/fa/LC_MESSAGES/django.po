@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-28 08:34+0430\n"
+"POT-Creation-Date: 2019-05-12 08:21+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,14 +35,15 @@ msgid "Support"
 msgstr "پشتیبانی"
 
 #: contact/models.py:15 dashboard/models.py:29 links/forms.py:18
+#: links/models.py:327
 msgid "Email"
 msgstr "ایمیل"
 
-#: contact/models.py:17 links/forms.py:19 links/models.py:320
+#: contact/models.py:17 links/forms.py:19 links/models.py:332
 msgid "Text"
 msgstr "متن پیام"
 
-#: contact/models.py:18 links/forms.py:20 links/models.py:321
+#: contact/models.py:18 links/forms.py:20 links/models.py:333
 msgid "Text up to 1024 characters"
 msgstr "حداکثر تعداد کاراکترها ۱۰۲۴ عدد است."
 
@@ -77,6 +78,10 @@ msgstr "اینستاگرام"
 #: dashboard/forms.py:18
 msgid "Link Type"
 msgstr "نوع لینک"
+
+#: dashboard/forms.py:19
+msgid "Select link's type (Website, Channel, Group or Instagram)"
+msgstr "نوع لینک ( سایت، کانال، گروه، اینستاگرام ) را انتخاب کنید."
 
 #: dashboard/models.py:25
 msgid "Enter a valid phone number"
@@ -126,13 +131,13 @@ msgstr "حساب کاربری شما ساخته شد! الان می توانید
 msgid "Your account has been updated"
 msgstr "حساب کاربری شما بروز رسانی شد."
 
-#: homelinks/dev_settings.py:211
-msgid "English"
-msgstr "انگلیسی"
-
-#: homelinks/dev_settings.py:212
+#: homelinks/dev_settings.py:134
 msgid "Persian"
 msgstr "فارسی"
+
+#: homelinks/dev_settings.py:135
+msgid "English"
+msgstr "انگلیسی"
 
 #: links/api/permissions.py:6
 msgid "Only premium users are allowed to do this operation"
@@ -158,99 +163,115 @@ msgstr "پيش نويس"
 msgid "Published"
 msgstr "منتشر شده"
 
-#: links/models.py:60
+#: links/models.py:66
 msgid "Title"
 msgstr "عنوان"
 
-#: links/models.py:62 links/models.py:314
+#: links/models.py:67
+msgid "Write a title for your link"
+msgstr "برای لینک خود یک عنوان مناسب بنویسید."
+
+#: links/models.py:69 links/models.py:326
 msgid "URL"
 msgstr "لینک"
 
-#: links/models.py:65
+#: links/models.py:72
 msgid "Category"
 msgstr "دسته بندی"
 
-#: links/models.py:68
+#: links/models.py:75
 msgid "Description"
 msgstr "توضیحات"
 
-#: links/models.py:69
+#: links/models.py:76
 msgid "Link's description up to 500 characters"
 msgstr "حداکثر تعداد کاراکترها ۵۰۰ عدد است."
 
-#: links/models.py:71
+#: links/models.py:78
 msgid "Image"
 msgstr "تصویر"
 
-#: links/models.py:202
+#: links/models.py:207
+msgid "example: https://www.google.com"
+msgstr "مثال: https://www.google.com"
+
+#: links/models.py:210
 msgid "Iranian"
 msgstr "ایرانی"
 
-#: links/models.py:203
+#: links/models.py:211
 msgid "Foreign"
 msgstr "خارجی"
 
-#: links/models.py:207
+#: links/models.py:215
 msgid "Type of Link"
 msgstr "نوع سایت"
 
-#: links/models.py:225 links/models.py:260
+#: links/models.py:216
+msgid "Iranian or foreign website"
+msgstr "ایرانی یا خارجی بودن سایت را مشخص کنید."
+
+#: links/models.py:234 links/models.py:272
 msgid "Telegram"
 msgstr "تلگرام"
 
-#: links/models.py:226 links/models.py:261
+#: links/models.py:235 links/models.py:273
 msgid "Soroush"
 msgstr "سروش"
 
-#: links/models.py:227 links/models.py:262
+#: links/models.py:236 links/models.py:274
 msgid "Gap"
 msgstr "گپ"
 
-#: links/models.py:228 links/models.py:263
+#: links/models.py:237 links/models.py:275
 msgid "IGap"
 msgstr "آی‌گپ"
 
-#: links/models.py:229 links/models.py:264
+#: links/models.py:238 links/models.py:276
 msgid "Eitaa"
 msgstr "ایتا"
 
-#: links/models.py:233 links/models.py:268
+#: links/models.py:242 links/models.py:280
 msgid "Application"
 msgstr "اپلیکیشن"
 
-#: links/models.py:234
+#: links/models.py:243
 msgid "Channel ID"
 msgstr "شناسه کانال"
 
-#: links/models.py:259
+#: links/models.py:244
+msgid "Your channel ID without @ simple"
+msgstr "آیدی کانال بدون علامت @"
+
+#: links/models.py:268
+msgid "example: https://chat.whatsapp.com/46CvXH44diaHVpTRFGA55K"
+msgstr "مثال: https://chat.whatsapp.com/46CvXH44diaHVpTRFGA55K"
+
+#: links/models.py:271
 msgid "Whatsapp"
 msgstr "واتس اپ"
 
-#: links/models.py:287
+#: links/models.py:299
 msgid "Page ID"
 msgstr "شناسه اینستاگرام"
 
-#: links/models.py:288
-msgid "without @ simple"
-msgstr "بدون علامت @"
+#: links/models.py:300
+msgid "Your instagram ID without @ simple"
+msgstr "آیدی اینستاگرام بدون علامت @"
 
-#: links/models.py:308
+#: links/models.py:320
 msgid "Inappropriate content"
 msgstr "محتوای نامناسب"
 
-#: links/models.py:310
+#: links/models.py:322
 msgid "Mismatched title and description"
 msgstr "عدم تطابق با عنوان و توضیحات"
 
-#: links/models.py:311
+#: links/models.py:323
 msgid "Broken link"
 msgstr "لینک خراب"
 
-#: links/models.py:315
-msgid "Your Email"
-msgstr "ایمیل"
-
-#: links/models.py:318
+#: links/models.py:330
 msgid "Type of Report"
 msgstr "نوع گزارش"
 
@@ -287,14 +308,17 @@ msgid "Something went wrong. Fill all fields and try again."
 msgstr "اشکالی در ارسال اطلاعات پیش آمد. دوباره امتحان کنید."
 
 #: links/utils.py:51
-msgid "Your link was successfully created. And it will be processed and published "
+msgid ""
+"Your link was successfully created. And it will be processed and published "
 "in 24 hours."
 msgstr "لینک شما با موفقیت ثبت شد. و تا ۲۴ ساعت آینده بررسی و منتشر خواهد شد."
 
 #: links/utils.py:54
-msgid "Your link was successfully updated. And it will be processed and published "
+msgid ""
+"Your link was successfully updated. And it will be processed and published "
 "in 24 hours."
-msgstr "لینک شما با موفقیت بروز رسانی شد. و تا ۲۴ ساعت آینده بررسی و منتشر خواهد شد."
+msgstr ""
+"لینک شما با موفقیت بروز رسانی شد. و تا ۲۴ ساعت آینده بررسی و منتشر خواهد شد."
 
 #: links/utils.py:56
 msgid "Your link was successfully deleted."
@@ -304,7 +328,7 @@ msgstr "لینک شما با موفقیت حذف شد."
 msgid "This application is not registered in the system."
 msgstr "اپلیکیشن در سیستم ثبت نشده است."
 
-#: links/views.py:377
+#: links/views.py:415
 msgid "Your report was successfully submitted."
 msgstr "گزارش شما با موفقیت ثبت شد."
 
