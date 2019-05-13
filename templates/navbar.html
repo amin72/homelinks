@@ -2,7 +2,7 @@
 {% load homelinks_tags %}
 
 <!-- Navbar -->
-<nav class="navbar navbar-dark bg-dark navbar-expand-md">
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
 
     <button class="navbar-toggler navbar-toggler-right" type="button"
             data-toggle="collapse" data-target="#mainNavbar"
@@ -56,6 +56,10 @@
 
             <li class="nav-item {% if active_contactus %}active{% endif %}">
                 <a class="nav-link" href="{% url 'contact:contact_us' %}">تماس با ما</a>
+            </li>
+
+            <li class="nav-item {% if active_categories %}active{% endif %}">
+                <a class="nav-link" href="{% url 'links:categories' %}">دسته بندی ها</a>
             </li>
         </ul>
 

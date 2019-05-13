@@ -24,6 +24,7 @@ from ratelimit.mixins import RatelimitMixin
 from ratelimit.decorators import ratelimit
 
 from .models import (
+    Category,
     Website,
     Channel,
     Group,
@@ -488,3 +489,37 @@ def search(request):
         'query_string': f'&q={q}', # search query
     }
     return render(request, 'links/search.html', context)
+
+
+class CategoriesListView(ListView):
+    model = Category
+
+
+def categorized_items(request, category_id):
+    """
+    list all links that are categorized as category_id[name]
+    """
+    category = get_object_or_404(Category, pk=category_id)
+    websites = Website.published.filter(category_id=category_id)
+    channels = Channel.published.filter(category_id=category_id)
+    groups = Group.published.filter(category_id=category_id)
+    instagrams = Instagram.published.filter(category_id=category_id)
+
+    object_list = list(chain(websites, channels, groups, instagrams))
+
+    # 20 links per page
+    paginator = Paginator(object_list, utils.MAX_PAGE_LIMIT)
+    page = request.GET.get('page')
+    try:
+        object_list = paginator.page(page)
+    except PageNotAnInteger:
+        object_list = paginator.page(1)
+    except EmptyPage:
+        object_list = paginator.page(paginator.num_pages)
+
+    context = {
+        'is_paginated': True,
+        'page_obj': object_list,
+        'category': category,
+    }
+    return render(request, 'links/categorized_items.html', context)

@@ -143,4 +143,11 @@ urlpatterns = [
 
     # search
     path('search/', views.search, name='search'),
+
+    # categories
+    path('categories/', views.CategoriesListView.as_view(), name='categories'),
+
+    # categorized items
+    path('category/<int:category_id>/', views.categorized_items,
+        name='categorized_items'),
 ]
