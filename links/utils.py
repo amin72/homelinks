@@ -172,10 +172,18 @@ def generate_instagram_url(page_id):
 def add_slash(url: str):
     """
     Add / to end of url if given url does not have it.
-    This function can be used for website and group links.
+    """
+    if url and not url.endswith('/'):
+        return url + '/'
+    return url
+
+
+def split_slash(url: str):
+    """
+    Remove / from end of url if given url does have it.
     """
     if url and url.endswith('/'):
-        return url + '/'
+        return url[:-1]
     return url
 
 
@@ -185,7 +193,9 @@ def is_duplicate_url(object):
     Return True on exiting the object else False.
     """
     model = object.__class__ # get the model name
-    url = add_slash(object.url)
+    url = object.url
+    if not object.url.endswith('/'):
+        url = add_slash(object.url)
     instance = model.objects.filter(url__endswith=split_protocol(url))
 
     if instance.exists(): # object exists
@@ -267,9 +277,9 @@ def validate_and_update_link(object, data):
     elif model_name == 'channel':
         object_dup.application = data.get('application', object_dup.application)
         object_dup.channel_id = data.get('channel_id', object_dup.channel_id)
-        if not valid_channel_id(object_dup.channel_id,
-                                object_dup.application):
-            raise ValidationError({'channel_id': INVALID_NAME_MESSAGE})
+        if not valid_channel_id(object_dup.channel_id, object_dup.application):
+            return False
+            #raise ValidationError({'channel_id': INVALID_NAME_MESSAGE})
         if not valid_channel_length(object_dup.channel_id,
                                     object_dup.application):
             raise ValidationError({'channel_id': SHORT_NAME_MESSAGE})
@@ -282,7 +292,7 @@ def validate_and_update_link(object, data):
     elif model_name == 'group':
         object_dup.application = data.get('application', object_dup.application)
         slug = \
-            f'{object_dup.application}-{object_dup.title}-{object_dup.uuid}'
+            f'{object_dup.application}-{object_dup.uuid}'
         object_dup.slug = slugify(slug)
 
     elif model_name == 'instagram':

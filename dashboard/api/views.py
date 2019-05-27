@@ -99,7 +99,6 @@ class UserInstagramListAPIView(ReplaceChildWithParentMixIn):
 
 class UserUpdateAPIView(APIView):
 	serializer_class = UserUpdateSerializer
-	#permission_classes = [AllowAny]
 	model = User
 
 	def get(self, request, format=None):
@@ -107,7 +106,7 @@ class UserUpdateAPIView(APIView):
 		return Response(serializer.data)
 
 	def put(self, request, format=None):
-		serializer = self.serializer_class(request.user, request.POST)
+		serializer = self.serializer_class(request.user, request.data)
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=200)

@@ -139,7 +139,7 @@ class RetrieveUpdateAPIMixIn(RetrieveUpdateAPIView):
         obj = self.get_object()
         data = serializer.validated_data
         if not utils.validate_and_update_link(obj, data):
-        	raise utils.serialize_validation_exceptions[obj.model_name]
+            raise utils.serialize_validation_exceptions[obj.model_name]
         return serializer
 
     def get_object(self):
@@ -227,3 +227,45 @@ class SetActiveCssClassMixIn:
         key = f'active_{self.model_name}s'
         context[key] = True # eg. active_websites = True
         return context
+
+
+class FilterByTypeMixIn:
+    """
+    Filter queryset by `type`
+    """
+
+    def get_queryset(self):
+        type = self.request.GET.get('type')
+        queryset = super().get_queryset()
+        if type:
+            queryset = super().get_queryset().filter(type=type)
+        return queryset
+
+
+class FilterByApplicationMixIn:
+    """
+    Filter queryset by `application`
+    """
+
+    def get_queryset(self):
+        app = self.request.GET.get('app')
+        queryset = super().get_queryset()
+        if app:
+            queryset = super().get_queryset().filter(application=app)
+        return queryset
+
+
+class PaginateMixIn:
+	def get(self, request, *args, **kwargs):
+		return self.list(request, *args, **kwargs)
+
+	def list(self, request, *args, **kwargs):
+		queryset = self.get_queryset()
+		page = self.paginate_queryset(queryset)
+		if page is not None:
+			return self.get_paginated_response(page)
+
+		result = {
+			'links': queryset,
+		}
+		return Response(result)

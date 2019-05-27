@@ -1,14 +1,16 @@
 from itertools import chain
+from urllib.parse import unquote
 
 from django.db.models import Q
 from django.http import Http404
 from django.contrib.contenttypes.models import ContentType
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import get_object_or_404, GenericAPIView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.decorators import permission_classes
+from taggit.models import Tag
 
 from rest_framework.generics import (
 	ListAPIView,
@@ -64,6 +66,9 @@ from links.mixins import (
 	CreateAPIMixIn,
 	RetrieveUpdateAPIMixIn,
 	DeleteAPIMixIn,
+	FilterByTypeMixIn,
+	FilterByApplicationMixIn,
+	PaginateMixIn,
 )
 
 from links import utils
@@ -98,23 +103,9 @@ class IndexAPIView(APIView):
 		return Response(result)
 
 
-class WebsiteListAPIView(ListAPIView):
+class WebsiteListAPIView(FilterByTypeMixIn, ListAPIView):
 	serializer_class = WebsiteSerializer
 	queryset = Website.published.all()
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class IranianWebsiteListAPIView(ListAPIView):
-	serializer_class = WebsiteSerializer
-	queryset = Website.published.filter(type='iranian')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class ForeignWebsiteListAPIView(ListAPIView):
-	serializer_class = WebsiteSerializer
-	queryset = Website.published.filter(type='foreign')
 	pagination_class = LinkPageNumberPagination
 	permission_classes = [AllowAny]
 
@@ -148,44 +139,9 @@ class WebsiteDeleteAPIView(DeleteAPIMixIn):
 #----------------------------------------------------------
 
 
-class ChannelListAPIView(ListAPIView):
+class ChannelListAPIView(FilterByApplicationMixIn, ListAPIView):
 	serializer_class = ChannelSerializer
 	queryset = Channel.published.all()
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class TelegramChannelListAPIView(ListAPIView):
-	serializer_class = ChannelSerializer
-	queryset = Channel.published.filter(application='telegram')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class SoroushChannelListAPIView(ListAPIView):
-	serializer_class = ChannelSerializer
-	queryset = Channel.published.filter(application='soroush')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class GapChannelListAPIView(ListAPIView):
-	serializer_class = ChannelSerializer
-	queryset = Channel.published.filter(application='gap')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class IGapChannelListAPIView(ListAPIView):
-	serializer_class = ChannelSerializer
-	queryset = Channel.published.filter(application='igap')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class EitaaChannelListAPIView(ListAPIView):
-	serializer_class = ChannelSerializer
-	queryset = Channel.published.filter(application='eitaa')
 	pagination_class = LinkPageNumberPagination
 	permission_classes = [AllowAny]
 
@@ -216,51 +172,9 @@ class ChannelDeleteAPIView(DestroyAPIView):
 # ---------------------------------------------------------
 
 
-class GroupListAPIView(ListAPIView):
+class GroupListAPIView(FilterByApplicationMixIn, ListAPIView):
 	serializer_class = GroupSerializer
 	queryset = Group.published.all()
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class WhatsappGroupListAPIView(ListAPIView):
-	serializer_class = GroupSerializer
-	queryset = Group.published.filter(application='whatsapp')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class TelegramGroupListAPIView(ListAPIView):
-	serializer_class = GroupSerializer
-	queryset = Group.published.filter(application='telegram')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class SoroushGroupListAPIView(ListAPIView):
-	serializer_class = GroupSerializer
-	queryset = Group.published.filter(application='soroush')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class GapGroupListAPIView(ListAPIView):
-	serializer_class = GroupSerializer
-	queryset = Group.published.filter(application='gap')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class IGapGroupListAPIView(ListAPIView):
-	serializer_class = GroupSerializer
-	queryset = Group.published.filter(application='igap')
-	pagination_class = LinkPageNumberPagination
-	permission_classes = [AllowAny]
-
-
-class EitaaGroupListAPIView(ListAPIView):
-	serializer_class = GroupSerializer
-	queryset = Group.published.filter(application='eitaa')
 	pagination_class = LinkPageNumberPagination
 	permission_classes = [AllowAny]
 
@@ -352,11 +266,86 @@ class ReportLinkAPIView(CreateAPIView):
 		return serializer
 
 
-class LinkSearchAPIView(APIView):
+class CategoryListAPIView(ListAPIView):
+	serializer_class = CategorySerializer
+	queryset = Category.objects.all()
 	permission_classes = [AllowAny]
 
-	def get(self, request, format=None):
-		q = request.GET.get('q')
+
+class CategorizedItemsAPIListView(PaginateMixIn, GenericAPIView):
+	"""
+	Get categorized items by category id
+	"""
+	permission_classes = [AllowAny]
+	pagination_class = LinkPageNumberPagination
+
+	def get_queryset(self):
+		category_id = self.kwargs.get('category_id')
+		websites = Website.published.filter(category_id=category_id)
+		channels = Channel.published.filter(category_id=category_id)
+		groups = Group.published.filter(category_id=category_id)
+		instagrams = Instagram.published.filter(category_id=category_id)
+
+		serialized_websites = WebsiteSerializer(websites, many=True,
+			context={'request': self.request})
+		serialized_channels = ChannelSerializer(channels, many=True,
+			context={'request': self.request})
+		serialized_groups = GroupSerializer(groups, many=True,
+			context={'request': self.request})
+		serialized_instagrams = InstagramSerializer(instagrams, many=True,
+			context={'request': self.request})
+
+		chained_links = chain(serialized_websites.data,
+			serialized_channels.data,
+			serialized_groups.data,
+			serialized_instagrams.data
+		)
+		return list(chained_links)
+
+
+class TaggedItemsAPIListView(PaginateMixIn, GenericAPIView):
+	"""
+	Get tagged items by tag slug
+	"""
+	permission_classes = [AllowAny]
+	pagination_class = LinkPageNumberPagination
+
+	def get_queryset(self):
+		tag_slug = self.kwargs.get('tag_slug')
+		tag_slug = unquote(tag_slug)
+		tag = get_object_or_404(Tag, slug=tag_slug)
+
+		websites = Website.published.filter(tags__in=[tag])
+		channels = Channel.published.filter(tags__in=[tag])
+		groups = Group.published.filter(tags__in=[tag])
+		instagrams = Instagram.published.filter(tags__in=[tag])
+
+		serialized_websites = WebsiteSerializer(websites, many=True,
+			context={'request': self.request})
+		serialized_channels = ChannelSerializer(channels, many=True,
+			context={'request': self.request})
+		serialized_groups = GroupSerializer(groups, many=True,
+			context={'request': self.request})
+		serialized_instagrams = InstagramSerializer(instagrams, many=True,
+			context={'request': self.request})
+
+		chained_links = chain(serialized_websites.data,
+			serialized_channels.data,
+			serialized_groups.data,
+			serialized_instagrams.data
+		)
+		return list(chained_links)
+
+
+class LinkSearchAPIView(PaginateMixIn, GenericAPIView):
+	"""
+	Search items by given query named `q`
+	"""
+	permission_classes = [AllowAny]
+	pagination_class = LinkPageNumberPagination
+
+	def get_queryset(self):
+		q = self.request.GET.get('q')
 		if q:
 		    query = (Q(title__icontains=q) | Q(description__icontains=q))
 
@@ -365,27 +354,20 @@ class LinkSearchAPIView(APIView):
 		        WebsiteSerializer(
 					Website.published.filter(query),
 					many=True,
-					context={'request': request}).data,
+					context={'request': self.request}).data,
 		        ChannelSerializer(
 					Channel.published.filter(query),
 					many=True,
-					context={'request': request}).data,
+					context={'request': self.request}).data,
 		        GroupSerializer(
 					Group.published.filter(query),
 					many=True,
-					context={'request': request}).data,
+					context={'request': self.request}).data,
 		        InstagramSerializer(
 					Instagram.published.filter(query),
 					many=True,
-					context={'request': request}).data
+					context={'request': self.request}).data
 			)
 		else:
-		    search_result = None
-
-		return Response(search_result)
-
-
-class CategoryListAPIView(ListAPIView):
-	serializer_class = CategorySerializer
-	queryset = Category.objects.all()
-	permission_classes = [AllowAny]
+		    return None
+		return list(search_result)

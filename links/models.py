@@ -188,9 +188,7 @@ class Link(models.Model):
             self.url = utils.generate_channel_url(self.channel_id,
                 self.application)
         elif model_name == 'group':
-            self.slug = slugify(
-                f'{self.application}-{self.title}-f{self.uuid}',
-                allow_unicode=True)
+            self.slug = slugify(f'{self.application}-f{self.uuid}')
         elif model_name == 'instagram':
             self.slug = slugify(f'ig-{self.page_id}')
             self.url = utils.generate_instagram_url(self.page_id)
@@ -329,10 +327,10 @@ class Instagram(Link):
 
 class Report(models.Model):
     TYPES = (
-        ('Inappropriate content', _('Inappropriate content')),
-        ('Mismatched title and description',
+        ('inappropriate content', _('Inappropriate content')),
+        ('mismatched title and description',
             _('Mismatched title and description')),
-        ('Broken link', _('Broken link')),
+        ('broken link', _('Broken link')),
     )
 
     url = models.URLField(verbose_name=_('URL'))

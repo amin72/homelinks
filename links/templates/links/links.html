@@ -9,7 +9,7 @@
             </a>
             <div class="media-body">
                 <div class="article-metadata">
-                    <h5><a class="article-title" href="{{ link.get_absolute_url }}">{{ link.title }}</a></h5>
+                    <h5><a class="article-title" href="{{ link.get_absolute_url }}">{{ link.title|truncatechars:40 }}</a></h5>
                 </div>
                 <div class="pt-2">
                     <p class="article-content">{{ link.description|truncatechars:28 }}</p>

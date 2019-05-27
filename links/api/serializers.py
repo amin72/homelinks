@@ -44,7 +44,6 @@ class WebsiteSerializer(serializers.ModelSerializer):
 
 class WebsiteDetailSerializer(serializers.ModelSerializer):
     author = UserSerializer()
-    category = CategorySerializer()
 
     class Meta:
         model = Website
@@ -112,12 +111,12 @@ class ChannelSerializer(serializers.ModelSerializer):
 
 class ChannelDetailSerializer(serializers.ModelSerializer):
     author = UserSerializer()
-    category = CategorySerializer()
 
     class Meta:
         model = Channel
         fields = [
             'title',
+            'channel_id',
             'author',
             'url',
             'application',
@@ -192,7 +191,6 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class GroupDetailSerializer(serializers.ModelSerializer):
     author = UserSerializer()
-    category = CategorySerializer()
 
     class Meta:
         model = Group
@@ -260,12 +258,12 @@ class InstagramSerializer(serializers.ModelSerializer):
 
 class InstagramDetailSerializer(serializers.ModelSerializer):
     author = UserSerializer()
-    category = CategorySerializer()
 
     class Meta:
         model = Instagram
         fields = [
             'title',
+            'page_id',
             'author',
             'url',
             'category',

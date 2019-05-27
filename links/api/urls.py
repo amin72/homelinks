@@ -10,14 +10,6 @@ urlpatterns = [
     # list websites
     path('websites/', views.WebsiteListAPIView.as_view(), name='websites'),
 
-    # list iranian websites
-    path('websites/iranian/', views.IranianWebsiteListAPIView.as_view(),
-        name='iranian-websites'),
-
-    # list foreign websites
-    path('websites/foreign/', views.ForeignWebsiteListAPIView.as_view(),
-        name='foreign-websites'),
-
     # website create
     path('websites/create/', views.WebsiteCreateAPIView.as_view(),
        name='website-create'),
@@ -37,26 +29,6 @@ urlpatterns = [
     # list channels
     path('channels/', views.ChannelListAPIView.as_view(), name='channels'),
 
-    # list telegram channels
-    path('channels/telegram/', views.TelegramChannelListAPIView.as_view(),
-        name='telegram-channels'),
-
-    # list soroush channels
-    path('channels/soroush/', views.SoroushChannelListAPIView.as_view(),
-        name='soroush-channels'),
-
-    # list gap channels
-    path('channels/gap/', views.GapChannelListAPIView.as_view(),
-        name='gap-channels'),
-
-    # list igap channels
-    path('channels/igap/', views.IGapChannelListAPIView.as_view(),
-        name='igap-channels'),
-
-    # list eitaa channels
-    path('channels/eitaa/', views.EitaaChannelListAPIView.as_view(),
-        name='eitaa-channels'),
-
     # channel create
     path('channels/create/', views.ChannelCreateAPIView.as_view(),
        name='channel-create'),
@@ -75,30 +47,6 @@ urlpatterns = [
 
     # list groups
     path('groups/', views.GroupListAPIView.as_view(), name='groups'),
-
-    # list whatsapp groups
-    path('groups/whatsapp/', views.WhatsappGroupListAPIView.as_view(),
-        name='whatsapp-groups'),
-
-    # list telegram groups
-    path('groups/telegram/', views.TelegramGroupListAPIView.as_view(),
-        name='telegram-groups'),
-
-    # list soroush groups
-    path('groups/soroush/', views.SoroushGroupListAPIView.as_view(),
-        name='soroush-groups'),
-
-    # list gap groups
-    path('groups/gap/', views.GapGroupListAPIView.as_view(),
-        name='gap-groups'),
-
-    # list igap groups
-    path('groups/igap/', views.IGapGroupListAPIView.as_view(),
-        name='igap-groups'),
-
-    # list eitaa groups
-    path('groups/eitaa/', views.EitaaGroupListAPIView.as_view(),
-        name='eitaa-groups'),
 
     # group create
     path('groups/create/', views.GroupCreateAPIView.as_view(),
@@ -138,16 +86,22 @@ urlpatterns = [
         name='instagram-delete'),
 
     # report link
-    path('<str:model_name>/<str:slug>/report/',
+    path('<str:model_name>/<str:slug>/report_link/',
         views.ReportLinkAPIView.as_view(),
         name='report'),
 
     # # tagged items
-    # path('tag/<str:tag_slug>/', views.tagged_items, name='tagged_items'),
+    path('tag/<str:tag_slug>/', views.TaggedItemsAPIListView.as_view(),
+        name='tagged_items'),
 
     # search
     path('search/', views.LinkSearchAPIView.as_view(), name='search'),
 
     # categories
     path('categories/', views.CategoryListAPIView.as_view(), name='categories'),
+
+    # categorized items
+    path('category/<int:category_id>/',
+        views.CategorizedItemsAPIListView.as_view(),
+        name='categorized_items'),
 ]

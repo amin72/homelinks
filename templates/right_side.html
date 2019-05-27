@@ -18,11 +18,11 @@
                     <ul class="list-group">
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:iranian-websites' %}">ایرانی</a>
+                            <a class="nounderline" href="{% url 'links:websites' %}?type=iranian">ایرانی</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a href="{% url 'links:foreign-websites' %}">خارجی</a>
+                            <a href="{% url 'links:websites' %}?type=foreign">خارجی</a>
                         </li>
                     </ul>
                 </div>
@@ -37,23 +37,23 @@
                     <ul class="list-group">
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:telegram-channels' %}">تلگرام</a>
+                            <a class="nounderline" href="{% url 'links:channels' %}?app=telegram">تلگرام</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:soroush-channels' %}">سروش</a>
+                            <a class="nounderline" href="{% url 'links:channels' %}?app=soroush">سروش</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:gap-channels' %}">گپ</a>
+                            <a class="nounderline" href="{% url 'links:channels' %}?app=gap">گپ</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:igap-channels' %}">ای گپ</a>
+                            <a class="nounderline" href="{% url 'links:channels' %}?app=igap">ای گپ</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:eitaa-channels' %}">ایتا</a>
+                            <a class="nounderline" href="{% url 'links:channels' %}?app=eitaa">ایتا</a>
                         </li>
 
                     </ul>
@@ -69,29 +69,28 @@
 
                     <ul class="list-group">
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:telegram-groups' %}">تلگرام</a>
+                            <a class="nounderline" href="{% url 'links:groups' %}?app=whatsapp">واتساپ</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:whatsapp-groups' %}">واتساپ</a>
+                            <a class="nounderline" href="{% url 'links:groups' %}?telegram">تلگرام</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:soroush-groups' %}">سروش</a>
+                            <a class="nounderline" href="{% url 'links:groups' %}?app=soroush">سروش</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:gap-groups' %}">گپ</a>
+                            <a class="nounderline" href="{% url 'links:groups' %}?app=gap">گپ</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:igap-groups' %}">ای گپ</a>
+                            <a class="nounderline" href="{% url 'links:groups' %}?app=igap">ای گپ</a>
                         </li>
 
                         <li class="list-group-item list-group-item-light">
-                            <a class="nounderline" href="{% url 'links:eitaa-groups' %}">ایتا</a>
+                            <a class="nounderline" href="{% url 'links:groups' %}?app=eitaa">ایتا</a>
                         </li>
-
                     </ul>
                 </div>
             </div><!-- links to groups -->

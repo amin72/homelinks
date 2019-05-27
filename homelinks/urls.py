@@ -17,6 +17,13 @@ urlpatterns = i18n_patterns(
     # links
     path('', include('links.urls')),
 
+    prefix_default_language=False
+)
+
+# admin
+urlpatterns += i18n_patterns(
+    path('admin/', admin.site.urls),
+
     ### APIs ###
     # links-apis
     path('api/', include('links.api.urls')),
@@ -33,12 +40,6 @@ urlpatterns = i18n_patterns(
     path('api/auth/register/', dashboard_views.UserRegisterAPIView.as_view(),
         name='register'),
 
-    prefix_default_language=False
-)
-
-# admin
-urlpatterns += i18n_patterns(
-    path('admin/', admin.site.urls),
     prefix_default_language=True
 )
 

@@ -10,10 +10,7 @@ urlpatterns = [
 
     # # rules
     # path('rules/', views.rules, name='rules'),
-    #
-    # # add-link
-    # path('add_link/', views.add_link, name='add_link'),
-    #
+
     # list user's websites
     path('users_websites/', views.UserWebsiteListAPIView.as_view(),
         name='users_websites'),

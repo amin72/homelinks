@@ -44,6 +44,8 @@ from .mixins import (
     SuccessMessageMixin,
     SetModelNameMixIn,
     SetActiveCssClassMixIn,
+    FilterByTypeMixIn,
+    FilterByApplicationMixIn,
 )
 
 from .forms import (
@@ -74,29 +76,11 @@ def index(request):
     return render(request, 'links/index.html', context)
 
 
-class WebsiteListView(SetActiveCssClassMixIn, ListView):
+class WebsiteListView(SetActiveCssClassMixIn, FilterByTypeMixIn, ListView):
     """List all published websites"""
     model_name = 'website'
     queryset = Website.published.all()
     paginate_by = utils.MAX_PAGE_LIMIT
-
-
-class IranianWebsiteListView(SetActiveCssClassMixIn, ListView):
-    """List all published and iranian websites"""
-    model_name = 'website'
-    paginate_by = utils.MAX_PAGE_LIMIT
-
-    def get_queryset(self):
-        return Website.published.filter(type='iranian')
-
-
-class ForeignWebsiteListView(SetActiveCssClassMixIn, ListView):
-    """List all published and foreign websites"""
-    model_name = 'website'
-    paginate_by = utils.MAX_PAGE_LIMIT
-
-    def get_queryset(self):
-        return Website.published.filter(type='foreign')
 
 
 class WebsiteDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
@@ -151,40 +135,12 @@ class WebsiteDeleteView(DeleteMixIn):
 ## -----------------------------------------------------
 
 
-class ChannelListView(SetActiveCssClassMixIn, ListView):
-    queryset = Channel.published.all().filter(parent=None)
+class ChannelListView(SetActiveCssClassMixIn,
+    FilterByApplicationMixIn,
+    ListView):
+    queryset = Channel.published.all()
     model_name = 'channel'
     paginate_by = utils.MAX_PAGE_LIMIT
-
-
-class TelegramChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Channel
-    application='telegram'
-    model_name = 'channel'
-
-
-class SoroushChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Channel
-    application='soroush'
-    model_name = 'channel'
-
-
-class GapChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Channel
-    application='gap'
-    model_name = 'channel'
-
-
-class IGapChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Channel
-    application='igap'
-    model_name = 'channel'
-
-
-class EitaaChannelListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Channel
-    application='eitaa'
-    model_name = 'channel'
 
 
 class ChannelDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
@@ -235,46 +191,10 @@ class ChannelDeleteView(DeleteMixIn):
 ## -----------------------------------------------------
 
 
-class GroupListView(SetActiveCssClassMixIn, ListView):
+class GroupListView(SetActiveCssClassMixIn, FilterByApplicationMixIn, ListView):
     queryset = Group.published.all()
     model_name = 'group'
     paginate_by = utils.MAX_PAGE_LIMIT
-
-
-class WhatsappGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Group
-    application = 'whatsapp'
-    model_name = 'group'
-
-
-class TelegramGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Group
-    application='telegram'
-    model_name = 'group'
-
-
-class SoroushGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Group
-    application='soroush'
-    model_name = 'group'
-
-
-class GapGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Group
-    application='gap'
-    model_name = 'group'
-
-
-class IGapGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Group
-    application='igap'
-    model_name = 'group'
-
-
-class EitaaGroupListView(SetActiveCssClassMixIn, ApplicationMixIn):
-    model = Group
-    application='eitaa'
-    model_name = 'group'
 
 
 class GroupDetailView(PublishedObjectMixIn, SetModelNameMixIn, DetailView):
@@ -369,7 +289,6 @@ class InstagramUpdateView(RatelimitMixin, LoginRequiredMixin,
     ratelimit_rate = '5/m'
     ratelimit_block = False
     ratelimit_method = 'POST'
-
 
 
 class InstagramDeleteView(DeleteMixIn):

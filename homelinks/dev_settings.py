@@ -209,3 +209,8 @@ INTERNAL_IPS = ['127.0.0.1', '::1']
 
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'dashboard.api.serializers.UserDetailSerializer',
+}

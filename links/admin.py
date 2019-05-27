@@ -56,15 +56,15 @@ class ChannelAdmin(TaggitCounter, admin.ModelAdmin):
 # Group
 @admin.register(Group)
 class GroupAdmin(TaggitCounter, admin.ModelAdmin):
-    fields = ('author', 'title', 'status', 'url', 'application', 'category',
-        'description', 'image')
+    fields = ('author', 'title', 'slug', 'status', 'url', 'application',
+        'category', 'description', 'image')
     list_display = ('title', 'application', 'slug', 'status', 'author',
         'category', 'taggit_counter', 'is_parent')
     list_filter = ('application', 'status', 'created', 'updated', 'category')
     search_fields = ('title', 'url', 'description')
     raw_id_fields = ('author', 'category')
     list_editable = ('status',)
-    readonly_fields = ('application', 'url', 'parent')
+    readonly_fields = ('application', 'url', 'parent', 'slug')
     inlines = [TaggitStackedInline]
 
 

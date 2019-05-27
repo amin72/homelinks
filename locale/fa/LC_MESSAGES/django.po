@@ -277,19 +277,19 @@ msgstr "نوع گزارش"
 
 #: links/utils.py:25
 msgid "Website already exists"
-msgstr ".این وب سایت قبلا ثبت شده است"
+msgstr "این وب سایت قبلا ثبت شده است."
 
 #: links/utils.py:26
 msgid "Channel already exists"
-msgstr ".این کانال قبلا ثبت شده است"
+msgstr "این کانال قبلا ثبت شده است."
 
 #: links/utils.py:27
 msgid "Group already exists"
-msgstr ".این گروه قبلا ثبت شده است"
+msgstr "این گروه قبلا ثبت شده است."
 
 #: links/utils.py:28
 msgid "Instagram page already exists"
-msgstr ".این صفحه اینستاگرام قبلا ثبت شده است"
+msgstr "این صفحه اینستاگرام قبلا ثبت شده است."
 
 #: links/utils.py:29
 msgid "Sorry, This name is too short"

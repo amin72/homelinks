@@ -23,30 +23,30 @@
             <li class="nav-item dropdown mr-1 {% if active_websites %}active{% endif %}">
                 <a class="nav-link dropdown-toggle">سایت ها</a>
                 <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownWebsites">
-                    <a class="dropdown-item" href="{% url 'links:iranian-websites' %}">ایرانی</a>
-                    <a class="dropdown-item" href="{% url 'links:foreign-websites' %}">خارجی</a>
+                    <a class="dropdown-item" href="{% url 'links:websites' %}?type=iranian">ایرانی</a>
+                    <a class="dropdown-item" href="{% url 'links:websites' %}?type=foreign">خارجی</a>
                 </div>
             </li>
             <li class="nav-item dropdown mr-1 {% if active_channels %}active{% endif %}">
                 <a class="nav-link dropdown-toggle">کانال ها</a>
                 <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownChannels">
-                    <a class="dropdown-item" href="{% url 'links:telegram-channels' %}">تلگرام</a>
-                    <a class="dropdown-item" href="{% url 'links:soroush-channels' %}">سروش</a>
-                    <a class="dropdown-item" href="{% url 'links:gap-channels' %}">گپ</a>
-                    <a class="dropdown-item" href="{% url 'links:igap-channels' %}">ای گپ</a>
-                    <a class="dropdown-item" href="{% url 'links:eitaa-channels' %}">ایتا</a>
+                    <a class="dropdown-item" href="{% url 'links:channels' %}?app=telegram">تلگرام</a>
+                    <a class="dropdown-item" href="{% url 'links:channels' %}?app=soroush">سروش</a>
+                    <a class="dropdown-item" href="{% url 'links:channels' %}?app=gap">گپ</a>
+                    <a class="dropdown-item" href="{% url 'links:channels' %}?app=igap">ای گپ</a>
+                    <a class="dropdown-item" href="{% url 'links:channels' %}?app=eitaa">ایتا</a>
                 </div>
             </li>
 
             <li class="nav-item dropdown mr-1 {% if active_groups %}active{% endif %}">
                 <a class="nav-link dropdown-toggle">گروه ها</a>
                 <div class="dropdown-menu dropdown-content" aria-labelledby="dropdownGroups">
-                    <a class="dropdown-item" href="{% url 'links:whatsapp-groups' %}">واتس اپ</a>
-                    <a class="dropdown-item" href="{% url 'links:telegram-groups' %}">تلگرام</a>
-                    <a class="dropdown-item" href="{% url 'links:soroush-groups' %}">سروش</a>
-                    <a class="dropdown-item" href="{% url 'links:gap-groups' %}">گپ</a>
-                    <a class="dropdown-item" href="{% url 'links:igap-groups' %}">ای گپ</a>
-                    <a class="dropdown-item" href="{% url 'links:eitaa-groups' %}">ایتا</a>
+                    <a class="dropdown-item" href="{% url 'links:groups' %}?app=whatsapp">واتس اپ</a>
+                    <a class="dropdown-item" href="{% url 'links:groups' %}?app=telegram">تلگرام</a>
+                    <a class="dropdown-item" href="{% url 'links:groups' %}?app=soroush">سروش</a>
+                    <a class="dropdown-item" href="{% url 'links:groups' %}?app=gap">گپ</a>
+                    <a class="dropdown-item" href="{% url 'links:groups' %}?app=igap">ای گپ</a>
+                    <a class="dropdown-item" href="{% url 'links:groups' %}?app=eitaa">ایتا</a>
                 </div>
             </li>
 
@@ -54,12 +54,12 @@
                 <a class="nav-link" href="{% url 'links:instagrams' %}">اینستاگرام</a>
             </li>
 
-            <li class="nav-item {% if active_contactus %}active{% endif %}">
-                <a class="nav-link" href="{% url 'contact:contact_us' %}">تماس با ما</a>
-            </li>
-
             <li class="nav-item {% if active_categories %}active{% endif %}">
                 <a class="nav-link" href="{% url 'links:categories' %}">دسته بندی ها</a>
+            </li>
+
+            <li class="nav-item {% if active_contactus %}active{% endif %}">
+                <a class="nav-link" href="{% url 'contact:contact_us' %}">تماس با ما</a>
             </li>
         </ul>
 
