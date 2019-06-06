@@ -83,12 +83,14 @@ class WebsiteUpdateSerializer(serializers.ModelSerializer):
         model = Website
         fields = [
             'title',
+            'slug',
             'url',
             'type',
             'category',
             'description',
             'image',
         ]
+        read_only_fields = ['slug']
 #----------------------------------------------------------
 
 
@@ -144,14 +146,20 @@ class ChannelCreateSerializer(serializers.ModelSerializer):
 
         if not links_utils.valid_channel_id(instance.channel_id,
                                             instance.application):
-            raise serializers.ValidationError({'channel_id': INVALID_NAME})
+            raise serializers.ValidationError({
+                'channel_id': links_utils.INVALID_NAME
+            })
 
         if not links_utils.valid_channel_length(instance.channel_id,
                                             instance.application):
-            raise serializers.ValidationError({'channel_id': SHORT_NAME})
+            raise serializers.ValidationError({
+                'channel_id': links_utils.SHORT_NAME
+            })
 
-        instance.url = links_utils.generate_channel_url(instance.channel_id,
-                                                instance.application)
+        instance.url = links_utils.generate_channel_url(
+                                        instance.channel_id,
+                                        instance.application)
+
         if links_utils.is_duplicate_url(instance):
             raise links_utils.serialize_validation_exceptions['channel']
 
@@ -164,11 +172,13 @@ class ChannelUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'application',
             'title',
+            'slug',
             'channel_id',
             'category',
             'description',
             'image',
         ]
+        read_only_fields = ['slug']
 #----------------------------------------------------------
 
 
@@ -231,11 +241,13 @@ class GroupUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'application',
             'title',
+            'slug',
             'url',
             'category',
             'description',
             'image',
         ]
+        read_only_fields = ['slug']
 #----------------------------------------------------------
 
 
@@ -302,11 +314,13 @@ class InstagramUpdateSerializer(serializers.ModelSerializer):
         model = Instagram
         fields = [
             'title',
+            'slug',
             'page_id',
             'category',
             'description',
             'image',
         ]
+        read_only_fields = ['slug']
 #----------------------------------------------------------
 
 

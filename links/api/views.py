@@ -69,6 +69,7 @@ from links.mixins import (
 	FilterByTypeMixIn,
 	FilterByApplicationMixIn,
 	PaginateMixIn,
+	PublishedObjectMixIn,
 )
 
 from links import utils
@@ -80,10 +81,10 @@ class IndexAPIView(APIView):
 	permission_classes = [AllowAny]
 
 	def get(self, request, format=None):
-		websites = Website.published.all()[:6]
-		channels = Channel.published.all()[:6]
-		groups = Group.published.all()[:6]
-		instagrams = Instagram.published.all()[:6]
+		websites = Website.published.all()[:12]
+		channels = Channel.published.all()[:12]
+		groups = Group.published.all()[:12]
+		instagrams = Instagram.published.all()[:12]
 
 		serialized_websites = WebsiteSerializer(websites, many=True,
 			context={'request': request})
@@ -98,7 +99,7 @@ class IndexAPIView(APIView):
 			'websites': serialized_websites.data,
 			'channels': serialized_channels.data,
 			'groups': serialized_groups.data,
-			'instagram': serialized_instagrams.data,
+			'instagrams': serialized_instagrams.data,
 		}
 		return Response(result)
 
@@ -146,11 +147,12 @@ class ChannelListAPIView(FilterByApplicationMixIn, ListAPIView):
 	permission_classes = [AllowAny]
 
 
-class ChannelDetailAPIView(RetrieveAPIView):
+class ChannelDetailAPIView(PublishedObjectMixIn, RetrieveAPIView):
 	serializer_class = ChannelDetailSerializer
 	queryset = Channel.published.all()
 	lookup_field = 'slug'
 	permission_classes = [AllowAny]
+	model = Channel
 
 
 class ChannelCreateAPIView(CreateAPIMixIn):

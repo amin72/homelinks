@@ -80,6 +80,14 @@ class PublishedObjectMixIn(UserPassesTestMixin):
     """
     Only published objects are allowed to be seen.
     But if the object belongs to current user, let user sees the object.
+
+    eg: parent: published, child: published -> return parent
+
+    eg: parent: published, child: draft ->
+        return parent for non-owners, and child for the owners
+
+    eg: parent: draft, child: None (not created yet) ->
+            return parent for the owners
     """
 
     def get_object(self):
@@ -256,16 +264,16 @@ class FilterByApplicationMixIn:
 
 
 class PaginateMixIn:
-	def get(self, request, *args, **kwargs):
-		return self.list(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-	def list(self, request, *args, **kwargs):
-		queryset = self.get_queryset()
-		page = self.paginate_queryset(queryset)
-		if page is not None:
-			return self.get_paginated_response(page)
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            return self.get_paginated_response(page)
 
-		result = {
-			'links': queryset,
-		}
-		return Response(result)
+        result = {
+            'links': queryset,
+        }
+        return Response(result)

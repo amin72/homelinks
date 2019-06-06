@@ -26,8 +26,8 @@ WEBSITE_EXISTS = _('Website already exists')
 CHANNEL_EXISTS = _('Channel already exists')
 GROUP_EXISTS = _('Group already exists')
 INSTAGRAM_EXISTS = _('Instagram page already exists')
-SHORT_NAME = _('Sorry, This name is too short')
-INVALID_NAME = _('Sorry, this name is invalid.')
+SHORT_NAME = _('This name is too short')
+INVALID_NAME = _('This name is invalid.')
 INSTAGRAM_ID_INCORRECT = _('Instagram id is incorrect')
 
 validation_exceptions = {

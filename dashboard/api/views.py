@@ -1,7 +1,10 @@
+from itertools import chain
+
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 
 from rest_framework.permissions import (
 	AllowAny,
@@ -31,6 +34,8 @@ from dashboard.mixins import (
 	ReplaceChildWithParentMixIn,
 )
 
+from links.mixins import PaginateMixIn
+
 #from dashboard import utils
 from links.api.pagination import (
 	LinkLimitOffsetPagination,
@@ -42,35 +47,33 @@ from dashboard import utils
 User = get_user_model()
 
 
-class LinkListAPIView(APIView):
-	def get(self, request, format=None):
+class LinkListAPIView(PaginateMixIn, GenericAPIView):
+	"""
+	List and paginate all user's links
+	"""
+	pagination_class = LinkPageNumberPagination
+
+	def get_queryset(self):
 		user = self.request.user
 		sorted_links = utils.get_sorted_users_links(user)
 		# if links have child, sent their child instead of them.
 		links_and_children = utils.replace_child_with_parent(sorted_links)
 
-		serialized_links = []
+		users_links = []
 		for link in links_and_children:
 			if link.model_name == 'website':
-				serialized_link = WebsiteSerializer(link,
-					context={'request': request})
+				users_links.append(WebsiteSerializer(link,
+				context={'request': self.request}).data)
 			elif link.model_name == 'channel':
-				serialized_link = ChannelSerializer(link,
-					context={'request': request})
+				users_links.append(ChannelSerializer(link,
+				context={'request': self.request}).data)
 			elif link.model_name == 'group':
-				serialized_link = GroupSerializer(link,
-					context={'request': request})
+				users_links.append(GroupSerializer(link,
+				context={'request': self.request}).data)
 			elif link.model_name == 'instagram':
-				serialized_link = InstagramSerializer(link,
-					context={'request': request})
-
-			serialized_links.append(serialized_link.data)
-
-		# return latest 10 links to dashboard-index
-		result = {
-			'links': serialized_links[:10],
-		}
-		return Response(result)
+				users_links.append(InstagramSerializer(link,
+				context={'request': self.request}).data)
+		return users_links
 
 
 class UserWebsiteListAPIView(ReplaceChildWithParentMixIn):
