@@ -58,6 +58,10 @@
                 <a class="nav-link" href="{% url 'links:categories' %}">دسته بندی ها</a>
             </li>
 
+            <li class="nav-item {% if active_categories %}active{% endif %}">
+                <a class="nav-link" href="{% static 'apk/Homelinks.apk' %}">دانلود اپلیکیشن</a>
+            </li>
+
             <li class="nav-item {% if active_contactus %}active{% endif %}">
                 <a class="nav-link" href="{% url 'contact:contact_us' %}">تماس با ما</a>
             </li>

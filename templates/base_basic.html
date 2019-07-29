@@ -42,9 +42,18 @@
 
             <!-- left sidebar -->
             <!-- block content -->
+            <div id="magnet-native-ad">
+            </div>
+
             {% block content %}{% endblock %}
 
         </div><!-- row -->
+
+        <div class="row mt-5 mb-0">
+            <div class="offset-1 col-10 border-top">
+                <div id='mediaad-Vdti'></div>
+            </div>
+        </div>
     </div><!-- container-fluid -->
 
 
@@ -54,6 +63,14 @@
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script type="text/javascript">
+        var head = document.getElementsByTagName("head")[0];
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.async=1;
+        script.src = "https://s1.mediaad.org/serve/homelinks.ir/loader.js" ;
+        head.appendChild(script);
+    </script>
 
     {% block javascript %}{% endblock %}
 </body>

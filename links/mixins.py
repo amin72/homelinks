@@ -97,7 +97,7 @@ class PublishedObjectMixIn(UserPassesTestMixin):
 
         # if both parent and child are in published status, return parent
         # this only happens if object was modified in admin area
-        if object.status == 'published':
+        if object and object.status == 'published':
             if object.child and object.child.status == 'published':
                 return object
 
